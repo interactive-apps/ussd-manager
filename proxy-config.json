@@ -1,0 +1,19 @@
+{
+  "/api": {
+    "target": "https://test.hisptz.org/dhis",
+    "target1": "http://localhost:8080/dhis",
+    "secure": "false",
+    "auth":"kmbwilo:DHIS2014",
+    "auth1":"admin:PASS@2017",
+    "changeOrigin": "true"
+
+  },
+  "/": {
+    "target": "https://test.hisptz.org/dhis",
+    "target1": "http://localhost:8080/dhis",
+    "secure": "false",
+    "auth":"kmbwilo:DHIS2014",
+    "auth1":"admin:PASS@2017",
+    "changeOrigin": "true"
+  }
+}

@@ -1,0 +1,21 @@
+<div class="form-group">
+  <label>Message</label>
+  <textarea
+    class="form-control form-control-sm"
+    placeholder="Message to User"
+    (input)="setMessage($event.target.value)"
+    [value]="menu.title"
+  ></textarea>
+  <small class="form-text text-muted">
+    A simple message to display to user.
+  </small>
+</div>
+
+<!--option for submitting data-->
+<div class="col-sm-12 mt-2" *ngIf="isDataReady">
+  <div class="form-check cursor">
+    <input [(ngModel)]="submit_data" (change)="setSubmit(submit_data)" type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="pl-0 form-check-label" for="exampleCheck1">Submit data after this menu</label>
+  </div>
+</div>
+

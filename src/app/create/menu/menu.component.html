@@ -1,0 +1,110 @@
+
+<div class="menu-div">
+  <div class="row">
+    <div class="col-12">
+      <button
+        @fadeOut
+        *ngIf="showDelete()"
+        class="cursor pull-right btn btn-outline-danger btn-sm"
+        title="Delete this menu and all next menus from this"
+        (click)="deleteEnabled = true"
+      >
+        <i class="fa fa-trash-o"></i>
+      </button>
+      <p class="mb-1 text-center" *ngIf="deleteEnabled" @fadeOut>Are you sure <br>
+        <small class="text-muted">This will delete all the children menus</small>
+        <button
+          class="btn btn-light mr-1"
+          (click)="deleteMenu(menu, true)"
+        >
+          <i class="fa fa-check"></i>
+          Yes
+        </button>
+        <button
+          class="btn btn-light"
+          (click)="deleteEnabled = false"
+        >
+          <i class="fa fa-window-close"></i>
+          No
+        </button>
+      </p>
+    </div>
+  </div>
+  <div class="row m-0 mt-2"  *ngIf="!isMenuInitialized()">
+    <div class="col-sm-12 p-2">
+      <ul class="list-group border-1">
+        <li (click)="setType('options')" class="list-group-item cursor m-1 p-2" title="show a menu with options for user to select">
+          Menu with Options
+          <p class="text-muted m-0"><small>show a menu with options for user to select</small></p>
+        </li>
+        <li *ngIf="!authAvailable" (click)="setType('auth')" class="list-group-item cursor m-1 p-2" title="show a menu for authentication details like pin">
+          Authentication Menu
+          <p class="text-muted m-0"><small>show a menu for authentication details like pin</small></p>
+        </li>
+        <li (click)="setType('period')" class="list-group-item cursor m-1 p-2" title="show a menu to enter the period">
+          Menu for period
+          <p class="text-muted m-0"><small>show a menu to enter the period </small></p>
+        </li>
+        <li (click)="setType('data')" class="list-group-item cursor m-1 p-2" title="show a menu to collect data for specific options">
+          Menu to collect data
+          <p class="text-muted m-0"><small>show a menu to collect data for specific options</small></p>
+        </li>
+        <li (click)="setType('message')" class="list-group-item cursor m-1 p-2" title="show a menu to collect data for specific options">
+          Show Message
+          <p class="text-muted m-0"><small>simple message to user that needs no response</small></p>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+
+  <div class="row m-0 mt-2">
+    <div class="container-fluid p-2" *ngIf="menu.type == 'auth'" (click)="activateMenu(menu)">
+      <app-authentication
+        [menu]="menu"
+        (nextMenu)="setNextMenu($event)"
+      ></app-authentication>
+    </div>
+
+    <div class="container-fluid p-2" *ngIf="menu.type == 'message'">
+      <app-message [menu]="menu" (messageValue)="setMessage($event)"></app-message>
+    </div>
+
+    <div class="container-fluid p-2" *ngIf="menu.type == 'data'">
+      <app-data
+        [menus]="menus"
+        [menu]="menu"
+        [datasets]="datasets"
+        [programs]="programs"
+        [programEntities]="programEntities"
+        [datasetEntities]="datasetEntities"
+        [selectedDatas]="selectedDatas"
+        (nextMenu)="setNextMenu($event)"
+        (messageValue)="setMessage($event)"
+      ></app-data>
+    </div>
+
+    <div class="container-fluid p-2" *ngIf="menu.type == 'period'">
+      <app-period [menus]="menus" [menu]="menu" (nextMenu)="setNextMenu($event)"></app-period>
+    </div>
+
+    <div class="container-fluid p-2" *ngIf="menu.type == 'options'">
+      <app-options
+        #optionComponent
+        [menus]="menus"
+        [menu]="menu"
+        [nextmenus]="next_menus"
+        (nextMenuValue)="setNextMenu($event)"
+        (deletedMenuValue)="deleteMenu($event)"
+      ></app-options>
+    </div>
+
+  </div>
+</div>
+<!--<div class="menu-div" *ngIf="next_menu">-->
+  <!--<app-menu [menu]="next_menu" [menus]="menus"></app-menu>-->
+<!--</div>-->
+
+
+
+

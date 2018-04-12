@@ -1,0 +1,122 @@
+
+{
+  "datasetUrl": "https://test.hisptz.org/dhis/api/dataSets.json?fields=id,name,periodType,dataSetElements[dataElement[id,name,displayName,categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false",
+  "programUrl": "https://test.hisptz.org/dhis/api/programs.json?fields=id,name,displayName,programStages[id,name,programStageDataElements[dataElement[id,name,displayName,optionSet[id,name,options[id,name]]]]]&paging=false",
+  "settings": {
+    "name": "iEDSR Application",
+    "main_code": "*152*05*09",
+    "test_code": "*152*05*01",
+    "phone_number_key": "msisdn",
+    "provider_key": "telco",
+    "user_response": "USSDRequest",
+    "session_key": "sessionid",
+    "starting_menu": "cc943329459e4524ba54edf15989fab5",
+    "request_type": {
+      "key": "USSDType",
+      "first_request": "NR",
+      "Continue_request": "CR",
+      "terminated_by_provider": "UC",
+      "timed_out": "T"
+    }
+  },
+  "menus": {
+    "cc943329459e4524ba54edf15989fab5": {
+      "id": "cc943329459e4524ba54edf15989fab5",
+      "title": "Welcome ${name} to eIDSR Reporting -- Enter PIN",
+      "type": "auth",
+      "auth_key": "1234",
+      "number_of_retries":"3",
+      "fail_message": "Please check your pin, or contact your data manager",
+      "retry_message": "Incorrect PIN. Please Try Again",
+      "next_menu": "4d90f171b90541cfb275a64b0e9844f3"
+    },
+    "4d90f171b90541cfb275a64b0e9844f3": {
+      "id": "4d90f171b90541cfb275a64b0e9844f3",
+      "title": "",
+      "type": "options",
+      "options": [
+        {
+          "response": "1",
+          "title": "Immediate reporting",
+          "next_menu": ""
+        },{
+          "response": "2",
+          "title": "Weekly Reporting",
+          "next_menu": "5a95197fa1eb4171b93684031413c7c9"
+        },{
+          "response": "1",
+          "title": "Submit Weekly Report",
+          "next_menu": ""
+        }
+      ],
+      "previous_menu": null
+    },
+    "5a95197fa1eb4171b93684031413c7c9": {
+      "id": "5a95197fa1eb4171b93684031413c7c9",
+      "title": "Enter week number",
+      "type": "period",
+      "period_type": "Weekly",
+      "maximum_value": 52,
+      "next_menu": "b08fa4a1e1f84fd2bff40217d2a6a2ba",
+      "previous_menu": "5a95197fa1eb4171b93684031413c7c9"
+    },
+    "b08fa4a1e1f84fd2bff40217d2a6a2ba": {
+      "id": "b08fa4a1e1f84fd2bff40217d2a6a2ba",
+      "title": "Disease group",
+      "type": "options",
+      "options": [
+        {
+          "response": "1",
+          "title": "Public health importance",
+          "next_menu": "c6ed7bc55ec34e9f99b7c46308f79ab5"
+        },{
+          "response": "2",
+          "title": "Malaria",
+          "next_menu": ""
+        }
+      ],
+      "previous_menu": "5a95197fa1eb4171b93684031413c7c9"
+    },
+    "c6ed7bc55ec34e9f99b7c46308f79ab5": {
+      "id": "c6ed7bc55ec34e9f99b7c46308f79ab5",
+      "title": "Select disease",
+      "type": "options",
+      "previous_menu": "b08fa4a1e1f84fd2bff40217d2a6a2ba",
+      "options": [
+        {
+          "response": "1",
+          "title": "Animal bites",
+          "next_menu": ""
+        },{
+          "response": "2",
+          "title": "Diarrhoea",
+          "next_menu": ""
+        },{
+          "response": "3",
+          "title": "Malnutrition",
+          "next_menu": ""
+        },{
+          "response": "4",
+          "title": "Onchocerciasis",
+          "next_menu": ""
+        },{
+          "response": "5",
+          "title": "Pneumonia",
+          "next_menu": ""
+        },{
+          "response": "6",
+          "title": "Tick borne r.fever",
+          "next_menu": ""
+        },{
+          "response": "7",
+          "title": "Trachoma",
+          "next_menu": ""
+        },{
+          "response": "8",
+          "title": "Typhoid",
+          "next_menu": ""
+        }
+      ]
+    }
+  }
+}
