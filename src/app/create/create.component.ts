@@ -1,30 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import {Store} from '@ngrx/store';
-import {ApplicationState} from '../store/reducers/index';
-import {Observable} from 'rxjs/Observable';
-import {Setting} from '../shared/models/settings';
+import { Store } from '@ngrx/store';
+import { ApplicationState } from '../store/reducers/index';
+import { Observable } from 'rxjs/Observable';
+import { Setting } from '../shared/models/settings';
 import * as settingSelectors from '../store/selectors/setting.selectors';
 import * as menuSelectors from '../store/selectors/menu.selectors';
 import * as dataSelectors from '../store/selectors/data.selectors';
 import * as settingsActions from '../store/actions/settings.actions';
 import * as menuActions from '../store/actions/menu.actions';
-import {UssdService} from '../shared/services/ussd.service';
-import {UssdMenu} from '../shared/models/menu';
-import {Dictionary} from '@ngrx/entity/src/models';
-import {listStateTrigger} from '../shared/animations/basic-animations';
-import {DataSet} from '../shared/models/dataSet';
-import {Program} from '../shared/models/program';
+import { UssdService } from '../shared/services/ussd.service';
+import { UssdMenu } from '../shared/models/menu';
+import { Dictionary } from '@ngrx/entity/src/models';
+import { listStateTrigger } from '../shared/animations/basic-animations';
+import { DataSet } from '../shared/models/dataSet';
+import { Program } from '../shared/models/program';
 
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css'],
-  animations: [
-    listStateTrigger
-  ]
+  animations: [listStateTrigger]
 })
 export class CreateComponent implements OnInit {
-
   settings$: Observable<Setting>;
   menus$: Observable<Dictionary<UssdMenu>>;
   selectedMenu$: Observable<UssdMenu>;
@@ -55,25 +52,33 @@ export class CreateComponent implements OnInit {
     this.programs$ = store.select(dataSelectors.getPrograms);
     this.programsEntities$ = store.select(dataSelectors.selectProgramEntities);
     this.datasetEntities$ = store.select(dataSelectors.selectDatasetEntities);
-    store.select(settingSelectors.selectCurrentSettingId).subscribe((id) => this.selectedId = id);
+    store
+      .select(settingSelectors.selectCurrentSettingId)
+      .subscribe(id => (this.selectedId = id));
   }
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   addStartingMenu() {
+    console.log('On addStartingMenu ');
     const createdId = this.ussdService.makeid();
-    const newStartingMenu: UssdMenu = this.ussdService.getStartingMenu(createdId, this.selectedId);
-    this.store.dispatch(new menuActions.AddMenu({menu: newStartingMenu}));
-    this.store.dispatch(new settingsActions.UpdateSetting(
-      {setting: {id: this.selectedId, changes: {starting_menu: createdId}}}));
+    const newStartingMenu: UssdMenu = this.ussdService.getStartingMenu(
+      createdId,
+      this.selectedId
+    );
+    this.store.dispatch(new menuActions.AddMenu({ menu: newStartingMenu }));
+    this.store.dispatch(
+      new settingsActions.UpdateSetting({
+        setting: { id: this.selectedId, changes: { starting_menu: createdId } }
+      })
+    );
   }
 
   setNextMenu(event) {
-    const {current_menu_id, next_menu_id} = event;
+    const { current_menu_id, next_menu_id } = event;
   }
 
   trackItem(index, item) {
     return item ? item : undefined;
   }
-
 }
