@@ -63,6 +63,7 @@ export class UssdService {
   initiateBlankStore() {
     const id = this.makeid();
     const data = this.getDummyStore(id);
+    console.log('data : ', data);
     return this.http.post(`dataStore/ussd/${id}`, data);
   }
 
@@ -70,11 +71,11 @@ export class UssdService {
     const menuId = this.makeid();
     const inititialSettings = this.getStartingSettings(id);
     inititialSettings.starting_menu = menuId;
-    const menu = {};
-    menu[menuId] = this.getStartingMenu(menuId, id);
+    const menus = {};
+    menus[menuId] = this.getStartingMenu(menuId, id);
     return {
       id: id,
-      menus: menu,
+      menus: menus,
       settings: inititialSettings
     };
   }
