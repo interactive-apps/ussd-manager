@@ -232,6 +232,7 @@ export class UssdService {
         timed_out: 'T'
       },
       phone_number_key: '',
+      no_user_message: '',
       starting_menu: ''
     };
   }

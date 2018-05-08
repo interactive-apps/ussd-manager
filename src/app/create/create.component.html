@@ -1,8 +1,4 @@
 <div class="container-fluid">
-
-  {{ (settings$ | async)|json }} ::
-
-
   <app-basic *ngIf="(settings$ | async)" [setting]="settings$ | async" [menus]="menus$ | async">
   </app-basic>
 
