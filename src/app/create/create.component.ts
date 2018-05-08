@@ -62,7 +62,6 @@ export class CreateComponent implements OnInit {
   ngOnInit() {}
 
   addStartingMenu() {
-    console.log('On addStartingMenu ');
     const createdId = this.ussdService.makeid();
     const newStartingMenu: UssdMenu = this.ussdService.getStartingMenu(
       createdId,

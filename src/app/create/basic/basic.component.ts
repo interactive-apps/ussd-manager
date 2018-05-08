@@ -11,6 +11,7 @@ import { Ussd } from '../../shared/models/ussd';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { UpdateUssd, UpsertUssd } from '../../store/actions/ussd.actions';
 import { fadeIn } from '../../shared/animations/basic-animations';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-basic',
@@ -52,6 +53,34 @@ export class BasicComponent implements OnInit {
     );
   }
 
+  handlingSuccessSaving(ussdItem: Ussd) {
+    this.saving = false;
+    this.saving_success = true;
+    setTimeout(() => {
+      this.saving_success = false;
+    }, 3000);
+    setTimeout(() => {
+      this.store.dispatch(new Go({ path: [''] }));
+    }, 2000);
+    this.store.dispatch(
+      new UpdateUssd({
+        ussd: {
+          id: ussdItem.id,
+          changes: { ...ussdItem }
+        }
+      })
+    );
+  }
+
+  hadlingFailSaving() {
+    this.saving_success = false;
+    this.saving = false;
+    this.saving_failed = true;
+    setTimeout(() => {
+      this.saving_failed = false;
+    }, 2000);
+  }
+
   save() {
     this.saving = true;
     const ussdItem: Ussd = {
@@ -59,32 +88,29 @@ export class BasicComponent implements OnInit {
       settings: { ...this.setting },
       menus: { ...this.menus }
     };
-    this.http.put(`dataStore/ussd/${ussdItem.id}`, ussdItem).subscribe(
+    let { dataStoreKey } = ussdItem.settings;
+    if (ussdItem.settings.dataStoreKey === '') {
+      dataStoreKey = _.camelCase(ussdItem.settings.name);
+      ussdItem.settings.dataStoreKey = dataStoreKey;
+    }
+    this.http.put(`dataStore/ussd/${dataStoreKey}`, ussdItem).subscribe(
       data => {
-        this.saving = false;
-        this.saving_success = true;
-        setTimeout(() => {
-          this.saving_success = false;
-        }, 3000);
-        setTimeout(() => {
-          this.store.dispatch(new Go({ path: [''] }));
-        }, 2000);
-        this.store.dispatch(
-          new UpdateUssd({
-            ussd: {
-              id: ussdItem.id,
-              changes: { ...ussdItem }
-            }
-          })
-        );
+        this.handlingSuccessSaving(ussdItem);
       },
-      error => {
-        this.saving_success = false;
-        this.saving = false;
-        this.saving_failed = true;
-        setTimeout(() => {
-          this.saving_failed = false;
-        }, 2000);
+      errorResponse => {
+        const { error } = errorResponse;
+        if (error && error.httpStatusCode && error.httpStatusCode === 404) {
+          this.http.post(`dataStore/ussd/${dataStoreKey}`, ussdItem).subscribe(
+            data => {
+              this.handlingSuccessSaving(ussdItem);
+            },
+            errorResponsePosting => {
+              this.hadlingFailSaving();
+            }
+          );
+        } else {
+          this.hadlingFailSaving();
+        }
       }
     );
   }

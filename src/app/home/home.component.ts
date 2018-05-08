@@ -7,7 +7,7 @@ import * as ussdSelectors from '../store/selectors/ussd.selectors';
 import * as settingsActions from '../store/actions/settings.actions';
 import { Go } from '../store/actions/router.action';
 import { Ussd } from '../shared/models/ussd';
-import { GetUssds } from '../store/actions/ussd.actions';
+import { GetUssds, AddUssd } from '../store/actions/ussd.actions';
 import {
   AddMenu,
   ClearMenus,
@@ -19,6 +19,7 @@ import {
   SetSelectedSetting
 } from '../store/actions/settings.actions';
 import { visibilityChanged } from '../shared/animations/basic-animations';
+import { UssdService } from '../shared/services/ussd.service';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +31,10 @@ export class HomeComponent implements OnInit {
   ussd_items$: Observable<Ussd[]>;
   loading$: Observable<boolean>;
   loaded$: Observable<boolean>;
-  constructor(private store: Store<ApplicationState>) {
+  constructor(
+    private store: Store<ApplicationState>,
+    private ussdService: UssdService
+  ) {
     this.store.dispatch(new GetUssds());
     this.ussd_items$ = store.select(ussdSelectors.selectAllUssds);
     this.loading$ = store.select(ussdSelectors.selectUssdLoading);
@@ -40,9 +44,15 @@ export class HomeComponent implements OnInit {
   ngOnInit() {}
 
   create() {
-    alert('here we are ib add new');
-
-    this.store.dispatch(new Go({ path: ['create'] }));
+    const id = this.ussdService.makeid();
+    const data = this.ussdService.getEmptyUssdConfiguration(id);
+    const ussd: Ussd = {
+      id: id,
+      settings: data.settings,
+      menus: data.menus
+    };
+    this.store.dispatch(new AddUssd({ ussd }));
+    this.editMenu(ussd);
   }
 
   editMenu(item) {
