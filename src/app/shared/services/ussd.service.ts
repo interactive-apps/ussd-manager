@@ -71,11 +71,20 @@ export class UssdService {
     const menuId = this.makeid();
     const inititialSettings = this.getStartingSettings(id);
     inititialSettings.starting_menu = menuId;
-    const menus = {};
-    menus[menuId] = this.getStartingMenu(menuId, id);
+    const menus = {
+      id: menuId,
+      title: 'Untitled menu',
+      type: '',
+      options: [],
+      previous_menu: '',
+      data_id: '',
+      next_menu: ''
+    };
+    const menuObject = {};
+    menuObject[menuId] = menus;
     return {
       id: id,
-      menus: menus,
+      menus: menuObject,
       settings: inititialSettings
     };
   }
@@ -211,7 +220,7 @@ export class UssdService {
   getStartingSettings(id: string): Setting {
     return {
       id: id,
-      name: '',
+      name: 'Untitled Ussd',
       description: '',
       session_key: '',
       user_response: '',
