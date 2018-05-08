@@ -59,8 +59,7 @@ export function reducer(state = initialState, action: MenuActions): State {
     }
 
     case MenuActionTypes.CLEAR_MENUS: {
-      // return adapter.removeAll({ ...state, selectedMenuId: null });
-      return state;
+      return { ...state, selectedMenuId: null };
     }
 
     case MenuActionTypes.SET_SELECTED_MENU: {

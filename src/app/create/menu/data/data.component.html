@@ -1,11 +1,6 @@
 <div class="form-group">
   <label>Message</label>
-  <textarea
-    class="form-control form-control-sm"
-    placeholder="Message to User"
-    (input)="setMessage($event.target.value)"
-    [value]="menu.title"
-  ></textarea>
+  <textarea class="form-control form-control-sm" placeholder="Message to User" (input)="setMessage($event.target.value)" [value]="menu.title"></textarea>
   <small class="form-text text-muted">
     A simple message to display to user.
   </small>
@@ -14,7 +9,7 @@
   <div class="col">
     <label>Select Data</label>
     <p *ngIf="menu.data_name" class="active-item mb-1 p-1" style="border: 1px solid black">
-    <small>{{ menu.data_name || ''}}</small>
+      <small>{{ menu.data_name || ''}}</small>
       <button (click)="unsetMenu()" class=" cursor btn btn-outline-danger btn-sm pull-right" style="height: 25px;padding-top: 1px">
         <i class="fa fa-trash-o"></i>
       </button>
@@ -23,48 +18,32 @@
 </div>
 <div class="row">
   <div class="col pr-1">
-    <button
-      (click)="setDataType('datasets')"
-      class="cursor btn btn-sm btn-block"
-      [ngClass]="{'btn-outline-secondary': dataType != 'datasets', 'btn-secondary': dataType == 'datasets'}"
-    >Data sets</button>
+    <button (click)="setDataType('datasets')" class="cursor btn btn-sm btn-block" [ngClass]="{'btn-outline-secondary': dataType != 'datasets', 'btn-secondary': dataType == 'datasets'}">Data sets</button>
   </div>
   <div class="col pl-1">
-    <button
-      (click)="setDataType('programs')"
-      class="cursor btn btn-sm btn-block"
-      [ngClass]="{'btn-outline-secondary': dataType != 'programs', 'btn-secondary': dataType == 'programs'}"
-    >Programs</button>
+    <button (click)="setDataType('programs')" class="cursor btn btn-sm btn-block" [ngClass]="{'btn-outline-secondary': dataType != 'programs', 'btn-secondary': dataType == 'programs'}">Programs</button>
   </div>
   <div class="col-12">
-    <select (change)="setSelectedGroup($event.target.value)"  class="form-control form-control-sm">
+    <select (change)="setSelectedGroup($event.target.value)" class="form-control form-control-sm">
       <option *ngFor="let group of groups;trackBy: trackItem;let i = index" [value]="group.id">{{ group.name }}</option>
     </select>
   </div>
   <div class="col-12" *ngIf="dataType == 'programs'">
-    <select (change)="setDataElementFromStage($event.target.value)" class="form-control form-control-sm">
-      <option *ngFor="let group of selected_group.programStages;trackBy: trackItem;let i = index" [value]="group.id">{{ group.name }}</option>
-    </select>
+    <div *ngIf="selected_group && selected_group.programStages">
+      <select (change)="setDataElementFromStage($event.target.value)" class="form-control form-control-sm">
+        <option *ngFor="let group of selected_group.programStages;trackBy: trackItem;let i = index" [value]="group.id">{{ group.name }}</option>
+      </select>
+    </div>
   </div>
-  <div class="col" *ngIf="dataLists.length !== 0" >
+  <div class="col" *ngIf="dataLists.length !== 0">
     <input type="text" class="form-control form-control-sm" placeholder="Search by name" [(ngModel)]="searchQuery">
     <ul class="list-group dataList" [@listState]="dataLists.length">
-      <li
-        *ngIf="menu.data_name"
-        class="list-group-item pt-1 pb-1 active-item"
-        style="cursor: no-drop"
-      >
-         {{ menu.data_name }}
+      <li *ngIf="menu.data_name" class="list-group-item pt-1 pb-1 active-item" style="cursor: no-drop">
+        {{ menu.data_name }}
       </li>
-      <ng-container *ngFor="let data of dataLists| filterByName:searchQuery;trackBy: trackItem;let i = index"
-      >
-        <li
-          class="list-group-item pt-1 pb-1"
-          [ngClass]="{'active-item': data.id === menu.data_id}"
-          (click)="setData(data)"
-          *ngIf="!alreadySelected(data.id)"
-        >
-          <span > {{ data.name }}</span>
+      <ng-container *ngFor="let data of dataLists| filterByName:searchQuery;trackBy: trackItem;let i = index">
+        <li class="list-group-item pt-1 pb-1" [ngClass]="{'active-item': data.id === menu.data_id}" (click)="setData(data)" *ngIf="!alreadySelected(data.id)">
+          <span> {{ data.name }}</span>
         </li>
       </ng-container>
 
@@ -79,9 +58,5 @@
   </div>
 </div>
 
-<button
-  style="height: 28px; padding: 2px"
-  class="p-1 cursor btn-outline-secondary btn-block btn-sm btn"
-  (click)="setNextMenu()"
->Set Next Menu
+<button style="height: 28px; padding: 2px" class="p-1 cursor btn-outline-secondary btn-block btn-sm btn" (click)="setNextMenu()">Set Next Menu
 </button>

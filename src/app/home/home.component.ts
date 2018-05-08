@@ -40,6 +40,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {}
 
   create() {
+    alert('here we are ib add new');
+
     this.store.dispatch(new Go({ path: ['create'] }));
   }
 
@@ -66,8 +68,8 @@ export class HomeComponent implements OnInit {
       if (item.settings.starting_menu !== '') {
         this.store.dispatch(new SetNextMenus([item.settings.starting_menu]));
       }
+      this.store.dispatch(new Go({ path: ['create'] }));
     });
-    this.store.dispatch(new Go({ path: ['create'] }));
   }
 
   simulate(item) {

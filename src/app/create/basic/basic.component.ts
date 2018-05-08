@@ -33,7 +33,6 @@ export class BasicComponent implements OnInit {
   ngOnInit() {}
 
   setValue(key, event) {
-    console.log('setValue : ', key, event.target.value);
     this.store.dispatch(
       new settingsActions.UpdateSetting({
         setting: { id: this.setting.id, changes: { [key]: event.target.value } }
@@ -42,7 +41,6 @@ export class BasicComponent implements OnInit {
   }
 
   setTypeValue(key, event) {
-    console.log('setTypeValue : ', key, event.target.value);
     const request_type = {
       ...this.setting.request_type,
       [key]: event.target.value
@@ -70,7 +68,7 @@ export class BasicComponent implements OnInit {
         }, 3000);
         setTimeout(() => {
           this.store.dispatch(new Go({ path: [''] }));
-        }, 4000);
+        }, 2000);
         this.store.dispatch(
           new UpdateUssd({
             ussd: {
@@ -86,13 +84,11 @@ export class BasicComponent implements OnInit {
         this.saving_failed = true;
         setTimeout(() => {
           this.saving_failed = false;
-        }, 3000);
+        }, 2000);
       }
     );
   }
   cancel() {
-    this.store.dispatch(new ClearMenus());
-    this.store.dispatch(new ClearSettings());
     this.store.dispatch(new Go({ path: [''] }));
   }
 }
