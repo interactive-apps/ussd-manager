@@ -45,8 +45,6 @@ export const is_data_ready = createSelector(
   selectNextMenu,
   selectMenuEntities,
   (menus, menusEntities) => {
-    console.log('menusEntities : ', menusEntities);
-    console.log('menus : ', menus);
     const dataMenus = menus
       .map(id => menusEntities[id].data_id)
       .filter(menu => !!menu);

@@ -25,6 +25,7 @@
   </div>
   <div class="col-12">
     <select (change)="setSelectedGroup($event.target.value)" class="form-control form-control-sm">
+      <option [value]="">Select option</option>
       <option *ngFor="let group of groups;trackBy: trackItem;let i = index" [value]="group.id">{{ group.name }}</option>
     </select>
   </div>
