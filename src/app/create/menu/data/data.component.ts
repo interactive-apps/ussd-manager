@@ -1,23 +1,22 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UssdMenu} from '../../../shared/models/menu';
-import {DataSet} from '../../../shared/models/dataSet';
-import {Program} from '../../../shared/models/program';
-import {listStateTrigger} from '../../../shared/animations/basic-animations';
-import {Store} from '@ngrx/store';
-import {ApplicationState} from '../../../store/reducers/index';
-import {UpdateMenu} from '../../../store/actions/menu.actions';
-import {UssdService} from '../../../shared/services/ussd.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UssdMenu } from '../../../shared/models/menu';
+import { DataSet } from '../../../shared/models/dataSet';
+import { Program } from '../../../shared/models/program';
+import { listStateTrigger } from '../../../shared/animations/basic-animations';
+import { Store } from '@ngrx/store';
+import { ApplicationState } from '../../../store/reducers/index';
+import { UpdateMenu } from '../../../store/actions/menu.actions';
+import { UssdService } from '../../../shared/services/ussd.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-data',
   templateUrl: './data.component.html',
   styleUrls: ['./data.component.css'],
-  animations: [
-    listStateTrigger
-  ]
+  animations: [listStateTrigger]
 })
 export class DataComponent implements OnInit {
-  @Input() menus: {[id: string]: UssdMenu};
+  @Input() menus: { [id: string]: UssdMenu };
   @Input() menu: UssdMenu = null;
   @Input() datasets: DataSet[] = [];
   @Input() datasetEntities: any = {};
@@ -38,7 +37,7 @@ export class DataComponent implements OnInit {
   constructor(
     private store: Store<ApplicationState>,
     private ussdService: UssdService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.groups = this.datasets;
@@ -50,6 +49,8 @@ export class DataComponent implements OnInit {
 
   setDataType(type) {
     this.dataType = type;
+    this.dataLists = [];
+    this.selected_group = null;
     if (type === 'datasets') {
       this.groups = this.datasets;
     } else if (type === 'programs') {
@@ -62,35 +63,46 @@ export class DataComponent implements OnInit {
   }
 
   setSubmit(value) {
-    this.store.dispatch(new UpdateMenu({
-      menu: {
-        id: this.menu.id,
-        changes: {
-          submit_data: value
+    this.store.dispatch(
+      new UpdateMenu({
+        menu: {
+          id: this.menu.id,
+          changes: {
+            submit_data: value
+          }
         }
-      }
-    }));
+      })
+    );
   }
 
   setSelectedGroup(value) {
     if (this.dataType === 'datasets') {
       const datasets = this.getItemById(this.datasets, value);
       const items = [];
-      datasets.dataElements.forEach((dataelem) => {
-        items.push(...dataelem.categoryCombos.map((cat) => {
-          return {
-            id: dataelem.id + '.' + cat.id,
-            dataElementId: dataelem.id,
-            categoryId: cat.id,
-            name: cat.name === 'default' ? dataelem.name : dataelem.name + ' ' + cat.name
-          };
-        }));
+      datasets.dataElements.map(dataelem => {
+        items.push(
+          ...dataelem.categoryCombos.map(cat => {
+            return {
+              id: dataelem.id + '.' + cat.id,
+              dataElementId: dataelem.id,
+              categoryId: cat.id,
+              name:
+                cat.name === 'default'
+                  ? dataelem.name
+                  : dataelem.name + ' ' + cat.name
+            };
+          })
+        );
       });
       this.dataLists = items;
     } else if (this.dataType === 'programs') {
       this.selectedProgram = value;
-      const programs = this.getItemById(this.programs, value);
-      this.selected_group = programs;
+      const program = this.getItemById(this.programs, value);
+      this.selected_group = program;
+      const { programStages } = program;
+      if (programStages && programStages.length > 0 && programStages[0].id) {
+        this.setDataElementFromStage(programStages[0].id);
+      }
     }
   }
 
@@ -118,16 +130,18 @@ export class DataComponent implements OnInit {
         data_id: data.id
       };
     }
-    this.store.dispatch(new UpdateMenu({
-      menu: {
-        id: this.menu.id,
-        changes: {...menu}
-      }
-    }));
+    this.store.dispatch(
+      new UpdateMenu({
+        menu: {
+          id: this.menu.id,
+          changes: { ...menu }
+        }
+      })
+    );
   }
 
   unsetMenu() {
-    const menu = <UssdMenu> {
+    const menu = <UssdMenu>{
       ...this.menu,
       title: '',
       data_element: '',
@@ -138,12 +152,14 @@ export class DataComponent implements OnInit {
       data_name: '',
       data_id: ''
     };
-    this.store.dispatch(new UpdateMenu({
-      menu: {
-        id: this.menu.id,
-        changes: {...menu}
-      }
-    }));
+    this.store.dispatch(
+      new UpdateMenu({
+        menu: {
+          id: this.menu.id,
+          changes: { ...menu }
+        }
+      })
+    );
   }
 
   setDataElementFromStage(value) {
@@ -158,18 +174,19 @@ export class DataComponent implements OnInit {
     });
   }
 
-  getItemById(arr, id) {
-    let obj = null;
-    arr.forEach((item) => {
-      if (item.id === id) {
-        obj = item;
-      }
+  getItemById(array, id) {
+    const matchItem = _.find(array, item => {
+      return item.id === id;
     });
-    return obj;
+    return matchItem;
   }
 
   setNextMenu() {
-    this.nextMenu.emit({current_menu_id: this.menu.id, next_menu_id: this.menu.next_menu, option: null});
+    this.nextMenu.emit({
+      current_menu_id: this.menu.id,
+      next_menu_id: this.menu.next_menu,
+      option: null
+    });
   }
 
   trackItem(index, item) {

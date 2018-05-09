@@ -2,8 +2,10 @@
   <div class="col-sm-12 mb-2">
     <h3>
       {{ setting.name }}
-      <button class="btn btn-outline-secondary btn-sm pull-right mr-1 cursor" (click)="save()"><i class="fa fa-save"></i> Save</button>
-      <button class="btn btn-outline-secondary btn-sm pull-right mr-1 cursor" (click)="cancel()"><i class="fa fa-close"></i> Cancel</button>
+      <button class="btn btn-outline-secondary btn-sm pull-right mr-1 cursor" (click)="save()">
+        <i class="fa fa-save"></i> Save</button>
+      <button class="btn btn-outline-secondary btn-sm pull-right mr-1 cursor" (click)="cancel()">
+        <i class="fa fa-close"></i> Cancel</button>
     </h3>
     <h4 class="pull-right" *ngIf="saving" @fade> Saving Data Please Wait...</h4>
     <h4 class="pull-right text-success" *ngIf="saving_success" @fade> Data Was Saved Successful</h4>
@@ -14,18 +16,10 @@
 <div class="card" @fade>
   <div class="card-header p-1 pl-2">
     Basic Configuration
-    <button
-      class="btn btn-light pull-right cursor"
-      (click)="editting_is_on = true"
-      *ngIf="!editting_is_on"
-    >
+    <button class="btn btn-light pull-right cursor" (click)="editting_is_on = true" *ngIf="!editting_is_on">
       <i class="fa fa-cog"></i> Show Configurations
     </button>
-    <button
-      class="btn btn-light pull-right cursor"
-      (click)="editting_is_on = false"
-      *ngIf="editting_is_on"
-    >
+    <button class="btn btn-light pull-right cursor" (click)="editting_is_on = false" *ngIf="editting_is_on">
       <i class="fa fa-window-close"></i> Hide Configurations
     </button>
   </div>
@@ -35,44 +29,26 @@
         <!--title-->
         <div class="form-group mb-1">
           <label>Title</label>
-          <input
-            type="text"
-            [value]="setting.name"
-            class="form-control form-control-sm"
-            (input)="setValue('name', $event)"
-            placeholder="title">
+          <input type="text" [value]="setting.name" class="form-control form-control-sm" (input)="setValue('name', $event)" placeholder="title">
         </div>
         <!--description-->
         <div class="form-group mb-1">
           <label>Description</label>
-          <textarea
-            style="height: 70px"
-            [value]="setting.description"
-            class="form-control form-control-sm"
-            rows="3"
-            (input)="setValue('description', $event)"
+          <textarea style="height: 70px" [value]="setting.description" class="form-control form-control-sm" rows="3" (input)="setValue('description', $event)"
             placeholder="Description"></textarea>
         </div>
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group mb-3">
               <label>Session Key</label>
-              <input
-                type="text"
-                [value]="setting.session_key"
-                class="form-control form-control-sm"
-                (input)="setValue('session_key', $event)"
+              <input type="text" [value]="setting.session_key" class="form-control form-control-sm" (input)="setValue('session_key', $event)"
                 placeholder="Session Key">
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group mb-3">
               <label>Phone Number Key</label>
-              <input
-                type="text"
-                [value]="setting.phone_number_key"
-                class="form-control form-control-sm"
-                (input)="setValue('session_key', $event)"
+              <input type="text" [value]="setting.phone_number_key" class="form-control form-control-sm" (input)="setValue('phone_number_key', $event)"
                 placeholder="Phone Number Key">
             </div>
           </div>
@@ -83,70 +59,41 @@
           <div class="col-sm-6">
             <div class="form-group mb-1">
               <label>User Response Key</label>
-              <input
-                type="text"
-                [value]="setting.user_response"
-                class="form-control form-control-sm"
-                (input)="setValue('user_response', $event)"
+              <input type="text" [value]="setting.user_response" class="form-control form-control-sm" (input)="setValue('user_response', $event)"
                 placeholder="User Data Key">
             </div>
             <div class="form-group mb-1">
               <label>Request Type Key</label>
-              <input
-                type="text"
-                [value]="setting.request_type.key"
-                class="form-control form-control-sm"
-                (input)="setTypeValue('key', $event)"
+              <input type="text" [value]="setting.request_type.key" class="form-control form-control-sm" (input)="setTypeValue('key', $event)"
                 placeholder="Request Type Key">
             </div>
             <div class="form-group mb-1">
               <label>First Request Value</label>
-              <input
-                type="text"
-                [value]="setting.request_type.first_request"
-                class="form-control form-control-sm"
-                (input)="setTypeValue('first_request', $event)"
+              <input type="text" [value]="setting.request_type.first_request" class="form-control form-control-sm" (input)="setTypeValue('first_request', $event)"
                 placeholder="First Request Value">
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group mb-1">
               <label>Continue Request Value</label>
-              <input
-                type="text"
-                [value]="setting.request_type.Continue_request"
-                class="form-control form-control-sm"
-                (input)="setTypeValue('Continue_request', $event)"
+              <input type="text" [value]="setting.request_type.Continue_request" class="form-control form-control-sm" (input)="setTypeValue('Continue_request', $event)"
                 placeholder="Continue Request Value">
             </div>
             <div class="form-group mb-1">
               <label>Terminated By Provider</label>
-              <input
-                type="text"
-                [value]="setting.request_type.terminated_by_provider"
-                class="form-control form-control-sm"
-                (input)="setTypeValue('terminated_by_provider', $event)"
+              <input type="text" [value]="setting.request_type.terminated_by_provider" class="form-control form-control-sm" (input)="setTypeValue('terminated_by_provider', $event)"
                 placeholder="Session Key">
             </div>
             <div class="form-group mb-1">
               <label>Timed Out</label>
-              <input
-                type="text"
-                [value]="setting.request_type.timed_out"
-                class="form-control form-control-sm"
-                (input)="setTypeValue('timed_out', $event)"
+              <input type="text" [value]="setting.request_type.timed_out" class="form-control form-control-sm" (input)="setTypeValue('timed_out', $event)"
                 placeholder="Phone Number Key">
             </div>
           </div>
           <div class="col-sm-12">
             <div class="form-group mb-1">
               <label>Missing User Message</label>
-              <textarea
-                class="form-control"
-                style="height: 50px"
-                [value]="setting.no_user_message"
-                (input)="setValue('session_key', $event)"
-              ></textarea>
+              <textarea class="form-control" style="height: 50px" [value]="setting.no_user_message" (input)="setValue('no_user_message', $event)"></textarea>
             </div>
           </div>
         </div>

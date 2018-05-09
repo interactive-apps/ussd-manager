@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
-import {UssdMenu} from '../models/menu';
-import {Setting} from '../models/settings';
-import {Ussd} from '../models/ussd';
-import {AddUssd, DoneLoadingUssds, USSDActionTypes} from '../../store/actions/ussd.actions';
-import {Observable} from 'rxjs/Observable';
-import {Store} from '@ngrx/store';
-import {ApplicationState} from '../../store/reducers/index';
-import {HttpClientService} from './http-client.service';
-import {DataSet} from "../models/dataSet";
-import {Program} from "../models/program";
-import {DataElement} from "../models/dataElement";
-import {AddDataelements} from "../../store/actions/dataelement.actions";
-import {AddDatasets} from "../../store/actions/dataset.actions";
-import {LoadPrograms} from "../../store/actions/program.actions";
+import { UssdMenu } from '../models/menu';
+import { Setting } from '../models/settings';
+import { Ussd } from '../models/ussd';
+import {
+  AddUssd,
+  DoneLoadingUssds,
+  USSDActionTypes
+} from '../../store/actions/ussd.actions';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { ApplicationState } from '../../store/reducers/index';
+import { HttpClientService } from './http-client.service';
+import { DataSet } from '../models/dataSet';
+import { Program } from '../models/program';
+import { DataElement } from '../models/dataElement';
+import { AddDataelements } from '../../store/actions/dataelement.actions';
+import { AddDatasets } from '../../store/actions/dataset.actions';
+import { LoadPrograms } from '../../store/actions/program.actions';
 
 @Injectable()
 export class UssdService {
@@ -26,14 +30,17 @@ export class UssdService {
   constructor(
     private store: Store<ApplicationState>,
     private http: HttpClientService
-  ) { }
+  ) {}
 
   // generate a random list of Id for use as scorecard id
   makeid(): string {
     let text = '';
-    const possible_combinations = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for ( let i = 0; i < 31; i++ ) {
-      text += possible_combinations.charAt(Math.floor(Math.random() * possible_combinations.length));
+    const possible_combinations =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 31; i++) {
+      text += possible_combinations.charAt(
+        Math.floor(Math.random() * possible_combinations.length)
+      );
     }
     return text;
   }
@@ -41,8 +48,10 @@ export class UssdService {
   make_session_id(): string {
     let text = '';
     const possible_combinations = '123456789';
-    for ( let i = 0; i < 9; i++ ) {
-      text += possible_combinations.charAt(Math.floor(Math.random() * possible_combinations.length));
+    for (let i = 0; i < 9; i++) {
+      text += possible_combinations.charAt(
+        Math.floor(Math.random() * possible_combinations.length)
+      );
     }
     return text;
   }
@@ -51,46 +60,88 @@ export class UssdService {
     return this.http.get('dataStore/ussd');
   }
 
-  load(id: string ): Observable<any> {
+  getEmptyUssdConfiguration(id: string) {
+    const menuId = this.makeid();
+    const inititialSettings = this.getStartingSettings(id);
+    inititialSettings.starting_menu = menuId;
+    const menus: UssdMenu = {
+      id: menuId,
+      title: 'Untitled menu',
+      type: '',
+      options: [],
+      previous_menu: '',
+      data_id: '',
+      next_menu: '',
+      dataType: '',
+      data_name: '',
+      auth_key: '',
+      fail_message: '',
+      retry_message: ''
+    };
+    const menuObject = {};
+    menuObject[menuId] = menus;
+    return {
+      id: id,
+      menus: menuObject,
+      settings: inititialSettings
+    };
+  }
+
+  load(id: string): Observable<any> {
     return this.http.get(`dataStore/ussd/${id}`);
   }
 
   getAllUssds() {
-    if ( this._ussds.length !== 0 ) {
+    if (this._ussds.length !== 0) {
       this.store.dispatch(new DoneLoadingUssds());
     } else {
       this.loadAll().subscribe(
-        ( ussds ) => {
+        ussds => {
           let ussd_count = 0;
-          ussds.forEach((ussd_key) => {
-            // loading scorecard details
+          ussds.forEach(ussd_key => {
+            // loading ussd details
             this.load(ussd_key).subscribe(
-              (ussd_details) => {
+              ussd_details => {
                 ussd_count++;
                 const ussd: Ussd = {
-                  id: ussd_key,
+                  id: ussd_details.id,
                   settings: ussd_details.settings,
                   menus: ussd_details.menus
                 };
                 this._ussds.push(ussd);
                 this.store.dispatch(new AddUssd({ ussd }));
-                if ( ussd_count === ussds.length ) {
+                if (ussd_count === ussds.length) {
                   this.store.dispatch(new DoneLoadingUssds());
                 }
               },
-              // catch error if anything happens when loading scorecard details
+              // catch error if anything happens when loading ussd details
               detail_error => {
                 ussd_count++;
-                if ( ussd_count === ussds.length ) {
+                if (ussd_count === ussds.length) {
                   this.store.dispatch(new DoneLoadingUssds());
                 }
               }
             );
           });
         },
-        // catch error when there is no scorecard
-        error => {
-          this.store.dispatch(new DoneLoadingUssds());
+        // catch error when there is no ussd setupd
+        errorResponse => {
+          const { error } = errorResponse;
+          if (error && error.httpStatusCode && error.httpStatusCode === 404) {
+            const id = this.makeid();
+            const data = this.getEmptyUssdConfiguration(id);
+            data.settings.dataStoreKey = 'idsr';
+            const ussd: Ussd = {
+              id: id,
+              settings: data.settings,
+              menus: data.menus
+            };
+            this._ussds.push(ussd);
+            this.store.dispatch(new AddUssd({ ussd }));
+            this.store.dispatch(new DoneLoadingUssds());
+          } else {
+            this.store.dispatch(new DoneLoadingUssds());
+          }
         }
       );
     }
@@ -98,58 +149,71 @@ export class UssdService {
 
   getMetaData() {
     // get the datasets and its metadata
-    if ( this._datasets.length === 0) {
-      this.http.get(this.datasetUrl).subscribe((data) => {
-          data.dataSets.forEach((dataset) => {
-            this._datasets.push({
-              id: dataset.id,
-              name: dataset.name,
-              periodType: dataset.periodType,
-              dataElementsIds: dataset.dataSetElements.map((dataelem) => dataelem.dataElement.id)
-            });
-            this._dataelements.push(...dataset.dataSetElements.map((dataelem) => {
+    if (this._datasets.length === 0) {
+      this.http.get(this.datasetUrl).subscribe(data => {
+        data.dataSets.forEach(dataset => {
+          this._datasets.push({
+            id: dataset.id,
+            name: dataset.name,
+            periodType: dataset.periodType,
+            dataElementsIds: dataset.dataSetElements.map(
+              dataelem => dataelem.dataElement.id
+            )
+          });
+          this._dataelements.push(
+            ...dataset.dataSetElements.map(dataelem => {
               return <DataElement>{
                 id: dataelem.dataElement.id,
                 name: dataelem.dataElement.name,
                 displayName: dataelem.dataElement.displayName,
-                categoryCombos: dataelem.dataElement.categoryCombo.categoryOptionCombos
+                categoryCombos:
+                  dataelem.dataElement.categoryCombo.categoryOptionCombos
               };
-            }));
-          });
-          this.store.dispatch(new AddDataelements({dataelements: this._dataelements}));
-          this.store.dispatch(new AddDatasets({datasets: this._datasets}));
+            })
+          );
+        });
+        this.store.dispatch(
+          new AddDataelements({ dataelements: this._dataelements })
+        );
+        this.store.dispatch(new AddDatasets({ datasets: this._datasets }));
       });
     }
     // get programs and its metadata
     if (this._programs.length === 0) {
-      this.http.get(this.programUrl).subscribe((data) => {
+      this.http.get(this.programUrl).subscribe(data => {
         const dx: DataElement[] = [];
-        data.programs.forEach((program) => {
+        data.programs.forEach(program => {
           this._programs.push({
             id: program.id,
             name: program.name,
             displayName: program.displayName,
-            programStages: program.programStages.map((stage) => {
+            programStages: program.programStages.map(stage => {
               return {
                 id: stage.id,
                 name: stage.name,
-                dataElementIds: stage.programStageDataElements.map((stageDe) => stageDe.dataElement.id)
+                dataElementIds: stage.programStageDataElements.map(
+                  stageDe => stageDe.dataElement.id
+                )
               };
             })
           });
-          program.programStages.forEach((stage) => {
-            dx.push(...stage.programStageDataElements.map((stageDe) => {
-              return <DataElement> {
-                id: stageDe.dataElement.id,
-                name: stageDe.dataElement.name,
-                displayName: stageDe.dataElement.displayName,
-                optionSets: (stageDe.dataElement.hasOwnProperty('optionSet')) ? stageDe.dataElement.optionSet.options : []
-              };
-            }));
+          program.programStages.forEach(stage => {
+            dx.push(
+              ...stage.programStageDataElements.map(stageDe => {
+                return <DataElement>{
+                  id: stageDe.dataElement.id,
+                  name: stageDe.dataElement.name,
+                  displayName: stageDe.dataElement.displayName,
+                  optionSets: stageDe.dataElement.hasOwnProperty('optionSet')
+                    ? stageDe.dataElement.optionSet.options
+                    : []
+                };
+              })
+            );
           });
         });
-        this.store.dispatch(new LoadPrograms({programs: this._programs}));
-        this.store.dispatch(new AddDataelements({dataelements: dx}));
+        this.store.dispatch(new LoadPrograms({ programs: this._programs }));
+        this.store.dispatch(new AddDataelements({ dataelements: dx }));
       });
     }
   }
@@ -157,10 +221,11 @@ export class UssdService {
   getStartingSettings(id: string): Setting {
     return {
       id: id,
-      name: '',
+      name: 'Untitled Ussd',
       description: '',
-      session_key: '',
-      user_response: '',
+      session_key: 'sessionid',
+      user_response: 'USSDRequest',
+      dataStoreKey: '',
       request_type: {
         key: 'USSDType',
         first_request: 'NR',
@@ -168,8 +233,9 @@ export class UssdService {
         terminated_by_provider: 'UC',
         timed_out: 'T'
       },
-      phone_number_key: '',
-      starting_menu: '',
+      phone_number_key: 'msisdn',
+      no_user_message: 'This phone number has no associated user',
+      starting_menu: ''
     };
   }
 
@@ -192,8 +258,7 @@ export class UssdService {
       period_type: '',
       use_for_year: false,
       possible_period_values: '',
-      next_menu: '',
+      next_menu: ''
     };
   }
-
 }

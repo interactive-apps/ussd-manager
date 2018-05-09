@@ -1,19 +1,15 @@
 {
   "/api": {
-    "target": "https://test.hisptz.org/dhis",
-    "target1": "http://localhost:8080/dhis",
+    "target": "https://play.dhis2.org/2.28",
     "secure": "false",
-    "auth":"kmbwilo:DHIS2014",
-    "auth1":"admin:PASS@2017",
+    "auth": "admin:district",
     "changeOrigin": "true"
 
   },
   "/": {
-    "target": "https://test.hisptz.org/dhis",
-    "target1": "http://localhost:8080/dhis",
+    "target": "https://play.dhis2.org/2.28",
     "secure": "false",
-    "auth":"kmbwilo:DHIS2014",
-    "auth1":"admin:PASS@2017",
+    "auth": "admin:district",
     "changeOrigin": "true"
   }
 }
