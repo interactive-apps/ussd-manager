@@ -1,6 +1,6 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { MenuActions, MenuActionTypes } from '../actions/menu.actions';
-import {UssdMenu} from '../../shared/models/menu';
+import { UssdMenu } from '../../shared/models/menu';
 
 export interface State extends EntityState<UssdMenu> {
   // additional entities state properties
@@ -20,10 +20,7 @@ export const initialState: State = adapter.getInitialState({
   next_menus: []
 });
 
-export function reducer(
-  state = initialState,
-  action: MenuActions
-): State {
+export function reducer(state = initialState, action: MenuActions): State {
   switch (action.type) {
     case MenuActionTypes.ADD_MENU: {
       return adapter.addOne(action.payload.menu, state);
@@ -62,7 +59,7 @@ export function reducer(
     }
 
     case MenuActionTypes.CLEAR_MENUS: {
-      return adapter.removeAll({ ...state, selectedMenuId: null });
+      return { ...state, selectedMenuId: null };
     }
 
     case MenuActionTypes.SET_SELECTED_MENU: {

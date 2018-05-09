@@ -60,22 +60,29 @@ export class UssdService {
     return this.http.get('dataStore/ussd');
   }
 
-  initiateBlankStore() {
-    const id = this.makeid();
-    const data = this.getDummyStore(id);
-    console.log('data : ', data);
-    return this.http.post(`dataStore/ussd/${id}`, data);
-  }
-
-  getDummyStore(id: string) {
+  getEmptyUssdConfiguration(id: string) {
     const menuId = this.makeid();
     const inititialSettings = this.getStartingSettings(id);
     inititialSettings.starting_menu = menuId;
-    const menus = {};
-    menus[menuId] = this.getStartingMenu(menuId, id);
+    const menus: UssdMenu = {
+      id: menuId,
+      title: 'Untitled menu',
+      type: '',
+      options: [],
+      previous_menu: '',
+      data_id: '',
+      next_menu: '',
+      dataType: '',
+      data_name: '',
+      auth_key: '',
+      fail_message: '',
+      retry_message: ''
+    };
+    const menuObject = {};
+    menuObject[menuId] = menus;
     return {
       id: id,
-      menus: menus,
+      menus: menuObject,
       settings: inititialSettings
     };
   }
@@ -97,7 +104,7 @@ export class UssdService {
               ussd_details => {
                 ussd_count++;
                 const ussd: Ussd = {
-                  id: ussd_key,
+                  id: ussd_details.id,
                   settings: ussd_details.settings,
                   menus: ussd_details.menus
                 };
@@ -121,14 +128,17 @@ export class UssdService {
         errorResponse => {
           const { error } = errorResponse;
           if (error && error.httpStatusCode && error.httpStatusCode === 404) {
-            this.initiateBlankStore().subscribe(
-              data => {
-                this.getAllUssds();
-              },
-              err => {
-                console.log(err);
-              }
-            );
+            const id = this.makeid();
+            const data = this.getEmptyUssdConfiguration(id);
+            data.settings.dataStoreKey = 'idsr';
+            const ussd: Ussd = {
+              id: id,
+              settings: data.settings,
+              menus: data.menus
+            };
+            this._ussds.push(ussd);
+            this.store.dispatch(new AddUssd({ ussd }));
+            this.store.dispatch(new DoneLoadingUssds());
           } else {
             this.store.dispatch(new DoneLoadingUssds());
           }
@@ -211,10 +221,11 @@ export class UssdService {
   getStartingSettings(id: string): Setting {
     return {
       id: id,
-      name: '',
+      name: 'Untitled Ussd',
       description: '',
-      session_key: '',
-      user_response: '',
+      session_key: 'sessionid',
+      user_response: 'USSDRequest',
+      dataStoreKey: '',
       request_type: {
         key: 'USSDType',
         first_request: 'NR',
@@ -222,7 +233,8 @@ export class UssdService {
         terminated_by_provider: 'UC',
         timed_out: 'T'
       },
-      phone_number_key: '',
+      phone_number_key: 'msisdn',
+      no_user_message: 'This phone number has no associated user',
       starting_menu: ''
     };
   }

@@ -47,7 +47,9 @@ export class CreateComponent implements OnInit {
     this.selectedDatas$ = store.select(menuSelectors.selectedDatas);
     this.authAlreadySelected$ = store.select(menuSelectors.isAuthAvailable);
     this.is_data_ready$ = store.select(menuSelectors.is_data_ready);
-    this.is_data_ready$.subscribe(value => console.log(value));
+    this.is_data_ready$.subscribe(value => {
+      // sconsole.log(value)
+    });
     this.datasets$ = store.select(dataSelectors.getDataSets);
     this.programs$ = store.select(dataSelectors.getPrograms);
     this.programsEntities$ = store.select(dataSelectors.selectProgramEntities);
@@ -60,7 +62,6 @@ export class CreateComponent implements OnInit {
   ngOnInit() {}
 
   addStartingMenu() {
-    console.log('On addStartingMenu ');
     const createdId = this.ussdService.makeid();
     const newStartingMenu: UssdMenu = this.ussdService.getStartingMenu(
       createdId,
