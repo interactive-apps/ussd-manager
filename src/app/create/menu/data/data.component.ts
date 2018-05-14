@@ -111,7 +111,7 @@ export class DataComponent implements OnInit {
 
   updateOptions(option) {
     const options = this.menu.options;
-    const newOptions = [];
+    let newOptions = [];
     if (option && option.checked) {
       newOptions.push({
         id: option.id,
@@ -125,14 +125,20 @@ export class DataComponent implements OnInit {
         newOptions.push({
           id: optionObj.id,
           title: optionObj.title,
-          response: '' + newOptions.length + 1,
+          response: '' + newOptions.length,
           value: optionObj.value
         });
       }
     });
+    newOptions = _.sortBy(newOptions, ['title']);
+    let count = 0;
+    newOptions.forEach(newOption => {
+      count++;
+      newOption.response = '' + count;
+    });
     const menu = <UssdMenu>{
       ...this.menu,
-      options: _.sortBy(newOptions, ['title'])
+      options: newOptions
     };
     this.store.dispatch(
       new UpdateMenu({
@@ -144,6 +150,13 @@ export class DataComponent implements OnInit {
     );
   }
 
+  hasOptionInMenuOptions(option, optionList) {
+    const matchOption = _.find(optionList, optionObj => {
+      return optionObj.id === option.id;
+    });
+    return matchOption && matchOption.id ? true : false;
+  }
+
   setData(data) {
     this.options = [];
     if (data.optionSets) {
@@ -152,7 +165,7 @@ export class DataComponent implements OnInit {
           id: option.id,
           name: option.name,
           code: option.code,
-          checked: false
+          checked: this.hasOptionInMenuOptions(option, this.menu.options)
         });
       });
     }
@@ -166,7 +179,7 @@ export class DataComponent implements OnInit {
         dataType: 'aggregate',
         data_name: data.name,
         data_id: data.id,
-        options: []
+        options: data.id === this.menu.data_id ? this.menu.options : []
       };
     } else if (this.dataType === 'programs') {
       menu = <UssdMenu>{
@@ -178,7 +191,7 @@ export class DataComponent implements OnInit {
         dataType: 'event',
         data_name: data.name,
         data_id: data.id,
-        options: []
+        options: data.id === this.menu.data_id ? this.menu.options : []
       };
     }
     this.store.dispatch(
