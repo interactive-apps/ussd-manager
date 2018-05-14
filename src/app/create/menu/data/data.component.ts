@@ -155,12 +155,14 @@ export class DataComponent implements OnInit {
       {
         id: this.ussdService.makeid(),
         name: 'Yes',
-        code: true
+        response: '1',
+        value: true
       },
       {
         id: this.ussdService.makeid(),
         name: 'No',
-        code: valueType === 'BOOLEAN' ? false : ''
+        response: '2',
+        value: valueType === 'BOOLEAN' ? false : ''
       }
     ];
   }
