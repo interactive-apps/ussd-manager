@@ -150,6 +150,21 @@ export class DataComponent implements OnInit {
     );
   }
 
+  getDefaultOptions(valueType) {
+    return [
+      {
+        id: this.ussdService.makeid(),
+        name: 'Yes',
+        code: true
+      },
+      {
+        id: this.ussdService.makeid(),
+        name: 'No',
+        code: valueType === 'BOOLEAN' ? false : ''
+      }
+    ];
+  }
+
   hasOptionInMenuOptions(option, optionList) {
     const matchOption = _.find(optionList, optionObj => {
       return optionObj.id === option.id;
@@ -158,6 +173,7 @@ export class DataComponent implements OnInit {
   }
 
   setData(data) {
+    const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
     this.options = [];
     if (data.optionSets) {
       data.optionSets.map(option => {
@@ -179,7 +195,12 @@ export class DataComponent implements OnInit {
         dataType: 'aggregate',
         data_name: data.name,
         data_id: data.id,
-        options: data.id === this.menu.data_id ? this.menu.options : []
+        options:
+          data.id === this.menu.data_id
+            ? this.menu.options
+            : ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1
+              ? this.getDefaultOptions(data.valueType)
+              : []
       };
     } else if (this.dataType === 'programs') {
       menu = <UssdMenu>{
@@ -191,7 +212,12 @@ export class DataComponent implements OnInit {
         dataType: 'event',
         data_name: data.name,
         data_id: data.id,
-        options: data.id === this.menu.data_id ? this.menu.options : []
+        options:
+          data.id === this.menu.data_id
+            ? this.menu.options
+            : ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1
+              ? this.getDefaultOptions(data.valueType)
+              : []
       };
     }
     this.store.dispatch(
