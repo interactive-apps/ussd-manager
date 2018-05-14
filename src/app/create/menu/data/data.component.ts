@@ -136,15 +136,11 @@ export class DataComponent implements OnInit {
       count++;
       newOption.response = '' + count;
     });
-    const menu = <UssdMenu>{
-      ...this.menu,
-      options: newOptions
-    };
     this.store.dispatch(
       new UpdateMenu({
         menu: {
           id: this.menu.id,
-          changes: { ...menu }
+          changes: { options: newOptions }
         }
       })
     );

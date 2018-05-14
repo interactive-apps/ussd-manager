@@ -45,12 +45,23 @@ export const is_data_ready = createSelector(
   selectNextMenu,
   selectMenuEntities,
   (menus, menusEntities) => {
-    const dataMenus = menus
-      .map(id => menusEntities[id].data_id)
-      .filter(menu => !!menu);
-    const periodMenus = menus
-      .map(id => menusEntities[id].type)
-      .filter(menu => menu === 'period');
+    const dataMenus = [];
+    const periodMenus = [];
+    menus.map(id => {
+      if (menusEntities && menusEntities[id] && menusEntities[id].data_id) {
+        dataMenus.push(menusEntities[id].data_id);
+      }
+    });
+    menus.map(id => {
+      if (
+        menusEntities &&
+        menusEntities[id] &&
+        menusEntities[id].type &&
+        menusEntities[id].type === 'period'
+      ) {
+        periodMenus.push(menusEntities[id].type);
+      }
+    });
     return dataMenus.length !== 0 && periodMenus.length === 2;
   }
 );
@@ -58,8 +69,15 @@ export const is_data_ready = createSelector(
 export const selectedDatas = createSelector(
   selectNextMenu,
   selectMenuEntities,
-  (menus, menusEntities) =>
-    menus.map(id => menusEntities[id].data_id).filter(menu => menu !== '')
+  (menus, menusEntities) => {
+    const dataMenus = [];
+    menus.map(id => {
+      if (menusEntities && menusEntities[id] && menusEntities[id].data_id) {
+        dataMenus.push(menusEntities[id].data_id);
+      }
+    });
+    return dataMenus;
+  }
 );
 
 export const selectCurrentMenu = createSelector(
