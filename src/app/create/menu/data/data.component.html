@@ -47,8 +47,18 @@
           <span> {{ data.name }}</span>
         </li>
       </ng-container>
-
     </ul>
+    <br>
+    <div class="col list-group dataList" *ngIf="options && options.length > 0">
+      <div *ngFor="let option of options">
+        <div style="padding: 5px;">
+          <label>
+            <input type="checkbox" name="options" value="{{option.code}}" [(ngModel)]="option.checked" (change)="updateOptions(option)"
+            /> {{option.name}}
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!--option for submitting data-->
