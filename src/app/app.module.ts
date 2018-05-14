@@ -1,26 +1,29 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {NgxPaginationModule} from 'ngx-pagination';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { DndModule } from 'ng2-dnd';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import {services} from './shared/services/index';
-import {RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-store';
-import {CustomSerializer} from './store/reducers/router.reducer';
-import {AppRoutingModule} from './app-routing.module';
-import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {environment} from '../environments/environment';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {effects} from './store/effects/index';
-import {EffectsModule} from '@ngrx/effects';
-import {metaReducers, reducers} from './store/reducers/index';
-import {StoreModule} from '@ngrx/store';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MenuModule} from './shared/components/menu/menu.module';
+import { services } from './shared/services/index';
+import {
+  RouterStateSerializer,
+  StoreRouterConnectingModule
+} from '@ngrx/router-store';
+import { CustomSerializer } from './store/reducers/router.reducer';
+import { AppRoutingModule } from './app-routing.module';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { effects } from './store/effects/index';
+import { EffectsModule } from '@ngrx/effects';
+import { metaReducers, reducers } from './store/reducers/index';
+import { StoreModule } from '@ngrx/store';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MenuModule } from './shared/components/menu/menu.module';
 import { CreateComponent } from './create/create.component';
 import { BasicComponent } from './create/basic/basic.component';
 import { MenuComponent } from './create/menu/menu.component';
@@ -29,15 +32,14 @@ import { AuthenticationComponent } from './create/menu/authentication/authentica
 import { DataComponent } from './create/menu/data/data.component';
 import { PeriodComponent } from './create/menu/period/period.component';
 import { OptionsComponent } from './create/menu/options/options.component';
-import {guards} from "./guards/index";
-import {FilterByNamePipe} from "./shared/filter-by-name.pipe";
+import { guards } from './guards/index';
+import { FilterByNamePipe } from './shared/filter-by-name.pipe';
 import { SimulateComponent } from './simulate/simulate.component';
+import { DataSubmissionComponent } from './create/menu/data-submission/data-submission.component';
 
 // Add a function, that returns a “TranslateHttpLoader” and export it (needed by AoT)
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http,
-    './assets/i18n/',
-    '.json');
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -53,7 +55,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PeriodComponent,
     OptionsComponent,
     FilterByNamePipe,
-    SimulateComponent
+    SimulateComponent,
+    DataSubmissionComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     NgxPaginationModule,
     DndModule.forRoot(),
-    StoreModule.forRoot(reducers, {metaReducers}),
+    StoreModule.forRoot(reducers, { metaReducers }),
     StoreRouterConnectingModule,
     EffectsModule.forRoot(effects),
     TranslateModule.forRoot({
@@ -74,7 +77,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    !environment.production ? StoreDevtoolsModule.instrument({maxAge: 100}) : [],
+    !environment.production
+      ? StoreDevtoolsModule.instrument({ maxAge: 100 })
+      : [],
     AppRoutingModule
   ],
   providers: [
@@ -84,4 +89,4 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
