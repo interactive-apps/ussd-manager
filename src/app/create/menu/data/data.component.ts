@@ -136,15 +136,11 @@ export class DataComponent implements OnInit {
       count++;
       newOption.response = '' + count;
     });
-    const menu = <UssdMenu>{
-      ...this.menu,
-      options: newOptions
-    };
     this.store.dispatch(
       new UpdateMenu({
         menu: {
           id: this.menu.id,
-          changes: { ...menu }
+          changes: { options: newOptions }
         }
       })
     );
@@ -155,12 +151,14 @@ export class DataComponent implements OnInit {
       {
         id: this.ussdService.makeid(),
         name: 'Yes',
-        code: true
+        response: '1',
+        value: true
       },
       {
         id: this.ussdService.makeid(),
         name: 'No',
-        code: valueType === 'BOOLEAN' ? false : ''
+        response: '2',
+        value: valueType === 'BOOLEAN' ? false : ''
       }
     ];
   }

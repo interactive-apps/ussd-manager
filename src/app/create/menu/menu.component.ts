@@ -80,7 +80,6 @@ export class MenuComponent implements OnInit {
   }
 
   createNewMenu(option = null) {
-    console.log('options', option);
     const newMenu: UssdMenu = {
       id: this.ussdService.makeid(),
       title: 'New Menu',
@@ -161,7 +160,8 @@ export class MenuComponent implements OnInit {
     return (
       !this.deleteEnabled &&
       this.menu.next_menu === '' &&
-      this.menu.options.length === 0
+      ((this.menu.options && this.menu.options.length === 0) ||
+        this.menu.type === 'data')
     );
   }
 
