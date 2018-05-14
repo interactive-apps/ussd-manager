@@ -87,6 +87,7 @@ export class DataComponent implements OnInit {
               dataElementId: dataelem.id,
               categoryId: cat.id,
               optionSets: dataelem.optionSets,
+              valueType: dataelem.valueType,
               name:
                 cat.name === 'default'
                   ? dataelem.name
@@ -170,6 +171,7 @@ export class DataComponent implements OnInit {
       return {
         id: dx.id,
         optionSets: dx.optionSets,
+        valueType: dx.valueType,
         stage: value,
         name: dx.name,
         program: this.selectedProgram
