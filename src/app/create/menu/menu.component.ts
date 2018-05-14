@@ -168,7 +168,7 @@ export class MenuComponent implements OnInit {
   // Deleting menu means any menu or option attached to this menu has to be deleted too
   deleteMenu(menu, next = false) {
     const previousMenu = this.menus[menu.previous_menu];
-    if (previousMenu.next_menu === menu.id) {
+    if (previousMenu && previousMenu.next_menu === menu.id) {
       this.store.dispatch(
         new menuActions.UpdateMenu({
           menu: {
@@ -181,8 +181,9 @@ export class MenuComponent implements OnInit {
       );
     }
     if (
+      previousMenu &&
       previousMenu.options.map(option => option.next_menu).indexOf(menu.id) !==
-      -1
+        -1
     ) {
       const options = previousMenu.options.map(option => {
         if (option.next_menu === menu.id) {

@@ -150,13 +150,13 @@ export class DataComponent implements OnInit {
     return [
       {
         id: this.ussdService.makeid(),
-        name: 'Yes',
+        title: 'Yes',
         response: '1',
         value: true
       },
       {
         id: this.ussdService.makeid(),
-        name: 'No',
+        title: 'No',
         response: '2',
         value: valueType === 'BOOLEAN' ? false : ''
       }
