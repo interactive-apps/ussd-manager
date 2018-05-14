@@ -164,8 +164,12 @@ export class UssdService {
             ...dataset.dataSetElements.map(dataelem => {
               return <DataElement>{
                 id: dataelem.dataElement.id,
+                valueType: dataelem.dataElement.valueType,
                 name: dataelem.dataElement.name,
                 displayName: dataelem.dataElement.displayName,
+                optionSets: dataelem.dataElement.hasOwnProperty('optionSet')
+                  ? dataelem.dataElement.optionSet.options
+                  : [],
                 categoryCombos:
                   dataelem.dataElement.categoryCombo.categoryOptionCombos
               };
@@ -202,6 +206,7 @@ export class UssdService {
               ...stage.programStageDataElements.map(stageDe => {
                 return <DataElement>{
                   id: stageDe.dataElement.id,
+                  valueType: stageDe.dataElement.valueType,
                   name: stageDe.dataElement.name,
                   displayName: stageDe.dataElement.displayName,
                   optionSets: stageDe.dataElement.hasOwnProperty('optionSet')
