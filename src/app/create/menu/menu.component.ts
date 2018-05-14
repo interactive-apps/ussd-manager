@@ -57,6 +57,11 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  isPreviosuMenuAllowDataSubmission() {
+    const previousMenu = this.menus[this.menu.previous_menu];
+    return previousMenu && previousMenu.dataType === 'event' ? true : false;
+  }
+
   addNextMenu(current_menu_id, next_menu_id) {
     const currentNext = [...this.next_menus];
     const index = currentNext.indexOf(current_menu_id);
