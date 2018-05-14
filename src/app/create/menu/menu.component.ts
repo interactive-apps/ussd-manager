@@ -160,8 +160,8 @@ export class MenuComponent implements OnInit {
     return (
       !this.deleteEnabled &&
       this.menu.next_menu === '' &&
-      this.menu.options &&
-      this.menu.options.length === 0
+      ((this.menu.options && this.menu.options.length === 0) ||
+        this.menu.type === 'data')
     );
   }
 
