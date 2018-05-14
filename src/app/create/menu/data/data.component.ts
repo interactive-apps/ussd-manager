@@ -30,6 +30,7 @@ export class DataComponent implements OnInit {
   dataType = 'datasets';
   groups: any[] = [];
   dataLists: any[] = [];
+  options: any[] = [];
   selected_group: any;
   searchQuery: string = null;
   selectedProgram = '';
@@ -86,6 +87,8 @@ export class DataComponent implements OnInit {
               id: dataelem.id + '.' + cat.id,
               dataElementId: dataelem.id,
               categoryId: cat.id,
+              optionSets: dataelem.optionSets,
+              valueType: dataelem.valueType,
               name:
                 cat.name === 'default'
                   ? dataelem.name
@@ -106,7 +109,80 @@ export class DataComponent implements OnInit {
     }
   }
 
+  updateOptions(option) {
+    const options = this.menu.options;
+    let newOptions = [];
+    if (option && option.checked) {
+      newOptions.push({
+        id: option.id,
+        title: option.name,
+        response: '' + newOptions.length,
+        value: option.code
+      });
+    }
+    options.map(optionObj => {
+      if (optionObj && optionObj.id !== option.id) {
+        newOptions.push({
+          id: optionObj.id,
+          title: optionObj.title,
+          response: '' + newOptions.length,
+          value: optionObj.value
+        });
+      }
+    });
+    newOptions = _.sortBy(newOptions, ['title']);
+    let count = 0;
+    newOptions.forEach(newOption => {
+      count++;
+      newOption.response = '' + count;
+    });
+    this.store.dispatch(
+      new UpdateMenu({
+        menu: {
+          id: this.menu.id,
+          changes: { options: newOptions }
+        }
+      })
+    );
+  }
+
+  getDefaultOptions(valueType) {
+    return [
+      {
+        id: this.ussdService.makeid(),
+        name: 'Yes',
+        response: '1',
+        value: true
+      },
+      {
+        id: this.ussdService.makeid(),
+        name: 'No',
+        response: '2',
+        value: valueType === 'BOOLEAN' ? false : ''
+      }
+    ];
+  }
+
+  hasOptionInMenuOptions(option, optionList) {
+    const matchOption = _.find(optionList, optionObj => {
+      return optionObj.id === option.id;
+    });
+    return matchOption && matchOption.id ? true : false;
+  }
+
   setData(data) {
+    const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
+    this.options = [];
+    if (data.optionSets) {
+      data.optionSets.map(option => {
+        this.options.push({
+          id: option.id,
+          name: option.name,
+          code: option.code,
+          checked: this.hasOptionInMenuOptions(option, this.menu.options)
+        });
+      });
+    }
     let menu = null;
     if (this.dataType === 'datasets') {
       menu = <UssdMenu>{
@@ -116,7 +192,13 @@ export class DataComponent implements OnInit {
         category_combo: data.categoryId,
         dataType: 'aggregate',
         data_name: data.name,
-        data_id: data.id
+        data_id: data.id,
+        options:
+          data.id === this.menu.data_id
+            ? this.menu.options
+            : ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1
+              ? this.getDefaultOptions(data.valueType)
+              : []
       };
     } else if (this.dataType === 'programs') {
       menu = <UssdMenu>{
@@ -125,9 +207,15 @@ export class DataComponent implements OnInit {
         data_element: data.id,
         program: this.selectedProgram,
         program_stage: this.selected_group.id,
-        dataType: 'tracker',
+        dataType: 'event',
         data_name: data.name,
-        data_id: data.id
+        data_id: data.id,
+        options:
+          data.id === this.menu.data_id
+            ? this.menu.options
+            : ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1
+              ? this.getDefaultOptions(data.valueType)
+              : []
       };
     }
     this.store.dispatch(
@@ -167,6 +255,8 @@ export class DataComponent implements OnInit {
     this.dataLists = stage.dataElements.map(dx => {
       return {
         id: dx.id,
+        optionSets: dx.optionSets,
+        valueType: dx.valueType,
         stage: value,
         name: dx.name,
         program: this.selectedProgram

@@ -39,16 +39,29 @@
   <div class="col" *ngIf="dataLists.length !== 0">
     <input type="text" class="form-control form-control-sm" placeholder="Search by name" [(ngModel)]="searchQuery">
     <ul class="list-group dataList" [@listState]="dataLists.length">
-      <li *ngIf="menu.data_name" class="list-group-item pt-1 pb-1 active-item" style="cursor: no-drop">
+      <!-- <li *ngIf="menu.data_name" class="list-group-item pt-1 pb-1 active-item" style="cursor: no-drop">
         {{ menu.data_name }}
-      </li>
+      </li> -->
       <ng-container *ngFor="let data of dataLists| filterByName:searchQuery;trackBy: trackItem;let i = index">
-        <li class="list-group-item pt-1 pb-1" [ngClass]="{'active-item': data.id === menu.data_id}" (click)="setData(data)" *ngIf="!alreadySelected(data.id)">
+        <li class="list-group-item pt-1 pb-1" [ngClass]="{'active-item': data.id === menu.data_id}" (click)="setData(data)">
           <span> {{ data.name }}</span>
         </li>
       </ng-container>
-
     </ul>
+    <!--option selctions for data menu-->
+    <br>
+    <hr>
+    <div class="list-group dataList" *ngIf="options && options.length > 0">
+      <input type="text" class="form-control form-control-sm" placeholder="Search options by name" [(ngModel)]="searchOptionQuery">
+      <div *ngFor="let option of options| filterByName:searchOptionQuery;trackBy: trackItem;">
+        <div style="padding: 5px;">
+          <label>
+            <input type="checkbox" name="options" value="{{option.code}}" [(ngModel)]="option.checked" (change)="updateOptions(option)"
+            /> {{option.name}}
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!--option for submitting data-->
