@@ -166,6 +166,9 @@ export class UssdService {
                 id: dataelem.dataElement.id,
                 name: dataelem.dataElement.name,
                 displayName: dataelem.dataElement.displayName,
+                optionSets: dataelem.dataElement.hasOwnProperty('optionSet')
+                  ? dataelem.dataElement.optionSet.options
+                  : [],
                 categoryCombos:
                   dataelem.dataElement.categoryCombo.categoryOptionCombos
               };

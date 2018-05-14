@@ -86,6 +86,7 @@ export class DataComponent implements OnInit {
               id: dataelem.id + '.' + cat.id,
               dataElementId: dataelem.id,
               categoryId: cat.id,
+              optionSets: dataelem.optionSets,
               name:
                 cat.name === 'default'
                   ? dataelem.name
@@ -107,6 +108,7 @@ export class DataComponent implements OnInit {
   }
 
   setData(data) {
+    console.log(data);
     let menu = null;
     if (this.dataType === 'datasets') {
       menu = <UssdMenu>{
@@ -167,6 +169,7 @@ export class DataComponent implements OnInit {
     this.dataLists = stage.dataElements.map(dx => {
       return {
         id: dx.id,
+        optionSets: dx.optionSets,
         stage: value,
         name: dx.name,
         program: this.selectedProgram
