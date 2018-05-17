@@ -17,7 +17,11 @@ export class DataSubmissionComponent implements OnInit {
   submit_data = false;
   constructor(private store: Store<ApplicationState>) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.menu) {
+      this.submit_data = this.menu.submit_data;
+    }
+  }
 
   setNextMenu() {
     this.nextMenu.emit({

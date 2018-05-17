@@ -112,30 +112,43 @@ export class DataComponent implements OnInit {
   updateOptions(option) {
     const options = this.menu.options;
     let newOptions = [];
+
     if (option && option.checked) {
-      newOptions.push({
+      const newOption = {
         id: option.id,
         title: option.name,
         response: '' + newOptions.length,
         value: option.code
-      });
+      };
+      if (option.next_menu && option.next_menu !== '') {
+        newOption['next_menu'] = option.next_menu;
+      }
+      newOptions.push(newOption);
     }
     options.map(optionObj => {
       if (optionObj && optionObj.id !== option.id) {
-        newOptions.push({
+        const newOption = {
           id: optionObj.id,
           title: optionObj.title,
           response: '' + newOptions.length,
           value: optionObj.value
-        });
+        };
+        if (optionObj.next_menu && optionObj.next_menu !== '') {
+          newOption['next_menu'] = optionObj.next_menu;
+        }
+        newOptions.push(newOption);
       }
     });
     newOptions = _.sortBy(newOptions, ['title']);
+    if (option.inReverseOrder) {
+      newOptions = _.reverse(newOptions);
+    }
     let count = 0;
     newOptions.forEach(newOption => {
       count++;
       newOption.response = '' + count;
     });
+
     this.store.dispatch(
       new UpdateMenu({
         menu: {
@@ -150,15 +163,19 @@ export class DataComponent implements OnInit {
     return [
       {
         id: this.ussdService.makeid(),
-        title: 'Yes',
-        response: '1',
-        value: true
+        name: 'Yes',
+        code: true,
+        inReverseOrder: true,
+        next_menu: '',
+        checked: true
       },
       {
         id: this.ussdService.makeid(),
-        title: 'No',
-        response: '2',
-        value: valueType === 'BOOLEAN' ? false : ''
+        name: 'No',
+        code: valueType === 'BOOLEAN' ? false : '',
+        inReverseOrder: true,
+        next_menu: '',
+        checked: true
       }
     ];
   }
@@ -170,6 +187,18 @@ export class DataComponent implements OnInit {
     return matchOption && matchOption.id ? true : false;
   }
 
+  getMenuSelections(menus) {
+    const menuSelections = [];
+    menuSelections.push({ id: '', name: 'select next menu' });
+    Object.keys(menus).map(menuId => {
+      if (this.menu.id !== menuId) {
+        const menuObject = this.menus[menuId];
+        menuSelections.push({ id: menuId, name: menuObject.title });
+      }
+    });
+    return menuSelections;
+  }
+
   setData(data) {
     const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
     this.options = [];
@@ -179,9 +208,15 @@ export class DataComponent implements OnInit {
           id: option.id,
           name: option.name,
           code: option.code,
+          inReverseOrder: false,
+          next_menu: '',
           checked: this.hasOptionInMenuOptions(option, this.menu.options)
         });
       });
+    }
+    if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
+      const options = this.getDefaultOptions(data.valueType);
+      this.options = _.concat([], options);
     }
     let menu = null;
     if (this.dataType === 'datasets') {
@@ -193,12 +228,7 @@ export class DataComponent implements OnInit {
         dataType: 'aggregate',
         data_name: data.name,
         data_id: data.id,
-        options:
-          data.id === this.menu.data_id
-            ? this.menu.options
-            : ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1
-              ? this.getDefaultOptions(data.valueType)
-              : []
+        options: data.id === this.menu.data_id ? this.menu.options : []
       };
     } else if (this.dataType === 'programs') {
       menu = <UssdMenu>{
@@ -210,12 +240,7 @@ export class DataComponent implements OnInit {
         dataType: 'event',
         data_name: data.name,
         data_id: data.id,
-        options:
-          data.id === this.menu.data_id
-            ? this.menu.options
-            : ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1
-              ? this.getDefaultOptions(data.valueType)
-              : []
+        options: data.id === this.menu.data_id ? this.menu.options : []
       };
     }
     this.store.dispatch(
@@ -226,6 +251,31 @@ export class DataComponent implements OnInit {
         }
       })
     );
+    if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
+      const newOptions = [];
+      this.options.map(option => {
+        const newOption = {
+          id: option.id,
+          title: option.name,
+          response: '' + newOptions.length,
+          value: option.code
+        };
+        newOptions.push(newOption);
+      });
+      let count = 0;
+      newOptions.forEach(newOption => {
+        count++;
+        newOption.response = '' + count;
+      });
+      this.store.dispatch(
+        new UpdateMenu({
+          menu: {
+            id: this.menu.id,
+            changes: { options: newOptions }
+          }
+        })
+      );
+    }
   }
 
   unsetMenu() {

@@ -25,7 +25,7 @@
   </div>
   <div class="col-12">
     <select (change)="setSelectedGroup($event.target.value)" class="form-control form-control-sm">
-      <option [value]="">Select option</option>
+      <option [value]="">Select {{ (dataType == 'programs')? "program" : (dataType == 'datasets')? "datasets": "options" }}</option>
       <option *ngFor="let group of groups;trackBy: trackItem;let i = index" [value]="group.id">{{ group.name }}</option>
     </select>
   </div>
@@ -49,18 +49,8 @@
       </ng-container>
     </ul>
     <!--option selctions for data menu-->
-    <br>
-    <hr>
-    <div class="list-group dataList" *ngIf="options && options.length > 0">
-      <input type="text" class="form-control form-control-sm" placeholder="Search options by name" [(ngModel)]="searchOptionQuery">
-      <div *ngFor="let option of options| filterByName:searchOptionQuery;trackBy: trackItem;">
-        <div style="padding: 5px;">
-          <label>
-            <input type="checkbox" name="options" value="{{option.code}}" [(ngModel)]="option.checked" (change)="updateOptions(option)"
-            /> {{option.name}}
-          </label>
-        </div>
-      </div>
+    <div *ngIf="options && options.length > 0">
+      <app-data-element-options [menu]="menu" [menus]="menus" [options]="options" (changeOptionStatus)="updateOptions($event)"></app-data-element-options>
     </div>
   </div>
 </div>
