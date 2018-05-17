@@ -320,6 +320,15 @@ export class DataComponent implements OnInit {
         program: this.selectedProgram
       };
     });
+    if (this.menu.data_id) {
+      const { data_id } = this.menu;
+      const matchedData = _.find(this.dataLists, data => {
+        return data.id === data_id;
+      });
+      if (matchedData && matchedData.id) {
+        this.setData(matchedData);
+      }
+    }
   }
 
   getItemById(array, id) {
