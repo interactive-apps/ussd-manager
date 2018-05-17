@@ -37,6 +37,7 @@ export class DataSubmissionComponent implements OnInit {
         menu: {
           id: this.menu.id,
           changes: {
+            title: 'Data Submission',
             submit_data: value
           }
         }

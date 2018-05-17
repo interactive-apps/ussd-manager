@@ -42,6 +42,14 @@ export class DataComponent implements OnInit {
 
   ngOnInit() {
     this.groups = this.datasets;
+    const { dataType } = this.menu;
+    if (dataType) {
+      if (dataType === 'event') {
+        this.setDataType('programs');
+      } else if (dataType === 'aggregate') {
+        this.setDataType('datasets');
+      }
+    }
   }
 
   setMessage(message) {
