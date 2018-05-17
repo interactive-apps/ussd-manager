@@ -6,7 +6,7 @@ export interface UssdMenu {
     id: string;
     title: string;
     response: string;
-    next_menu: string;
+    next_menu?: string;
     value?: string;
   }[];
   previous_menu?: string;

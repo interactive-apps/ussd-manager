@@ -109,29 +109,38 @@ export class DataComponent implements OnInit {
     }
   }
 
-  updateOptions(option, inReverseOrder?) {
+  updateOptions(option) {
     const options = this.menu.options;
     let newOptions = [];
+
     if (option && option.checked) {
-      newOptions.push({
+      const newOption = {
         id: option.id,
         title: option.name,
         response: '' + newOptions.length,
         value: option.code
-      });
+      };
+      if (option.next_menu && option.next_menu !== '') {
+        newOption['next_menu'] = option.next_menu;
+      }
+      newOptions.push(newOption);
     }
     options.map(optionObj => {
       if (optionObj && optionObj.id !== option.id) {
-        newOptions.push({
+        const newOption = {
           id: optionObj.id,
           title: optionObj.title,
           response: '' + newOptions.length,
           value: optionObj.value
-        });
+        };
+        if (optionObj.next_menu && optionObj.next_menu !== '') {
+          newOption['next_menu'] = optionObj.next_menu;
+        }
+        newOptions.push(newOption);
       }
     });
     newOptions = _.sortBy(newOptions, ['title']);
-    if (inReverseOrder) {
+    if (option.inReverseOrder) {
       newOptions = _.reverse(newOptions);
     }
     let count = 0;
@@ -139,6 +148,7 @@ export class DataComponent implements OnInit {
       count++;
       newOption.response = '' + count;
     });
+
     this.store.dispatch(
       new UpdateMenu({
         menu: {
@@ -150,13 +160,12 @@ export class DataComponent implements OnInit {
   }
 
   getDefaultOptions(valueType) {
-    const menuSelections = this.getMenuSelections(this.menus);
     return [
       {
         id: this.ussdService.makeid(),
         name: 'Yes',
         code: true,
-        menuSelections: menuSelections,
+        inReverseOrder: true,
         next_menu: '',
         checked: true
       },
@@ -164,7 +173,7 @@ export class DataComponent implements OnInit {
         id: this.ussdService.makeid(),
         name: 'No',
         code: valueType === 'BOOLEAN' ? false : '',
-        menuSelections: menuSelections,
+        inReverseOrder: true,
         next_menu: '',
         checked: true
       }
@@ -193,14 +202,13 @@ export class DataComponent implements OnInit {
   setData(data) {
     const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
     this.options = [];
-    const menuSelections = this.getMenuSelections(this.menus);
     if (data.optionSets) {
       data.optionSets.map(option => {
         this.options.push({
           id: option.id,
           name: option.name,
           code: option.code,
-          menuSelections: menuSelections,
+          inReverseOrder: false,
           next_menu: '',
           checked: this.hasOptionInMenuOptions(option, this.menu.options)
         });
@@ -208,7 +216,7 @@ export class DataComponent implements OnInit {
     }
     if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
       const options = this.getDefaultOptions(data.valueType);
-      this.options = _.concat(this.options, options);
+      this.options = _.concat([], options);
     }
     let menu = null;
     if (this.dataType === 'datasets') {
@@ -244,11 +252,29 @@ export class DataComponent implements OnInit {
       })
     );
     if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
+      const newOptions = [];
       this.options.map(option => {
-        setTimeout(() => {
-          this.updateOptions(option, true);
-        }, 500);
+        const newOption = {
+          id: option.id,
+          title: option.name,
+          response: '' + newOptions.length,
+          value: option.code
+        };
+        newOptions.push(newOption);
       });
+      let count = 0;
+      newOptions.forEach(newOption => {
+        count++;
+        newOption.response = '' + count;
+      });
+      this.store.dispatch(
+        new UpdateMenu({
+          menu: {
+            id: this.menu.id,
+            changes: { options: newOptions }
+          }
+        })
+      );
     }
   }
 

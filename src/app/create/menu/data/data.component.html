@@ -50,7 +50,7 @@
     </ul>
     <!--option selctions for data menu-->
     <div *ngIf="options && options.length > 0">
-      <app-data-element-options [options]="options" (changeOptionStatus)="updateOptions($event)"></app-data-element-options>
+      <app-data-element-options [menu]="menu" [menus]="menus" [options]="options" (changeOptionStatus)="updateOptions($event)"></app-data-element-options>
     </div>
   </div>
 </div>
