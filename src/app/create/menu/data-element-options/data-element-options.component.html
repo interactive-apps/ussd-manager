@@ -12,8 +12,8 @@
             </label>
           </div>
           <div class="col-sm-5 col-md-5 col-lg-5">
-            <select class="form-control form-control-sm">
-              <option *ngFor="let option of menuSelections" value="{{ option.id }} "> {{ option.name }}</option>
+            <select (change)="updateOptionNextMenu($event.target.value, option.id)" class="form-control form-control-sm">
+              <option *ngFor="let menu of option.menuSelections" [value]="menu.id"> {{ menu.name }}</option>
             </select>
           </div>
         </div>

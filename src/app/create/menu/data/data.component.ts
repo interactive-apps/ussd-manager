@@ -180,6 +180,7 @@ export class DataComponent implements OnInit {
 
   getMenuSelections(menus) {
     const menuSelections = [];
+    menuSelections.push({ id: '', name: 'select next menu' });
     Object.keys(menus).map(menuId => {
       if (this.menu.id !== menuId) {
         const menuObject = this.menus[menuId];

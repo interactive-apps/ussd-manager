@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UssdMenu } from '../../../shared/models/menu';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-data-element-options',
@@ -16,6 +17,10 @@ export class DataElementOptionsComponent implements OnInit {
 
   updateOptions(option) {
     this.changeOptionStatus.emit(option);
+  }
+
+  updateOptionNextMenu(nextMenuId, optionId) {
+    console.log(nextMenuId, optionId);
   }
 
   trackItem(index, item) {

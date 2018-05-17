@@ -48,7 +48,6 @@
         </li>
       </ng-container>
     </ul>
-    {{ menu.options |json }}
     <!--option selctions for data menu-->
     <div *ngIf="options && options.length > 0">
       <app-data-element-options [options]="options" (changeOptionStatus)="updateOptions($event)"></app-data-element-options>
