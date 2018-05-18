@@ -64,6 +64,15 @@ export class DataComponent implements OnInit {
       this.groups = this.datasets;
     } else if (type === 'programs') {
       this.groups = this.programs;
+      setTimeout(() => {
+        if (
+          this.menu.program &&
+          this.menu.program !== '' &&
+          this.selectedDatas
+        ) {
+          this.setSelectedGroup(this.menu.program);
+        }
+      }, 100);
     }
   }
 
@@ -111,7 +120,13 @@ export class DataComponent implements OnInit {
       const program = this.getItemById(this.programs, value);
       this.selected_group = program;
       const { programStages } = program;
-      if (programStages && programStages.length > 0 && programStages[0].id) {
+      if (this.menu.program_stage && this.menu.program_stage !== '') {
+        this.setDataElementFromStage(programStages[0].id);
+      } else if (
+        programStages &&
+        programStages.length > 0 &&
+        programStages[0].id
+      ) {
         this.setDataElementFromStage(programStages[0].id);
       }
     }

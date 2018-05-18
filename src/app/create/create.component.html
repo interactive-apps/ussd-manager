@@ -17,9 +17,12 @@
         </tr>
         <tr>
           <td *ngFor="let next_menu of (nextmenus$ | async);trackBy: trackItem; let i=index">
-            <app-menu [menu]="(menus$ | async)[next_menu]" [menus]="menus$ | async" [programs]="programs$ | async" [datasets]="datasets$ | async"
-              [datasetEntities]="datasetEntities$ | async" [programEntities]="programsEntities$ | async" [next_menus]="nextmenus$ | async"
-              [selectedDatas]="selectedDatas$ | async" [authAvailable]="authAlreadySelected$ | async" (nextMenuValue)="setNextMenu($event)"></app-menu>
+            <div *ngIf="selectedDatas$ | async">
+              <app-menu [menu]="(menus$ | async)[next_menu]" [menus]="menus$ | async" [programs]="programs$ | async" [datasets]="datasets$ | async"
+                [datasetEntities]="datasetEntities$ | async" [programEntities]="programsEntities$ | async" [next_menus]="nextmenus$ | async"
+                [selectedDatas]="selectedDatas$ | async" [authAvailable]="authAlreadySelected$ | async" (nextMenuValue)="setNextMenu($event)"></app-menu>
+            </div>
+
           </td>
         </tr>
       </table>
