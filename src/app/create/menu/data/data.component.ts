@@ -188,6 +188,25 @@ export class DataComponent implements OnInit {
     ];
   }
 
+  getSelectedMenu(menuId) {
+    let selected = '';
+    if (menuId && menuId !== '') {
+      const menu = this.menus[menuId];
+      selected = menu && menu.title ? menu.title : '';
+    }
+    return selected;
+  }
+
+  updateNextMenu(next_menu: string) {
+    if (next_menu && next_menu !== '') {
+      this.nextMenu.emit({
+        current_menu_id: this.menu.id,
+        next_menu_id: next_menu,
+        option: null
+      });
+    }
+  }
+
   hasOptionInMenuOptions(option, optionList) {
     const matchOption = _.find(optionList, optionObj => {
       return optionObj.id === option.id;
@@ -223,6 +242,7 @@ export class DataComponent implements OnInit {
       });
     }
     if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
+      console.log('this.menu.options ', this.menu.options);
       const options = this.getDefaultOptions(data.valueType);
       this.options = _.concat([], options);
     }

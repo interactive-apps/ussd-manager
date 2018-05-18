@@ -62,5 +62,15 @@
   </div>
 </div>
 
-<button style="height: 28px; padding: 2px" class="p-1 cursor btn-outline-secondary btn-block btn-sm btn" (click)="setNextMenu()">Set Next Menu
-</button>
+<div class="row">
+  <div class="col-sm-6 col-md-6 col-lg-6">
+    <select (change)="updateNextMenu($event.target.value)" class="form-control form-control-sm">
+      <option *ngIf="getSelectedMenu(menu.next_menu) !== ''"> {{getSelectedMenu(menu.next_menu) }}</option>
+      <option *ngFor="let menuSelections of getMenuSelections(menus);trackBy: trackItem;" [value]="menuSelections.id"> {{ menuSelections.name }}</option>
+    </select>
+  </div>
+  <div class="col-sm-6 col-md-6 col-lg-6">
+    <button style="height: 28px; padding: 2px" class="p-1 cursor btn-outline-secondary btn-block btn-sm btn" (click)="setNextMenu()">Set Next Menu
+    </button>
+  </div>
+</div>

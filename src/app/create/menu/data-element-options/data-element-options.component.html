@@ -8,7 +8,7 @@
           <div class="col-sm-7 col-md-7 col-lg-7">
             <label>
               <input type="checkbox" name="options" value="{{option.code}}" [(ngModel)]="option.checked" (change)="updateOptions(option)"
-              /> {{option.name}}
+              /> {{option.name}} : {{ option.id}}
             </label>
           </div>
           <div class="col-sm-5 col-md-5 col-lg-5">

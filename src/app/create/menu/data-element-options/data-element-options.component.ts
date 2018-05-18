@@ -29,7 +29,6 @@ export class DataElementOptionsComponent implements OnInit {
         selected = menu.title;
       }
     }
-
     return selected;
   }
 
