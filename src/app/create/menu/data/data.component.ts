@@ -231,20 +231,36 @@ export class DataComponent implements OnInit {
     this.options = [];
     if (data.optionSets) {
       data.optionSets.map(option => {
+        const matchOption = _.find(this.menu.options, optionObj => {
+          return optionObj.id === option.id;
+        });
         this.options.push({
           id: option.id,
           name: option.name,
           code: option.code,
           inReverseOrder: false,
-          next_menu: '',
-          checked: this.hasOptionInMenuOptions(option, this.menu.options)
+          next_menu:
+            matchOption && matchOption.next_menu ? matchOption.next_menu : '',
+          checked: matchOption && matchOption.id ? true : false
         });
       });
     }
     if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
-      console.log('this.menu.options ', this.menu.options);
       const options = this.getDefaultOptions(data.valueType);
-      this.options = _.concat([], options);
+      options.map(option => {
+        const matchOption = _.find(this.menu.options, optionObj => {
+          return optionObj.value === option.code;
+        });
+        this.options.push({
+          id: matchOption && matchOption.id ? matchOption.id : option.id,
+          name: option.name,
+          code: option.code,
+          inReverseOrder: false,
+          next_menu:
+            matchOption && matchOption.next_menu ? matchOption.next_menu : '',
+          checked: matchOption && matchOption.id ? true : false
+        });
+      });
     }
     let menu = null;
     if (this.dataType === 'datasets') {
@@ -288,6 +304,9 @@ export class DataComponent implements OnInit {
           response: '' + newOptions.length,
           value: option.code
         };
+        if (option.next_menu && option.next_menu !== '') {
+          newOption['next_menu'] = option.next_menu;
+        }
         newOptions.push(newOption);
       });
       let count = 0;
