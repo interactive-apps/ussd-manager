@@ -15,6 +15,7 @@ export interface UssdMenu {
   data_id?: string;
   submit_data?: boolean;
   data_element?: string;
+  dataSet?: string;
   category_combo?: string;
   program?: string;
   program_stage?: string;

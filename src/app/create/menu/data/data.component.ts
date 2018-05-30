@@ -34,6 +34,7 @@ export class DataComponent implements OnInit {
   selected_group: any;
   searchQuery: string = null;
   selectedProgram = '';
+  selectedDataset = '';
   submit_data = true;
   constructor(
     private store: Store<ApplicationState>,
@@ -62,13 +63,24 @@ export class DataComponent implements OnInit {
     this.selected_group = null;
     if (type === 'datasets') {
       this.groups = this.datasets;
+      setTimeout(() => {
+        if (
+          this.menu.dataSet &&
+          this.menu.dataSet !== '' &&
+          this.selectedDatas &&
+          this.datasets
+        ) {
+          this.setSelectedGroup(this.menu.dataSet);
+        }
+      }, 100);
     } else if (type === 'programs') {
       this.groups = this.programs;
       setTimeout(() => {
         if (
           this.menu.program &&
           this.menu.program !== '' &&
-          this.selectedDatas
+          this.selectedDatas &&
+          this.programs
         ) {
           this.setSelectedGroup(this.menu.program);
         }
@@ -95,25 +107,30 @@ export class DataComponent implements OnInit {
 
   setSelectedGroup(value) {
     if (this.dataType === 'datasets') {
-      const datasets = this.getItemById(this.datasets, value);
+      const dataset = this.getItemById(this.datasets, value);
       const items = [];
-      datasets.dataElements.map(dataelem => {
-        items.push(
-          ...dataelem.categoryCombos.map(cat => {
-            return {
-              id: dataelem.id + '.' + cat.id,
-              dataElementId: dataelem.id,
-              categoryId: cat.id,
-              optionSets: dataelem.optionSets,
-              valueType: dataelem.valueType,
-              name:
-                cat.name === 'default'
-                  ? dataelem.name
-                  : dataelem.name + ' ' + cat.name
-            };
-          })
-        );
-      });
+      if (dataset && dataset.dataElements) {
+        dataset.dataElements.map(dataelement => {
+          if (dataelement && dataelement.categoryCombos) {
+            items.push(
+              ...dataelement.categoryCombos.map(cat => {
+                return {
+                  id: dataelement.id + '.' + cat.id,
+                  dataElementId: dataelement.id,
+                  categoryId: cat.id,
+                  optionSets: dataelement.optionSets,
+                  valueType: dataelement.valueType,
+                  name:
+                    cat.name === 'default'
+                      ? dataelement.name
+                      : dataelement.name + ' ' + cat.name
+                };
+              })
+            );
+          }
+        });
+      }
+      this.selectedDataset = value;
       this.dataLists = items;
     } else if (this.dataType === 'programs') {
       this.selectedProgram = value;
@@ -285,6 +302,7 @@ export class DataComponent implements OnInit {
         data_element: data.dataElementId,
         category_combo: data.categoryId,
         dataType: 'aggregate',
+        dataSet: this.selectedDataset,
         data_name: data.name,
         data_id: data.id,
         options: data.id === this.menu.data_id ? this.menu.options : []
