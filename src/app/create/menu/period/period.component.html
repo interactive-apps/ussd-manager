@@ -1,22 +1,14 @@
 <div class="form-group">
   <label>Message</label>
-  <textarea
-    class="form-control form-control-sm"
-    placeholder="Message to User"
-    (input)="setAuthValue('title', $event.target.value)"
-    [value]="menu.title"
-  ></textarea>
+  <textarea class="form-control form-control-sm" placeholder="Message to User" (input)="setAuthValue('title', $event.target.value)"
+    [value]="menu.title"></textarea>
   <small class="form-text text-muted">
     Welcome message to prompt user to enter period
   </small>
 </div>
 <div class="form-group">
   <label>Use to collect</label>
-  <select
-    class="form-control form-control-sm"
-    (change)="onSetCollectionType($event)"
-    [value]="collection_method"
-  >
+  <select class="form-control form-control-sm" (change)="onSetCollectionType($event)" [value]="collection_method">
     <option>Period Number</option>
     <option>Year</option>
   </select>
@@ -26,24 +18,18 @@
 </div>
 <div class="form-group" *ngIf="!menu.use_for_year">
   <label>Period Type</label>
-  <select
-    class="form-control form-control-sm"
-    [value]="menu.period_type"
-    (change)="setPeriodType($event.target.value)"
-  >
+  <select class="form-control form-control-sm" [value]="menu.period_type" (change)="setPeriodType($event.target.value)">
     <option *ngFor="let period of periods" [value]="period.value">
       {{ period.name }}
     </option>
   </select>
-  <p class="text-muted"><small>Period Limit: {{ limits[menu.period_type] }}</small></p>
+  <p class="text-muted">
+    <small>Period Limit: {{ limits[menu.period_type] }}</small>
+  </p>
 </div>
 <div class="form-group" *ngIf="menu.use_for_year">
   <label>Last Years to show in list</label>
-  <input
-    type="number"
-    class="form-control form-control-sm"
-    placeholder="Last Years to show"
-    (input)="setAuthValue('years_back', $event.target.value)"
+  <input type="number" class="form-control form-control-sm" placeholder="Last Years to show" (input)="setAuthValue('years_back', $event.target.value)"
     [value]="menu.years_back">
   <small class="form-text text-muted">
     Number of Last years to show in the list starting from current year
@@ -51,11 +37,7 @@
 </div>
 <div class="form-group">
   <label>Number Of Retries</label>
-  <input
-    type="number"
-    class="form-control form-control-sm"
-    placeholder="Number Of Retries"
-    (input)="setAuthValue('number_of_retries', $event.target.value)"
+  <input type="number" class="form-control form-control-sm" placeholder="Number Of Retries" (input)="setAuthValue('number_of_retries', $event.target.value)"
     [value]="menu.number_of_retries">
   <small class="form-text text-muted">
     Number of times User is allowed to retry if period is out of limit.
@@ -63,11 +45,7 @@
 </div>
 <div class="form-group">
   <label>Retry Message</label>
-  <textarea
-    type="text"
-    class="form-control form-control-sm"
-    placeholder="Number Of Retries"
-    (input)="setAuthValue('retry_message', $event.target.value)"
+  <textarea type="text" class="form-control form-control-sm" placeholder="Number Of Retries" (input)="setAuthValue('retry_message', $event.target.value)"
     [value]="menu.retry_message">
   </textarea>
   <small class="form-text text-muted">
@@ -76,11 +54,7 @@
 </div>
 <div class="form-group">
   <label>Fail Message</label>
-  <textarea
-    type="text"
-    class="form-control form-control-sm"
-    placeholder="Number Of Retries"
-    (input)="setAuthValue('fail_message', $event.target.value)"
+  <textarea type="text" class="form-control form-control-sm" placeholder="Number Of Retries" (input)="setAuthValue('fail_message', $event.target.value)"
     [value]="menu.fail_message">
   </textarea>
   <small class="form-text text-muted">
@@ -89,16 +63,12 @@
 </div>
 
 <!--option for submitting data-->
-<div class="col-sm-12 mt-2">
+<!-- <div class="col-sm-12 mt-2">
   <div class="form-check cursor">
     <input [(ngModel)]="submit_data" (change)="setSubmit(submit_data)" type="checkbox" class="form-check-input" id="exampleCheck1">
     <label class="pl-0 form-check-label" for="exampleCheck1">Submit data after this menu</label>
   </div>
-</div>
+</div> -->
 
-<button
-  style="height: 28px; padding: 2px"
-  class="p-1 cursor btn-outline-secondary btn-block btn-sm btn"
-  (click)="setNextMenu()"
->Set Next Menu
+<button style="height: 28px; padding: 2px" class="p-1 cursor btn-outline-secondary btn-block btn-sm btn" (click)="setNextMenu()">Set Next Menu
 </button>

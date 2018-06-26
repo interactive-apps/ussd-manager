@@ -19,7 +19,8 @@ export class DataSubmissionComponent implements OnInit {
 
   ngOnInit() {
     if (this.menu) {
-      this.submit_data = this.menu.submit_data;
+      const { submit_data } = this.menu;
+      this.submit_data = submit_data;
     }
   }
 
