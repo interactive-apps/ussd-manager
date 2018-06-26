@@ -42,6 +42,8 @@ export class PeriodComponent implements OnInit {
     if (this.menu.use_for_year) {
       this.collection_method = 'Year';
     }
+    const { submit_data } = this.menu;
+    this.submit_data = submit_data;
   }
 
   setPeriodType(period: string) {
