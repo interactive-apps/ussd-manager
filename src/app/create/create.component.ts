@@ -80,6 +80,6 @@ export class CreateComponent implements OnInit {
   }
 
   trackItem(index, item) {
-    return item ? item : undefined;
+    return item ? item : index;
   }
 }
