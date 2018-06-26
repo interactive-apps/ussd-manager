@@ -258,7 +258,7 @@ export class DataComponent implements OnInit {
     return menuSelections;
   }
 
-  setData(data) {
+  setData(data, title?) {
     const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
     this.options = [];
     if (data.optionSets) {
@@ -298,7 +298,7 @@ export class DataComponent implements OnInit {
     if (this.dataType === 'datasets') {
       menu = <UssdMenu>{
         ...this.menu,
-        title: data.name,
+        title: title ? title : data.name,
         data_element: data.dataElementId,
         category_combo: data.categoryId,
         dataType: 'aggregate',
@@ -310,7 +310,7 @@ export class DataComponent implements OnInit {
     } else if (this.dataType === 'programs') {
       menu = <UssdMenu>{
         ...this.menu,
-        title: data.name,
+        title: title ? title : data.name,
         data_element: data.id,
         program: this.selectedProgram,
         program_stage: this.selected_group.id,
@@ -398,7 +398,7 @@ export class DataComponent implements OnInit {
         return data.id === data_id;
       });
       if (matchedData && matchedData.id) {
-        this.setData(matchedData);
+        this.setData(matchedData, this.menu.title);
       }
     }
   }
