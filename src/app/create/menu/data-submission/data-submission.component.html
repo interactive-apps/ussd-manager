@@ -20,10 +20,11 @@
 </div>
 
 
-<div class="form-group">
-  <div class="form-check cursor">
+
+<div class="col-sm-12 mt-2">
+  <div class="form-check">
     <input [(ngModel)]="submit_data" (change)="setSubmit(submit_data)" type="checkbox" class="form-check-input" id="exampleCheck1">
-    <label class="pl-0 form-check-label" for="exampleCheck1">Submit data after this menu</label>
+    <label for="exampleCheck1">Submit data after this menu</label>
   </div>
 </div>
 <button style="height: 28px; padding: 2px" class="p-1 cursor btn-outline-secondary btn-block btn-sm btn" (click)="setNextMenu()">Set Next Menu
