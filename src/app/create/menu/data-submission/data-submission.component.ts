@@ -58,16 +58,15 @@ export class DataSubmissionComponent implements OnInit {
   }
 
   setOptionValue(value, current_option) {
-    console.log(value);
-    // this.options = this.options.map(option => {
-    //   const title =
-    //     current_option.response === option.response ? value : option.title;
-    //   return {
-    //     ...option,
-    //     title
-    //   };
-    // });
-    // this.updateMenu();
+    this.options = this.options.map(option => {
+      const title =
+        current_option.response === option.response ? value : option.title;
+      return {
+        ...option,
+        title
+      };
+    });
+    this.updateMenu();
   }
 
   updateMenu() {
