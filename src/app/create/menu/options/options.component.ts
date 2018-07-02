@@ -9,7 +9,6 @@ import {
 import { UssdMenu } from '../../../shared/models/menu';
 import { Store } from '@ngrx/store';
 import { ApplicationState } from '../../../store/reducers/index';
-import * as menuActions from '../../../store/actions/menu.actions';
 import { UpdateMenu } from '../../../store/actions/menu.actions';
 import {
   fadeIn,

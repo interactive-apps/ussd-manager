@@ -60,7 +60,7 @@ export class PeriodComponent implements OnInit {
     );
   }
 
-  setAuthValue(key, value) {
+  setValueByKey(key, value) {
     this.store.dispatch(
       new menuActions.UpdateMenu({
         menu: {

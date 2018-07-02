@@ -133,9 +133,18 @@ export class MenuComponent implements OnInit {
         menu: { id: this.menu.id, changes: { type } }
       })
     );
+    if (type === 'data-submission') {
+      const title = 'You are about to submit data, are you sure?';
+      this.store.dispatch(
+        new menuActions.UpdateMenu({
+          menu: {
+            id: this.menu.id,
+            changes: { title: title }
+          }
+        })
+      );
+    }
     if (type === 'period') {
-      const fail_message = '';
-      const retry_message = '';
       this.store.dispatch(
         new menuActions.UpdateMenu({
           menu: {
