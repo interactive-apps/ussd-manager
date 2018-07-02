@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UssdMenu } from '../../../shared/models/menu';
+import { UssdMenu, UssdMenuOptions } from '../../../shared/models/menu';
 import { Store } from '@ngrx/store';
 import { ApplicationState } from '../../../store/reducers/index';
 import * as menuActions from '../../../store/actions/menu.actions';
@@ -34,16 +34,16 @@ export class DataSubmissionComponent implements OnInit {
   }
 
   getDefaultOptions() {
-    const options = [
+    const options: Array<UssdMenuOptions> = [
       {
         id: this.ussdService.makeid(),
         title: 'Yes',
-        response: 1
+        response: true
       },
       {
         id: this.ussdService.makeid(),
         title: 'No',
-        response: 0
+        response: false
       }
     ];
     return options;
@@ -107,5 +107,9 @@ export class DataSubmissionComponent implements OnInit {
         }
       })
     );
+  }
+
+  trackItem(index, item) {
+    return item ? item.id : index;
   }
 }

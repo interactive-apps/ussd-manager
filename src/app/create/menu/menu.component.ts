@@ -1,25 +1,15 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UssdMenu } from '../../shared/models/menu';
 import { Store } from '@ngrx/store';
 import * as menuActions from '../../store/actions/menu.actions';
 import { ApplicationState } from '../../store/reducers/index';
 import {
   AddMenu,
-  MenuActions,
   SetNextMenus,
   UpdateMenu
 } from '../../store/actions/menu.actions';
 import { fadeOut } from '../../shared/animations/basic-animations';
-import { overrideProvider } from '@angular/core/src/view';
 import { UssdService } from '../../shared/services/ussd.service';
-import { OptionsComponent } from './options/options.component';
 import { DataSet } from '../../shared/models/dataSet';
 import { Program } from '../../shared/models/program';
 
@@ -43,17 +33,27 @@ export class MenuComponent implements OnInit {
   @Output() nextMenuValue: EventEmitter<any> = new EventEmitter<any>();
   next_menu: UssdMenu = null;
   deleteEnabled = false;
+  isPreviousMenuForDataConfirmation: boolean;
 
   constructor(
     private store: Store<ApplicationState>,
     private ussdService: UssdService
-  ) {}
+  ) {
+    this.isPreviousMenuForDataConfirmation = false;
+  }
 
   ngOnInit() {
     if (this.menu.hasOwnProperty('next_menu') && this.menu.next_menu !== '') {
       setTimeout(() => {
         this.addNextMenu(this.menu.id, this.menu.next_menu);
       });
+    }
+    const { previous_menu } = this.menu;
+    if (previous_menu && this.menus[previous_menu]) {
+      const { type } = this.menus[previous_menu];
+      if (type && type === 'data-submission') {
+        this.isPreviousMenuForDataConfirmation = true;
+      }
     }
   }
 
@@ -182,7 +182,7 @@ export class MenuComponent implements OnInit {
       !this.deleteEnabled &&
       this.menu.next_menu === '' &&
       ((this.menu.options && this.menu.options.length === 0) ||
-        this.menu.type === 'data')
+        (this.menu.type === 'data' || this.menu.type === 'data-submission'))
     );
   }
 

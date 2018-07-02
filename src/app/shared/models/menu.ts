@@ -27,7 +27,7 @@ export interface UssdMenu {
 export interface UssdMenuOptions {
   id: string;
   title: string;
-  response: string;
+  response: string | boolean;
   next_menu?: string;
   value?: string;
 }

@@ -90,7 +90,7 @@ export class OptionsComponent implements OnInit, OnChanges {
   }
 
   trackItem(index, item) {
-    return item ? item.id : undefined;
+    return item ? item.id : index;
   }
 
   onDropSuccess() {

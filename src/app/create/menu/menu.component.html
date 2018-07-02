@@ -22,7 +22,7 @@
   <div class="row m-0 mt-2" *ngIf="!isMenuInitialized()">
     <div class="col-sm-12 p-2">
       <ul class="list-group border-1">
-        <li (click)="setType('options')" class="list-group-item cursor m-1 p-2" title="show a menu with options for user to select">
+        <li *ngIf="!isPreviousMenuForDataConfirmation" (click)="setType('options')" class="list-group-item cursor m-1 p-2" title="show a menu with options for user to select">
           Menu with Options
           <p class="text-muted m-0">
             <small>show a menu with options for user to select</small>
@@ -34,19 +34,20 @@
             <small>show a menu for authentication details like pin</small>
           </p>
         </li>
-        <li (click)="setType('period')" class="list-group-item cursor m-1 p-2" title="show a menu to enter the period">
+        <li *ngIf="!isPreviousMenuForDataConfirmation" (click)="setType('period')" class="list-group-item cursor m-1 p-2" title="show a menu to enter the period">
           Menu for period
           <p class="text-muted m-0">
             <small>show a menu to enter the period </small>
           </p>
         </li>
-        <li (click)="setType('data-submission')" class="list-group-item cursor m-1 p-2" title="show a menu to enter the period">
+        <li *ngIf="!isPreviousMenuForDataConfirmation" (click)="setType('data-submission')" class="list-group-item cursor m-1 p-2"
+          title="show a menu to enter the period">
           Menu for data submission
           <p class="text-muted m-0">
             <small>show a menu to confirm data submission</small>
           </p>
         </li>
-        <li (click)="setType('data')" class="list-group-item cursor m-1 p-2" title="show a menu to collect data for specific options">
+        <li *ngIf="!isPreviousMenuForDataConfirmation" (click)="setType('data')" class="list-group-item cursor m-1 p-2" title="show a menu to collect data for specific options">
           Menu to collect data
           <p class="text-muted m-0">
             <small>show a menu to collect data for specific options</small>
