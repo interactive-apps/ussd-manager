@@ -1,25 +1,15 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UssdMenu } from '../../shared/models/menu';
 import { Store } from '@ngrx/store';
 import * as menuActions from '../../store/actions/menu.actions';
 import { ApplicationState } from '../../store/reducers/index';
 import {
   AddMenu,
-  MenuActions,
   SetNextMenus,
   UpdateMenu
 } from '../../store/actions/menu.actions';
 import { fadeOut } from '../../shared/animations/basic-animations';
-import { overrideProvider } from '@angular/core/src/view';
 import { UssdService } from '../../shared/services/ussd.service';
-import { OptionsComponent } from './options/options.component';
 import { DataSet } from '../../shared/models/dataSet';
 import { Program } from '../../shared/models/program';
 
@@ -43,17 +33,27 @@ export class MenuComponent implements OnInit {
   @Output() nextMenuValue: EventEmitter<any> = new EventEmitter<any>();
   next_menu: UssdMenu = null;
   deleteEnabled = false;
+  isPreviousMenuForDataConfirmation: boolean;
 
   constructor(
     private store: Store<ApplicationState>,
     private ussdService: UssdService
-  ) {}
+  ) {
+    this.isPreviousMenuForDataConfirmation = false;
+  }
 
   ngOnInit() {
     if (this.menu.hasOwnProperty('next_menu') && this.menu.next_menu !== '') {
       setTimeout(() => {
         this.addNextMenu(this.menu.id, this.menu.next_menu);
       });
+    }
+    const { previous_menu } = this.menu;
+    if (previous_menu && this.menus[previous_menu]) {
+      const { type } = this.menus[previous_menu];
+      if (type && type === 'data-submission') {
+        this.isPreviousMenuForDataConfirmation = true;
+      }
     }
   }
 
@@ -133,6 +133,27 @@ export class MenuComponent implements OnInit {
         menu: { id: this.menu.id, changes: { type } }
       })
     );
+    if (type === 'data-submission') {
+      const title = 'You are about to submit data, are you sure?';
+      this.store.dispatch(
+        new menuActions.UpdateMenu({
+          menu: {
+            id: this.menu.id,
+            changes: { title: title, submit_data: false }
+          }
+        })
+      );
+    }
+    if (type === 'period') {
+      this.store.dispatch(
+        new menuActions.UpdateMenu({
+          menu: {
+            id: this.menu.id,
+            changes: { retry_message: '', fail_message: '' }
+          }
+        })
+      );
+    }
   }
 
   setMessage(message: string) {
@@ -161,14 +182,14 @@ export class MenuComponent implements OnInit {
       !this.deleteEnabled &&
       this.menu.next_menu === '' &&
       ((this.menu.options && this.menu.options.length === 0) ||
-        this.menu.type === 'data')
+        (this.menu.type === 'data' || this.menu.type === 'data-submission'))
     );
   }
 
   // Deleting menu means any menu or option attached to this menu has to be deleted too
   deleteMenu(menu, next = false) {
     const previousMenu = this.menus[menu.previous_menu];
-    if (previousMenu.next_menu === menu.id) {
+    if (previousMenu && previousMenu.next_menu === menu.id) {
       this.store.dispatch(
         new menuActions.UpdateMenu({
           menu: {
@@ -181,8 +202,9 @@ export class MenuComponent implements OnInit {
       );
     }
     if (
+      previousMenu &&
       previousMenu.options.map(option => option.next_menu).indexOf(menu.id) !==
-      -1
+        -1
     ) {
       const options = previousMenu.options.map(option => {
         if (option.next_menu === menu.id) {

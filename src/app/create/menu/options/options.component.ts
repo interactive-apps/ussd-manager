@@ -9,7 +9,6 @@ import {
 import { UssdMenu } from '../../../shared/models/menu';
 import { Store } from '@ngrx/store';
 import { ApplicationState } from '../../../store/reducers/index';
-import * as menuActions from '../../../store/actions/menu.actions';
 import { UpdateMenu } from '../../../store/actions/menu.actions';
 import {
   fadeIn,
@@ -91,7 +90,7 @@ export class OptionsComponent implements OnInit, OnChanges {
   }
 
   trackItem(index, item) {
-    return item ? item.id : undefined;
+    return item ? item.id : index;
   }
 
   onDropSuccess() {
