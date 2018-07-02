@@ -60,7 +60,7 @@ export class PeriodComponent implements OnInit {
     );
   }
 
-  setAuthValue(key, value) {
+  setValueByKey(key, value) {
     this.store.dispatch(
       new menuActions.UpdateMenu({
         menu: {
@@ -109,6 +109,6 @@ export class PeriodComponent implements OnInit {
   }
 
   trackItem(index, item) {
-    return item ? item.id : undefined;
+    return item ? item.id : index;
   }
 }
