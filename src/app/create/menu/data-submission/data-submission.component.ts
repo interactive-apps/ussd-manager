@@ -27,9 +27,9 @@ export class DataSubmissionComponent implements OnInit {
     if (this.menu) {
       const { submit_data } = this.menu;
       const { options } = this.menu;
+      this.submit_data = submit_data;
       this.options =
         options && options.length > 0 ? options : this.getDefaultOptions();
-      this.submit_data = submit_data;
     }
   }
 
@@ -101,7 +101,6 @@ export class DataSubmissionComponent implements OnInit {
         menu: {
           id: this.menu.id,
           changes: {
-            title: 'Data Submission',
             submit_data: value
           }
         }

@@ -139,7 +139,7 @@ export class MenuComponent implements OnInit {
         new menuActions.UpdateMenu({
           menu: {
             id: this.menu.id,
-            changes: { title: title }
+            changes: { title: title, submit_data: false }
           }
         })
       );
