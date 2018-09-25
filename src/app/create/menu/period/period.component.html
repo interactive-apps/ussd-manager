@@ -45,16 +45,16 @@
 </div>
 <div class="form-group">
   <label>Retry Message</label>
-  <textarea type="text" class="form-control form-control-sm" placeholder="Number Of Retries" (input)="setValueByKey('retry_message', $event.target.value)"
+  <textarea type="text" class="form-control form-control-sm" placeholder="Message for retrying" (input)="setValueByKey('retry_message', $event.target.value)"
     [value]="menu.retry_message">
   </textarea>
   <small class="form-text text-muted">
-    Title to display during retry.
+    Text to display during retry.
   </small>
 </div>
 <div class="form-group">
   <label>Fail Message</label>
-  <textarea type="text" class="form-control form-control-sm" placeholder="Number Of Retries" (input)="setValueByKey('fail_message', $event.target.value)"
+  <textarea type="text" class="form-control form-control-sm" placeholder="A fail message" (input)="setValueByKey('fail_message', $event.target.value)"
     [value]="menu.fail_message">
   </textarea>
   <small class="form-text text-muted">
