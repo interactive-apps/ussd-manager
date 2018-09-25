@@ -8,6 +8,7 @@ import { ApplicationState } from '../../../store/reducers/index';
 import { UpdateMenu } from '../../../store/actions/menu.actions';
 import { UssdService } from '../../../shared/services/ussd.service';
 import * as _ from 'lodash';
+import * as menuActions from '../../../store/actions/menu.actions';
 
 @Component({
   selector: 'app-data',
@@ -420,5 +421,13 @@ export class DataComponent implements OnInit {
 
   trackItem(index, item) {
     return item ? item.id : undefined;
+  }
+
+  setDataValue(key, value) {
+    this.store.dispatch(new menuActions.UpdateMenu(
+      {menu: {id: this.menu.id, changes: {
+        [key]: value
+      }}}
+    ));
   }
 }

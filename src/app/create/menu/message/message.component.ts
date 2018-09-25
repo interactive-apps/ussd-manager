@@ -3,6 +3,8 @@ import {UssdMenu} from '../../../shared/models/menu';
 import {Store} from '@ngrx/store';
 import {ApplicationState} from '../../../store/reducers/index';
 import {UpdateMenu} from '../../../store/actions/menu.actions';
+import * as menuActions from '../../../store/actions/menu.actions';
+
 
 @Component({
   selector: 'app-message',
@@ -35,4 +37,12 @@ export class MessageComponent implements OnInit {
       }
     }));
   }
+  setValByKey(key, value) {
+    this.store.dispatch(new menuActions.UpdateMenu(
+      {menu: {id: this.menu.id, changes: {
+        [key]: value
+      }}}
+    ));
+  }
+
 }

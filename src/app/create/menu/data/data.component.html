@@ -62,6 +62,45 @@
   </div>
 </div>
 
+<div class="form-group">
+  <label>Number Of Retries</label>
+  <input
+    type="number"
+    class="form-control form-control-sm"
+    placeholder="Number Of Retries"
+    (input)="setDataValue('number_of_retries', $event.target.value)"
+    [value]="menu.number_of_retries">
+  <small class="form-text text-muted">
+    Number of times User is allowed to retry.
+  </small>
+</div>
+<div class="form-group">
+  <label>Retry Message</label>
+  <textarea
+    type="text"
+    class="form-control form-control-sm"
+    placeholder="Message for retrying"
+    (input)="setDataValue('retry_message', $event.target.value)"
+    [value]="menu.retry_message">
+  </textarea>
+  <small class="form-text text-muted">
+    Message to display for retrying.
+  </small>
+</div>
+<div class="form-group">
+  <label>Fail Message</label>
+  <textarea
+    type="text"
+    class="form-control form-control-sm"
+    placeholder="A fail message"
+    (input)="setDataValue('fail_message', $event.target.value)"
+    [value]="menu.fail_message">
+  </textarea>
+  <small class="form-text text-muted">
+    Message to give When Data collection Failed.
+  </small>
+</div>
+
 <div class="row">
   <div class="col-sm-6 col-md-6 col-lg-6">
     <select (change)="updateNextMenu($event.target.value)" class="form-control form-control-sm">
