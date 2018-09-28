@@ -82,7 +82,7 @@ export class DataSubmissionComponent implements OnInit {
     );
   }
 
-  setValueByKey(key, value) {
+  setValByKey(key, value) {
     this.store.dispatch(
       new menuActions.UpdateMenu({
         menu: {
