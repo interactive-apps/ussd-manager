@@ -1,20 +1,35 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input,OnChanges, Output, EventEmitter } from '@angular/core';
 import { UssdMenu } from '../../../shared/models/menu';
 import * as _ from 'lodash';
+import { Store } from '@ngrx/store';
+import { ApplicationState } from '../../../store/reducers/index';
+import { UpdateMenu } from '../../../store/actions/menu.actions';
+import {
+  fadeIn,
+  fadeOut,
+  fadeSmooth,
+  listStateTrigger
+} from '../../../shared/animations/basic-animations';
+import { Observable } from 'rxjs/Observable';
+import { UssdService } from '../../../shared/services/ussd.service';
 
 @Component({
   selector: 'app-data-element-options',
   templateUrl: './data-element-options.component.html',
-  styleUrls: ['./data-element-options.component.css']
+  styleUrls: ['./data-element-options.component.css'],
+  animations: [fadeIn, fadeOut, listStateTrigger, fadeSmooth]
 })
 export class DataElementOptionsComponent implements OnInit {
-  @Input() options;
+  @Input() options:any[]=[];
   @Input() menu;
   @Input() menus;
   @Output() changeOptionStatus = new EventEmitter();
   searchOptionQuery: string = null;
-
-  constructor() {}
+  enableItemdragOperation = true;
+  constructor(
+    private store: Store<ApplicationState>,
+    private ussdService: UssdService
+  ) {}
 
   ngOnInit() {}
 
@@ -31,6 +46,8 @@ export class DataElementOptionsComponent implements OnInit {
     }
     return selected;
   }
+
+  
 
   updateOptions(option) {
     this.changeOptionStatus.emit(option);
@@ -62,7 +79,33 @@ export class DataElementOptionsComponent implements OnInit {
     return menuSelections;
   }
 
+
+  onDropSuccess() {
+    let index = 0;
+    this.options = this.options.map(option => {
+      index += 1;
+      return {
+        ...option,
+        response: index + ''
+      };
+    });
+    this.updateMenu();
+  }
+  updateMenu() {
+    this.store.dispatch(
+      new UpdateMenu({
+        menu: {
+          id: this.menu.id,
+          changes: {
+            options: [...this.options]
+          }
+        }
+      })
+    );
+  }
+
+
   trackItem(index, item) {
-    return item ? item.id : undefined;
+    return item ? item.id : index;
   }
 }
