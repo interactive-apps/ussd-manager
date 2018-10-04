@@ -44,7 +44,7 @@
       </li> -->
       <ng-container *ngFor="let data of dataLists| filterByName:searchQuery;trackBy: trackItem;let i = index">
         <li class="list-group-item pt-1 pb-1" [ngClass]="{'active-item': data.id === menu.data_id}" (click)="setData(data)">
-          <span> {{ data.name }}</span>
+          <span> {{ data.shortName }}</span>
         </li>
       </ng-container>
     </ul>

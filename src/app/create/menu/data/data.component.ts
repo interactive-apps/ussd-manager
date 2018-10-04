@@ -124,7 +124,11 @@ export class DataComponent implements OnInit {
                   name:
                     cat.name === 'default'
                       ? dataelement.name
-                      : dataelement.name + ' ' + cat.name
+                      : dataelement.name + ' ' + cat.name,
+                  shortName:    
+                      cat.name === 'default'
+                      ? dataelement.shortName
+                      : dataelement.shortName + ' ' + cat.name
                 };
               })
             );
@@ -304,7 +308,7 @@ export class DataComponent implements OnInit {
         category_combo: data.categoryId,
         dataType: 'aggregate',
         dataSet: this.selectedDataset,
-        data_name: data.name,
+        data_name: data.shortName,
         data_id: data.id,
         options: data.id === this.menu.data_id ? this.menu.options : []
       };
@@ -316,7 +320,7 @@ export class DataComponent implements OnInit {
         program: this.selectedProgram,
         program_stage: this.selected_group.id,
         dataType: 'event',
-        data_name: data.name,
+        data_name: data.shortName,
         data_id: data.id,
         options: data.id === this.menu.data_id ? this.menu.options : []
       };
@@ -390,6 +394,7 @@ export class DataComponent implements OnInit {
         valueType: dx.valueType,
         stage: value,
         name: dx.name,
+        shortName: dx.shortName,
         program: this.selectedProgram
       };
     });

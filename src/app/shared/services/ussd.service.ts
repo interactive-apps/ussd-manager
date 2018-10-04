@@ -24,8 +24,8 @@ export class UssdService {
   _datasets: DataSet[] = [];
   _programs: Program[] = [];
   _dataelements: DataElement[] = [];
-  datasetUrl = 'dataSets.json?fields=id,name,periodType,dataSetElements[dataElement[id,name,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false';
-  programUrl = 'programs.json?fields=id,name,displayName,programStages[id,name,programStageDataElements[dataElement[id,name,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false';
+  datasetUrl = 'dataSets.json?fields=id,name,periodType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false';
+  programUrl = 'programs.json?fields=id,name,displayName,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false';
 
   constructor(
     private store: Store<ApplicationState>,
@@ -166,6 +166,7 @@ export class UssdService {
                 id: dataelem.dataElement.id,
                 valueType: dataelem.dataElement.valueType,
                 name: dataelem.dataElement.name,
+                shortName: dataelem.dataElement.shortName,
                 displayName: dataelem.dataElement.displayName,
                 optionSets: dataelem.dataElement.hasOwnProperty('optionSet')
                   ? dataelem.dataElement.optionSet.options
@@ -208,6 +209,7 @@ export class UssdService {
                   id: stageDe.dataElement.id,
                   valueType: stageDe.dataElement.valueType,
                   name: stageDe.dataElement.name,
+                  shortName: stageDe.dataElement.shortName,
                   displayName: stageDe.dataElement.displayName,
                   optionSets: stageDe.dataElement.hasOwnProperty('optionSet')
                     ? stageDe.dataElement.optionSet.options
