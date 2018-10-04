@@ -1,6 +1,7 @@
 export interface DataElement {
   id: string;
   name: string;
+  shortName: string;
   displayName?: string;
   categoryCombos?: {
     id: string,
