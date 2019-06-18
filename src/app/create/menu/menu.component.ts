@@ -87,6 +87,8 @@ export class MenuComponent implements OnInit {
       options: [],
       next_menu: '',
       data_id: '',
+      retry_message: '',
+      fail_message: '',
       previous_menu: this.menu.id
     };
     this.store.dispatch(new AddMenu({ menu: newMenu }));

@@ -262,11 +262,12 @@ export class DataComponent implements OnInit {
     return menuSelections;
   }
 
-  setData(data, title?) {
+  setData(data: any, title?: string) {
+    const { valueType } = data;
     const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
     this.options = [];
     if (data.optionSets) {
-      data.optionSets.map(option => {
+      data.optionSets.map((option: any) => {
         const matchOption = _.find(this.menu.options, optionObj => {
           return optionObj.id === option.id;
         });
@@ -309,6 +310,7 @@ export class DataComponent implements OnInit {
         dataSet: this.selectedDataset,
         data_name: data.name,
         data_id: data.id,
+        field_value_type: valueType,
         options: data.id === this.menu.data_id ? this.menu.options : []
       };
     } else if (this.dataType === 'programs') {
@@ -321,6 +323,7 @@ export class DataComponent implements OnInit {
         dataType: 'event',
         data_name: data.name,
         data_id: data.id,
+        field_value_type: valueType,
         options: data.id === this.menu.data_id ? this.menu.options : []
       };
     }

@@ -11,5 +11,6 @@ export interface DataElement {
   optionSets?: {
     id: string;
     name: string;
+    code: string;
   }[];
 }
