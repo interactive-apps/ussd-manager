@@ -30,6 +30,8 @@
     "@ngx-translate/http-loader": "^2.0.1",
     "bootstrap": "4.0.0-beta.2",
     "core-js": "^2.4.1",
+    "commitizen": "^2.10.1",
+    "cz-conventional-changelog": "^2.1.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "lodash": "^4.17.4",
@@ -39,6 +41,11 @@
     "popper.js": "^1.12.9",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "devDependencies": {
     "@angular/cli": "~1.7.1",

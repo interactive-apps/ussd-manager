@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { UssdMenu } from '../models/menu';
 import { Setting } from '../models/settings';
 import { Ussd } from '../models/ussd';
-import {
-  AddUssd,
-  DoneLoadingUssds,
-  USSDActionTypes
-} from '../../store/actions/ussd.actions';
+import { AddUssd, DoneLoadingUssds } from '../../store/actions/ussd.actions';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ApplicationState } from '../../store/reducers/index';
@@ -24,8 +20,10 @@ export class UssdService {
   _datasets: DataSet[] = [];
   _programs: Program[] = [];
   _dataelements: DataElement[] = [];
-  datasetUrl = 'dataSets.json?fields=id,name,periodType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false';
-  programUrl = 'programs.json?fields=id,name,displayName,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false';
+  datasetUrl =
+    'dataSets.json?fields=id,name,periodType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false';
+  programUrl =
+    'programs.json?fields=id,name,displayName,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false';
 
   constructor(
     private store: Store<ApplicationState>,
@@ -115,7 +113,7 @@ export class UssdService {
                 }
               },
               // catch error if anything happens when loading ussd details
-              detail_error => {
+              () => {
                 ussd_count++;
                 if (ussd_count === ussds.length) {
                   this.store.dispatch(new DoneLoadingUssds());
@@ -150,77 +148,101 @@ export class UssdService {
   getMetaData() {
     // get the datasets and its metadata
     if (this._datasets.length === 0) {
-      this.http.get(this.datasetUrl).subscribe(data => {
-        data.dataSets.forEach(dataset => {
-          this._datasets.push({
-            id: dataset.id,
-            name: dataset.name,
-            periodType: dataset.periodType,
-            dataElementsIds: dataset.dataSetElements.map(
-              dataelem => dataelem.dataElement.id
-            )
-          });
-          this._dataelements.push(
-            ...dataset.dataSetElements.map(dataelem => {
-              return <DataElement>{
-                id: dataelem.dataElement.id,
-                valueType: dataelem.dataElement.valueType,
-                name: dataelem.dataElement.name,
-                shortName: dataelem.dataElement.shortName,
-                displayName: dataelem.dataElement.displayName,
-                optionSets: dataelem.dataElement.hasOwnProperty('optionSet')
-                  ? dataelem.dataElement.optionSet.options
-                  : [],
-                categoryCombos:
-                  dataelem.dataElement.categoryCombo.categoryOptionCombos
-              };
-            })
-          );
-        });
-        this.store.dispatch(
-          new AddDataelements({ dataelements: this._dataelements })
-        );
-        this.store.dispatch(new AddDatasets({ datasets: this._datasets }));
-      });
-    }
-    // get programs and its metadata
-    if (this._programs.length === 0) {
-      this.http.get(this.programUrl).subscribe(data => {
-        const dx: DataElement[] = [];
-        data.programs.forEach(program => {
-          this._programs.push({
-            id: program.id,
-            name: program.name,
-            displayName: program.displayName,
-            programStages: program.programStages.map(stage => {
-              return {
-                id: stage.id,
-                name: stage.name,
-                dataElementIds: stage.programStageDataElements.map(
-                  stageDe => stageDe.dataElement.id
-                )
-              };
-            })
-          });
-          program.programStages.forEach(stage => {
-            dx.push(
-              ...stage.programStageDataElements.map(stageDe => {
+      this.http.get(this.datasetUrl).subscribe(
+        data => {
+          data.dataSets.forEach((dataset: any) => {
+            this._datasets.push({
+              id: dataset.id,
+              name: dataset.name,
+              periodType: dataset.periodType,
+              dataElementsIds: dataset.dataSetElements.map(
+                (dataSetElement: any) => dataSetElement.dataElement.id
+              )
+            });
+            this._dataelements.push(
+              ...dataset.dataSetElements.map((dataSetElement: any) => {
+                const { dataElement } = dataSetElement;
+                const {
+                  id,
+                  valueType,
+                  name,
+                  displayName,
+                  shortName,
+                  optionSet,
+                  categoryCombo
+                } = dataElement;
                 return <DataElement>{
-                  id: stageDe.dataElement.id,
-                  valueType: stageDe.dataElement.valueType,
-                  name: stageDe.dataElement.name,
-                  shortName: stageDe.dataElement.shortName,
-                  displayName: stageDe.dataElement.displayName,
-                  optionSets: stageDe.dataElement.hasOwnProperty('optionSet')
-                    ? stageDe.dataElement.optionSet.options
-                    : []
+                  id,
+                  valueType,
+                  name,
+                  displayName,
+                  shortName,
+                  categoryCombo,
+                  optionSet: optionSet ? optionSet.options : []
                 };
               })
             );
           });
+          this.store.dispatch(
+            new AddDataelements({ dataelements: this._dataelements })
+          );
+          this.store.dispatch(new AddDatasets({ datasets: this._datasets }));
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
+    // get programs and its metadata
+    if (this._programs.length === 0) {
+      this.http.get(this.programUrl).subscribe(data => {
+        const dataelements: DataElement[] = [];
+        data.programs.forEach((program: any) => {
+          this._programs.push({
+            id: program.id,
+            name: program.name,
+            displayName: program.displayName,
+            programStages: program.programStages.map((programStage: any) => {
+              const { id, name, programStageDataElements } = programStage;
+              return {
+                id,
+                name,
+                dataElementIds: programStageDataElements.map(
+                  (programStageDataElement: any) =>
+                    programStageDataElement.dataElement.id
+                )
+              };
+            })
+          });
+          program.programStages.forEach((programStage: any) => {
+            dataelements.push(
+              ...programStage.programStageDataElements.map(
+                (programStageDataElement: any) => {
+                  const { dataElement } = programStageDataElement;
+                  const {
+                    id,
+                    valueType,
+                    name,
+                    shortName,
+                    displayName,
+                    optionSet
+                  } = dataElement;
+                  return <DataElement>{
+                    id,
+                    valueType,
+                    name,
+                    shortName,
+                    displayName,
+                    optionSets:
+                      optionSet && optionSet.options ? optionSet.options : []
+                  };
+                }
+              )
+            );
+          });
         });
         this.store.dispatch(new LoadPrograms({ programs: this._programs }));
-        this.store.dispatch(new AddDataelements({ dataelements: dx }));
+        this.store.dispatch(new AddDataelements({ dataelements }));
       });
     }
   }

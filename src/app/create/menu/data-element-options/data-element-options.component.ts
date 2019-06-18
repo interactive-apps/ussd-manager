@@ -1,5 +1,4 @@
-import { Component, OnInit, Input,OnChanges, Output, EventEmitter } from '@angular/core';
-import { UssdMenu } from '../../../shared/models/menu';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 import { Store } from '@ngrx/store';
 import { ApplicationState } from '../../../store/reducers/index';
@@ -10,7 +9,6 @@ import {
   fadeSmooth,
   listStateTrigger
 } from '../../../shared/animations/basic-animations';
-import { Observable } from 'rxjs/Observable';
 import { UssdService } from '../../../shared/services/ussd.service';
 
 @Component({
@@ -20,16 +18,13 @@ import { UssdService } from '../../../shared/services/ussd.service';
   animations: [fadeIn, fadeOut, listStateTrigger, fadeSmooth]
 })
 export class DataElementOptionsComponent implements OnInit {
-  @Input() options:any[]=[];
+  @Input() options: any[] = [];
   @Input() menu;
   @Input() menus;
   @Output() changeOptionStatus = new EventEmitter();
   searchOptionQuery: string = null;
   enableItemdragOperation = true;
-  constructor(
-    private store: Store<ApplicationState>,
-    private ussdService: UssdService
-  ) {}
+  constructor(private store: Store<ApplicationState>) {}
 
   ngOnInit() {}
 
@@ -46,8 +41,6 @@ export class DataElementOptionsComponent implements OnInit {
     }
     return selected;
   }
-
-  
 
   updateOptions(option) {
     this.changeOptionStatus.emit(option);
@@ -79,7 +72,6 @@ export class DataElementOptionsComponent implements OnInit {
     return menuSelections;
   }
 
-
   onDropSuccess() {
     let index = 0;
     this.options = this.options.map(option => {
@@ -103,7 +95,6 @@ export class DataElementOptionsComponent implements OnInit {
       })
     );
   }
-
 
   trackItem(index, item) {
     return item ? item.id : index;
