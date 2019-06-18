@@ -7,6 +7,8 @@ export interface UssdMenu {
   dataType?: string;
   data_name?: string;
   data_id?: string;
+  field_value_type?: string;
+  field_short_name?: string;
   submit_data?: boolean;
   data_element?: string;
   dataSet?: string;
