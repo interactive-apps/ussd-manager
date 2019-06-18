@@ -1,20 +1,25 @@
 <br>
 <div class="list-group ">
-  <input type="text" class="form-control form-control-sm" placeholder="Search options by name" [(ngModel)]="searchOptionQuery">
-  <ul class="list-group dataList">
+  <input type="text" class="form-control form-control-sm" placeholder="Search options by name"
+    [(ngModel)]="searchOptionQuery">
+  <ul class="list-group dataList" dnd-sortable-container [sortableData]="options">
+
     <ng-container *ngFor="let option of options| filterByName:searchOptionQuery;trackBy: trackItem;">
-      <li class="list-group-item pt-1 pb-1">
+      <li class="list-group-item pt-1 pb-1" dnd-sortable (click)="enableItemdragOperation = true" [sortableIndex]="i"
+        [dragEnabled]="enableItemdragOperation" (onDropSuccess)="onDropSuccess()">
         <div class="row">
           <div class="col-sm-7 col-md-7 col-lg-7">
             <label>
-              <input type="checkbox" name="options" value="{{option.code}}" [(ngModel)]="option.checked" (change)="updateOptions(option)"
-              /> {{option.name}}
+              <input type="checkbox" name="options" value="{{option.code}}" [(ngModel)]="option.checked"
+                (change)="updateOptions(option)" /> {{option.name}}
             </label>
           </div>
           <div class="col-sm-5 col-md-5 col-lg-5">
-            <select (change)="updateOptionNextMenu($event.target.value, option.id)" class="form-control form-control-sm">
+            <select (change)="updateOptionNextMenu($event.target.value, option.id)"
+              class="form-control form-control-sm">
               <option *ngIf="getSelectedMenu(option.id) !== ''"> {{getSelectedMenu(option.id) }}</option>
-              <option *ngFor="let menuSelections of getMenuSelections(menus);trackBy: trackItem;" [value]="menuSelections.id"> {{ menuSelections.name }}</option>
+              <option *ngFor="let menuSelections of getMenuSelections(menus);trackBy: trackItem;"
+                [value]="menuSelections.id"> {{ menuSelections.name }}</option>
             </select>
           </div>
         </div>

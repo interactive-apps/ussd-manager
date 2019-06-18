@@ -8,6 +8,8 @@ import { ApplicationState } from '../../../store/reducers/index';
 import { UpdateMenu } from '../../../store/actions/menu.actions';
 import { UssdService } from '../../../shared/services/ussd.service';
 import * as _ from 'lodash';
+import * as menuActions from '../../../store/actions/menu.actions';
+import { DataElement } from '../../../shared/models/dataElement';
 
 @Component({
   selector: 'app-data',
@@ -53,11 +55,11 @@ export class DataComponent implements OnInit {
     }
   }
 
-  setMessage(message) {
+  setMessage(message: string) {
     this.messageValue.emit(message);
   }
 
-  setDataType(type) {
+  setDataType(type: string) {
     this.dataType = type;
     this.dataLists = [];
     this.selected_group = null;
@@ -88,11 +90,11 @@ export class DataComponent implements OnInit {
     }
   }
 
-  alreadySelected(id) {
+  alreadySelected(id: string) {
     return this.selectedDatas.indexOf(id) !== -1;
   }
 
-  setSubmit(value) {
+  setSubmit(value: boolean) {
     this.store.dispatch(
       new UpdateMenu({
         menu: {
@@ -105,27 +107,31 @@ export class DataComponent implements OnInit {
     );
   }
 
-  setSelectedGroup(value) {
+  setSelectedGroup(value: string) {
     if (this.dataType === 'datasets') {
       const dataset = this.getItemById(this.datasets, value);
       const items = [];
       if (dataset && dataset.dataElements) {
-        dataset.dataElements.map(dataelement => {
-          if (dataelement && dataelement.categoryCombos) {
+        dataset.dataElements.map((dataelement: DataElement) => {
+          if (dataelement && dataelement.categoryCombo) {
             items.push(
-              ...dataelement.categoryCombos.map(cat => {
-                return {
-                  id: dataelement.id + '.' + cat.id,
-                  dataElementId: dataelement.id,
-                  categoryId: cat.id,
-                  optionSets: dataelement.optionSets,
-                  valueType: dataelement.valueType,
-                  name:
-                    cat.name === 'default'
-                      ? dataelement.name
-                      : dataelement.name + ' ' + cat.name
-                };
-              })
+              ...dataelement.categoryCombo.categoryOptionCombos.map(
+                (categoryOptionCombo: { id: string; name: string }) => {
+                  return {
+                    id: dataelement.id + '.' + categoryOptionCombo.id,
+                    dataElementId: dataelement.id,
+                    shortName: dataelement.shortName,
+                    displayName: dataelement.displayName,
+                    categoryId: categoryOptionCombo.id,
+                    optionSets: dataelement.optionSets,
+                    valueType: dataelement.valueType,
+                    name:
+                      categoryOptionCombo.name === 'default'
+                        ? dataelement.name
+                        : dataelement.name + ' ' + categoryOptionCombo.name
+                  };
+                }
+              )
             );
           }
         });
@@ -258,11 +264,12 @@ export class DataComponent implements OnInit {
     return menuSelections;
   }
 
-  setData(data, title?) {
+  setData(data: any, title?: string) {
+    const { valueType, shortName, optionSets } = data;
     const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
     this.options = [];
     if (data.optionSets) {
-      data.optionSets.map(option => {
+      data.optionSets.map((option: any) => {
         const matchOption = _.find(this.menu.options, optionObj => {
           return optionObj.id === option.id;
         });
@@ -305,6 +312,8 @@ export class DataComponent implements OnInit {
         dataSet: this.selectedDataset,
         data_name: data.name,
         data_id: data.id,
+        field_value_type: valueType,
+        field_short_name: shortName,
         options: data.id === this.menu.data_id ? this.menu.options : []
       };
     } else if (this.dataType === 'programs') {
@@ -317,6 +326,8 @@ export class DataComponent implements OnInit {
         dataType: 'event',
         data_name: data.name,
         data_id: data.id,
+        field_value_type: valueType,
+        field_short_name: shortName,
         options: data.id === this.menu.data_id ? this.menu.options : []
       };
     }
@@ -345,7 +356,7 @@ export class DataComponent implements OnInit {
       let count = 0;
       newOptions.forEach(newOption => {
         count++;
-        newOption.response = '' + count;
+        newOption.response = `${count}`;
       });
       this.store.dispatch(
         new UpdateMenu({
@@ -380,18 +391,33 @@ export class DataComponent implements OnInit {
     );
   }
 
-  setDataElementFromStage(value) {
-    const stage = this.getItemById(this.selected_group.programStages, value);
-    this.dataLists = stage.dataElements.map(dx => {
-      return {
-        id: dx.id,
-        optionSets: dx.optionSets,
-        valueType: dx.valueType,
-        stage: value,
-        name: dx.name,
-        program: this.selectedProgram
-      };
-    });
+  setDataElementFromStage(value: string) {
+    const programStage = this.getItemById(
+      this.selected_group.programStages,
+      value
+    );
+    this.dataLists = programStage.dataElements.map(
+      (dataElement: DataElement) => {
+        const {
+          id,
+          valueType,
+          optionSets,
+          name,
+          shortName,
+          displayName
+        } = dataElement;
+        return {
+          id,
+          shortName,
+          displayName,
+          optionSets,
+          valueType,
+          name,
+          stage: value,
+          program: this.selectedProgram
+        };
+      }
+    );
     if (this.menu.data_id) {
       const { data_id } = this.menu;
       const matchedData = _.find(this.dataLists, data => {
@@ -403,8 +429,8 @@ export class DataComponent implements OnInit {
     }
   }
 
-  getItemById(array, id) {
-    const matchItem = _.find(array, item => {
+  getItemById(array: any[], id: string) {
+    const matchItem = _.find(array, (item: any) => {
       return item.id === id;
     });
     return matchItem;
@@ -418,7 +444,20 @@ export class DataComponent implements OnInit {
     });
   }
 
-  trackItem(index, item) {
-    return item ? item.id : undefined;
+  trackItem(index: string, item: any) {
+    return item ? item.id : index;
+  }
+
+  setDataValue(key: string, value: any) {
+    this.store.dispatch(
+      new menuActions.UpdateMenu({
+        menu: {
+          id: this.menu.id,
+          changes: {
+            [key]: value
+          }
+        }
+      })
+    );
   }
 }
