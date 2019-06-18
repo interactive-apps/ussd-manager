@@ -3,10 +3,11 @@ export interface DataElement {
   name: string;
   displayName?: string;
   valueType?: string;
-  categoryCombos?: {
+  categoryCombo?: {
     id: string;
     name: string;
-  }[];
+    categoryOptionCombos: { id: string; name: string };
+  };
   optionSets?: {
     id: string;
     name: string;
