@@ -6,7 +6,7 @@ export interface DataElement {
   categoryCombo?: {
     id: string;
     name: string;
-    categoryOptionCombos: { id: string; name: string };
+    categoryOptionCombos: { id: string; name: string }[];
   };
   optionSets?: {
     id: string;
