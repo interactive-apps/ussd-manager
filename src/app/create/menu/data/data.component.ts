@@ -265,7 +265,7 @@ export class DataComponent implements OnInit {
   }
 
   setData(data: any, title?: string) {
-    const { valueType, shortName } = data;
+    const { valueType, shortName, optionSets } = data;
     const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
     this.options = [];
     if (data.optionSets) {

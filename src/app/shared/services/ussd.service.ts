@@ -148,52 +148,56 @@ export class UssdService {
   getMetaData() {
     // get the datasets and its metadata
     if (this._datasets.length === 0) {
-      this.http.get(this.datasetUrl).subscribe(data => {
-        data.dataSets.forEach((dataset: any) => {
-          this._datasets.push({
-            id: dataset.id,
-            name: dataset.name,
-            periodType: dataset.periodType,
-            dataElementsIds: dataset.dataSetElements.map(
-              (dataSetElement: any) => dataSetElement.dataElement.id
-            )
+      this.http.get(this.datasetUrl).subscribe(
+        data => {
+          data.dataSets.forEach((dataset: any) => {
+            this._datasets.push({
+              id: dataset.id,
+              name: dataset.name,
+              periodType: dataset.periodType,
+              dataElementsIds: dataset.dataSetElements.map(
+                (dataSetElement: any) => dataSetElement.dataElement.id
+              )
+            });
+            this._dataelements.push(
+              ...dataset.dataSetElements.map((dataSetElement: any) => {
+                const { dataElement } = dataSetElement;
+                const {
+                  id,
+                  valueType,
+                  name,
+                  displayName,
+                  shortName,
+                  optionSet,
+                  categoryCombo
+                } = dataElement;
+                return <DataElement>{
+                  id,
+                  valueType,
+                  name,
+                  displayName,
+                  shortName,
+                  categoryCombo,
+                  optionSet: optionSet ? optionSet.options : []
+                };
+              })
+            );
           });
-          this._dataelements.push(
-            ...dataset.dataSetElements.map((dataSetElement: any) => {
-              const { dataElement } = dataSetElement;
-              const {
-                id,
-                valueType,
-                name,
-                displayName,
-                shortName,
-                optionSets,
-                categoryCombo
-              } = dataElement;
-              return <DataElement>{
-                id,
-                valueType,
-                name,
-                displayName,
-                shortName,
-                categoryCombo,
-                optionSets:
-                  optionSets && optionSets.options ? optionSets.options : []
-              };
-            })
+          this.store.dispatch(
+            new AddDataelements({ dataelements: this._dataelements })
           );
-        });
-        this.store.dispatch(
-          new AddDataelements({ dataelements: this._dataelements })
-        );
-        this.store.dispatch(new AddDatasets({ datasets: this._datasets }));
-      });
+          this.store.dispatch(new AddDatasets({ datasets: this._datasets }));
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
     // get programs and its metadata
     if (this._programs.length === 0) {
       this.http.get(this.programUrl).subscribe(data => {
         const dataelements: DataElement[] = [];
-        data.programs.forEach(program => {
+        data.programs.forEach((program: any) => {
           this._programs.push({
             id: program.id,
             name: program.name,
@@ -221,7 +225,7 @@ export class UssdService {
                     name,
                     shortName,
                     displayName,
-                    optionSets
+                    optionSet
                   } = dataElement;
                   return <DataElement>{
                     id,
@@ -230,7 +234,7 @@ export class UssdService {
                     shortName,
                     displayName,
                     optionSets:
-                      optionSets && optionSets.options ? optionSets.options : []
+                      optionSet && optionSet.options ? optionSet.options : []
                   };
                 }
               )
