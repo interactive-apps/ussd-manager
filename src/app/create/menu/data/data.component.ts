@@ -117,10 +117,14 @@ export class DataComponent implements OnInit {
             items.push(
               ...dataelement.categoryCombo.categoryOptionCombos.map(
                 (categoryOptionCombo: { id: string; name: string }) => {
+                  const shortName = this.getCustomFieldShortName(
+                    dataelement.shortName,
+                    categoryOptionCombo.name
+                  );
                   return {
                     id: dataelement.id + '.' + categoryOptionCombo.id,
                     dataElementId: dataelement.id,
-                    shortName: dataelement.shortName,
+                    shortName,
                     displayName: dataelement.displayName,
                     categoryId: categoryOptionCombo.id,
                     optionSets: dataelement.optionSets,
@@ -151,6 +155,54 @@ export class DataComponent implements OnInit {
         programStages[0].id
       ) {
         this.setDataElementFromStage(programStages[0].id);
+      }
+    }
+  }
+
+  getCustomFieldShortName(shortName: string, categoryOptionComboName?: string) {
+    shortName =
+      categoryOptionComboName && categoryOptionComboName !== 'default'
+        ? `${shortName || ''} ${categoryOptionComboName.split(',').join('')}`
+        : shortName;
+    // return shortname without double spaces
+    return shortName.replace(/\s\s+/g, ' ');
+  }
+
+  setDataElementFromStage(value: string) {
+    const programStage = this.getItemById(
+      this.selected_group.programStages,
+      value
+    );
+    this.dataLists = programStage.dataElements.map(
+      (dataElement: DataElement) => {
+        const {
+          id,
+          valueType,
+          optionSets,
+          name,
+          shortName,
+          displayName
+        } = dataElement;
+        const customShortName = this.getCustomFieldShortName(shortName);
+        return {
+          id,
+          shortName: customShortName,
+          displayName,
+          optionSets,
+          valueType,
+          name,
+          stage: value,
+          program: this.selectedProgram
+        };
+      }
+    );
+    if (this.menu.data_id) {
+      const { data_id } = this.menu;
+      const matchedData = _.find(this.dataLists, data => {
+        return data.id === data_id;
+      });
+      if (matchedData && matchedData.id) {
+        this.setData(matchedData, this.menu.title);
       }
     }
   }
@@ -268,8 +320,8 @@ export class DataComponent implements OnInit {
     const { valueType, shortName, optionSets } = data;
     const ValueTypeWithDefaultOptions = ['BOOLEAN', 'TRUE_ONLY'];
     this.options = [];
-    if (data.optionSets) {
-      data.optionSets.map((option: any) => {
+    if (optionSets) {
+      optionSets.map((option: any) => {
         const matchOption = _.find(this.menu.options, optionObj => {
           return optionObj.id === option.id;
         });
@@ -389,44 +441,6 @@ export class DataComponent implements OnInit {
         }
       })
     );
-  }
-
-  setDataElementFromStage(value: string) {
-    const programStage = this.getItemById(
-      this.selected_group.programStages,
-      value
-    );
-    this.dataLists = programStage.dataElements.map(
-      (dataElement: DataElement) => {
-        const {
-          id,
-          valueType,
-          optionSets,
-          name,
-          shortName,
-          displayName
-        } = dataElement;
-        return {
-          id,
-          shortName,
-          displayName,
-          optionSets,
-          valueType,
-          name,
-          stage: value,
-          program: this.selectedProgram
-        };
-      }
-    );
-    if (this.menu.data_id) {
-      const { data_id } = this.menu;
-      const matchedData = _.find(this.dataLists, data => {
-        return data.id === data_id;
-      });
-      if (matchedData && matchedData.id) {
-        this.setData(matchedData, this.menu.title);
-      }
-    }
   }
 
   getItemById(array: any[], id: string) {
