@@ -36,6 +36,7 @@ export class DataComponent implements OnInit {
   selected_group: any;
   searchQuery: string = null;
   selectedProgram = '';
+  selectedProgramStage = '';
   selectedDataset = '';
   submit_data = true;
   constructor(
@@ -168,11 +169,12 @@ export class DataComponent implements OnInit {
     return shortName.replace(/\s\s+/g, ' ');
   }
 
-  setDataElementFromStage(value: string) {
+  setDataElementFromStage(selectedProgramStage: string) {
     const programStage = this.getItemById(
       this.selected_group.programStages,
-      value
+      selectedProgramStage
     );
+    this.selectedProgramStage = selectedProgramStage;
     this.dataLists = programStage.dataElements.map(
       (dataElement: DataElement) => {
         const {
@@ -191,7 +193,7 @@ export class DataComponent implements OnInit {
           optionSets,
           valueType,
           name,
-          stage: value,
+          stage: selectedProgramStage,
           program: this.selectedProgram
         };
       }
@@ -374,7 +376,7 @@ export class DataComponent implements OnInit {
         title: title ? title : data.name,
         data_element: data.id,
         program: this.selectedProgram,
-        program_stage: this.selected_group.id,
+        program_stage: this.selectedProgramStage,
         dataType: 'event',
         data_name: data.name,
         data_id: data.id,
