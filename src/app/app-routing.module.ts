@@ -15,7 +15,7 @@ const routes: Routes = [
     canActivate: [UssdExistsGuards],
     component: CreateComponent
   }, {
-    path: 'simulate',
+    path: 'simulate/:id',
     canActivate: [UssdExistsGuards],
     component: SimulateComponent
   }, {

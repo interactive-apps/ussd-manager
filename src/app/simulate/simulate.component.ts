@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UssdService} from '../shared/services/ussd.service';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-simulate',
@@ -10,9 +11,10 @@ import {UssdService} from '../shared/services/ussd.service';
 export class SimulateComponent implements OnInit, AfterViewInit {
 
   phone = null;
-  url = '';
+  url = 'http://localhost:3000';
   sessionId = '';
-  @ViewChild('input1') inputEl: ElementRef;
+  id;
+  //@ViewChild('input1') inputEl: ElementRef;
 
   need_input = false;
   sending_response = false;
@@ -21,15 +23,14 @@ export class SimulateComponent implements OnInit, AfterViewInit {
   response_body = '';
   answer = '';
 
-  constructor(private http: HttpClient, private ussdService: UssdService) { }
+  constructor(private http: HttpClient, private route: ActivatedRoute, private ussdService: UssdService) { }
 
   ngOnInit() {
-    this.url = 'http://212.111.43.54/idsr/?telco=tigo&msisdn=';
-    this.sessionId = this.ussdService.make_session_id();
+    this.id = this.route.snapshot.paramMap.get("id")
   }
 
   ngAfterViewInit() {
-    this.inputEl.nativeElement.focus();
+    //this.inputEl.nativeElement.focus();
   }
 
   cancelRequest() {
@@ -59,6 +60,8 @@ export class SimulateComponent implements OnInit, AfterViewInit {
   sendFirstRequest() {
     this.sending_response = true;
     this.response_ready = false;
+    this.sessionId = this.ussdService.make_session_id();
+    console.log('URL:', this.getUrl('*152*05*01', 'NR'));
     this.http.get(this.getUrl('*152*05*01', 'NR'), {responseType: 'text'}).subscribe((data) => {
       const dataArr = data.split(';');
       if (dataArr[0] === 'P') {
@@ -72,7 +75,7 @@ export class SimulateComponent implements OnInit, AfterViewInit {
   }
 
   getUrl(request, type ) {
-    return `${this.url}${this.phone}&&USSDRequest=${request}&sessionid=${this.sessionId}&USSDType=${type}`;
+    return `${this.url}/${this.id}?msisdn=${this.phone}&USSDRequest=${request}&sessionid=${this.sessionId}&USSDType=${type}`;
   }
 
 }

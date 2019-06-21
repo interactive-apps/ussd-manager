@@ -106,6 +106,7 @@ export class HomeComponent implements OnInit {
         this.store.dispatch(new SetNextMenus([item.settings.starting_menu]));
       }
     });
-    this.store.dispatch(new Go({ path: ['simulate'] }));
+    console.log('item:', item.settings.dataStoreKey);
+    this.store.dispatch(new Go({ path: ['simulate', item.settings.dataStoreKey ] }));
   }
 }
