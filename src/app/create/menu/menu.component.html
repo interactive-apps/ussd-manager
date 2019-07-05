@@ -81,6 +81,9 @@
     <div class="container-fluid p-2" *ngIf="menu.type == 'period'">
       <app-period [menus]="menus" [menu]="menu" (nextMenu)="setNextMenu($event)"></app-period>
     </div>
+    <div class="container-fluid p-2" *ngIf="menu.type == 'ou'">
+      <app-organisation-unit [menu]="menu" (nextMenu)="setNextMenu($event)"></app-organisation-unit>
+    </div>
     <div class="container-fluid p-2" *ngIf="menu.type == 'data-submission'">
       <app-data-submission [menu]="menu" (nextMenu)="setNextMenu($event)"></app-data-submission>
     </div>

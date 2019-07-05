@@ -1,0 +1,37 @@
+<div class="form-group">
+  <label>Title</label>
+  <textarea class="form-control form-control-sm" placeholder="Message to User"
+    (input)="setOrganisationValue('title', $event.target.value)" [value]="menu.title"></textarea>
+  <small class="form-text text-muted">
+    Welcoming title to request for authentication.
+  </small>
+</div>
+<div class="form-group">
+  <label>Number Of Retries</label>
+  <input type="number" class="form-control form-control-sm" placeholder="Number Of Retries"
+    (input)="setOrganisationValue('number_of_retries', $event.target.value)" [value]="menu.number_of_retries">
+  <small class="form-text text-muted">
+    Number of times User is allowed to retry.
+  </small>
+</div>
+<div class="form-group">
+  <label>Retry Message</label>
+  <textarea type="text" class="form-control form-control-sm" placeholder="Message for retrying"
+    (input)="setOrganisationValue('retry_message', $event.target.value)" [value]="menu.retry_message"></textarea>
+  <small class="form-text text-muted">
+    Text to display for retrying.
+  </small>
+</div>
+<div class="form-group">
+  <label>Fail Message</label>
+  <textarea type="text" class="form-control form-control-sm" placeholder="A fail message"
+    (input)="setOrganisationValue('fail_message', $event.target.value)" [value]="menu.fail_message">
+  </textarea>
+  <small class="form-text text-muted">
+    Message to give When Authentication Failed.
+  </small>
+</div>
+
+<button style="height: 28px; padding: 2px" class="p-1 cursor btn-outline-secondary btn-block btn-sm btn"
+  (click)="setNextMenu()">Set Next Menu
+</button>

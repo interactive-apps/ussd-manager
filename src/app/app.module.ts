@@ -37,6 +37,7 @@ import { FilterByNamePipe } from './shared/filter-by-name.pipe';
 import { SimulateComponent } from './simulate/simulate.component';
 import { DataSubmissionComponent } from './create/menu/data-submission/data-submission.component';
 import { DataElementOptionsComponent } from './create/menu/data-element-options/data-element-options.component';
+import { OrganisationUnitComponent } from './create/menu/organisation-unit/organisation-unit.component';
 
 // Add a function, that returns a “TranslateHttpLoader” and export it (needed by AoT)
 export function HttpLoaderFactory(http: HttpClient) {
@@ -58,7 +59,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     FilterByNamePipe,
     SimulateComponent,
     DataSubmissionComponent,
-    DataElementOptionsComponent
+    DataElementOptionsComponent,
+    OrganisationUnitComponent
   ],
   imports: [
     BrowserModule,
