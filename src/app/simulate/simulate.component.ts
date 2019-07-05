@@ -46,11 +46,19 @@ export class SimulateComponent implements OnInit, AfterViewInit {
     this.sending_response = true;
     this.response_ready = false;
     this.http.get(this.getUrl(this.answer, 'UR'), {responseType: 'text'}).subscribe((data) => {
-      const dataArr = data.split(';');
-      if (dataArr[0] === 'P') {
-        this.need_input = true;
+      try {
+        let d = JSON.parse(data);
+        if (d.response_type === 2) {
+          this.need_input = true;
+        }
+        this.response_body = d.text.replace(new RegExp('\n', 'g'), '<br />');
+      } catch (e) {
+        const dataArr = data.split(';');
+        if (dataArr[0] === 'P') {
+          this.need_input = true;
+        }
+        this.response_body = dataArr[2].replace(new RegExp('\n', 'g'), '<br />');
       }
-      this.response_body = dataArr[2].replace(new RegExp('\n', 'g'), '<br />');
       this.sending_response = false;
       this.response_ready = true;
       this.answer = '';
@@ -62,12 +70,21 @@ export class SimulateComponent implements OnInit, AfterViewInit {
     this.response_ready = false;
     this.sessionId = this.ussdService.make_session_id();
     console.log('URL:', this.getUrl('*152*05*01', 'NR'));
-    this.http.get(this.getUrl('*152*05*01', 'NR'), {responseType: 'text'}).subscribe((data) => {
-      const dataArr = data.split(';');
-      if (dataArr[0] === 'P') {
-        this.need_input = true;
+    this.http.get(this.getUrl('*152*05*01', 'NR'), {responseType: 'text'}).subscribe((data:any) => {
+      console.log(data, typeof data);
+      try{
+        let d = JSON.parse(data);
+        if (d.response_type === 2) {
+          this.need_input = true;
+        }
+        this.response_body = d.text;
+      }catch(e){
+        const dataArr = data.split(';');
+        if (dataArr[0] === 'P') {
+          this.need_input = true;
+        }
+        this.response_body = dataArr[2];
       }
-      this.response_body = dataArr[2];
       this.sending_response = false;
       this.response_ready = true;
       this.answer = '';
