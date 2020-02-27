@@ -65,19 +65,21 @@ export class SimulateComponent implements OnInit, AfterViewInit {
 
           if (d.options) {
             this.response_body = "";
-            console.log("data", d);
+            //console.log("data", d);
             this.response_body += `${d.text}.<br/><ul>`;
             //console.log("Object.keys(d.options)", Object.keys(d.options));
             Object.keys(d.options).forEach(key => {
               this.response_body += `<li>${key}. ${d.options[key]}</li>`;
             });
             this.response_body += "</ul>";
-            console.log(this.response_body);
+            //console.log(this.response_body);
           } else {
             this.response_body = d.text.replace(
               new RegExp("\n", "g"),
               "<br />"
             );
+
+            console.log("here", d);
           }
         } catch (e) {
           const dataArr = data.split(";");
