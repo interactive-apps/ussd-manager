@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ApplicationState } from '../store/reducers/index';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Setting } from '../shared/models/settings';
 import * as settingSelectors from '../store/selectors/setting.selectors';
 import * as menuSelectors from '../store/selectors/menu.selectors';

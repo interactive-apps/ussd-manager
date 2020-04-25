@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ApplicationState } from '../store/reducers/index';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Setting } from '../shared/models/settings';
 import * as ussdSelectors from '../store/selectors/ussd.selectors';
 import * as settingsActions from '../store/actions/settings.actions';

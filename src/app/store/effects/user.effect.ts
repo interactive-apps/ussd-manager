@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import {LOAD_USER, LoadUserFailure, LoadUserSuccess} from '../actions/user.actions';
 import {catchError, map, switchMap} from 'rxjs/operators';
-import {of} from 'rxjs/observable/of';
+import {of} from 'rxjs';
 
 @Injectable()
 export class UserEffect {
