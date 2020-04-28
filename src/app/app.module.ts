@@ -10,7 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { services } from './shared/services/index';
 import {
   RouterStateSerializer,
-  StoreRouterConnectingModule
+  StoreRouterConnectingModule, DefaultRouterStateSerializer
 } from '@ngrx/router-store';
 import { CustomSerializer } from './store/reducers/router.reducer';
 import { AppRoutingModule } from './app-routing.module';
@@ -69,8 +69,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     NgxPaginationModule,
     DndModule.forRoot(),
-    StoreModule.forRoot(reducers, { metaReducers }),
-    StoreRouterConnectingModule,
+    StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: true, strictActionImmutability: true } }),
+    StoreRouterConnectingModule.forRoot({ serializer: DefaultRouterStateSerializer }),
     EffectsModule.forRoot(effects),
     TranslateModule.forRoot({
       loader: {
