@@ -12,7 +12,7 @@ export class SimulateComponent implements OnInit, AfterViewInit {
   phone = null;
   url = '';
   sessionId = '';
-  @ViewChild('input1') inputEl: ElementRef;
+  @ViewChild('input1', { static: true }) inputEl: ElementRef;
 
   need_input = false;
   sending_response = false;
