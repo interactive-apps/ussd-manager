@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --aot / --proxy proxy-config.json",
+    "start": "ng serve",
     "build": "ng build --prod --aot --output-hashing all --sourcemaps false --named-chunks false --build-optimizer --vendor-chunk  && cd dist && zip -r -D ussd-manager.zip .",
     "test": "ng test",
     "lint": "ng lint",
