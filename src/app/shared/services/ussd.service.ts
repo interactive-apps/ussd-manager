@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core';
-import { UssdMenu } from '../models/menu';
-import { Setting } from '../models/settings';
-import { Ussd } from '../models/ussd';
-import { AddUssd, DoneLoadingUssds } from '../../store/actions/ussd.actions';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
-import { ApplicationState } from '../../store/reducers/index';
-import { HttpClientService } from './http-client.service';
-import { DataSet } from '../models/dataSet';
-import { Program } from '../models/program';
-import { DataElement } from '../models/dataElement';
-import { AddDataelements } from '../../store/actions/dataelement.actions';
-import { AddDatasets } from '../../store/actions/dataset.actions';
-import { LoadPrograms } from '../../store/actions/program.actions';
+import { Injectable } from "@angular/core";
+import { UssdMenu } from "../models/menu";
+import { Setting } from "../models/settings";
+import { Ussd } from "../models/ussd";
+import { AddUssd, DoneLoadingUssds } from "../../store/actions/ussd.actions";
+import { Observable } from "rxjs/Observable";
+import { Store } from "@ngrx/store";
+import { ApplicationState } from "../../store/reducers/index";
+import { HttpClientService } from "./http-client.service";
+import { DataSet } from "../models/dataSet";
+import { Program } from "../models/program";
+import { DataElement } from "../models/dataElement";
+import { AddDataelements } from "../../store/actions/dataelement.actions";
+import { AddDatasets } from "../../store/actions/dataset.actions";
+import { LoadPrograms } from "../../store/actions/program.actions";
 
 @Injectable()
 export class UssdService {
@@ -20,10 +20,14 @@ export class UssdService {
   _datasets: DataSet[] = [];
   _programs: Program[] = [];
   _dataelements: DataElement[] = [];
+  _trackedEntityTypes: any = [];
+
+  trackedEntityTypesUrl =
+    "trackedEntityTypes.json?fields=id,name,trackedEntityTypeAttributes[id,name]&paging=false";
   datasetUrl =
-    'dataSets.json?fields=id,name,periodType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false';
+    "dataSets.json?fields=id,name,periodType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false";
   programUrl =
-    'programs.json?fields=id,name,displayName,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false';
+    "programs.json?fields=id,name,displayName,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false";
 
   constructor(
     private store: Store<ApplicationState>,
@@ -32,9 +36,9 @@ export class UssdService {
 
   // generate a random list of Id for use as scorecard id
   makeid(): string {
-    let text = '';
+    let text = "";
     const possible_combinations =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     for (let i = 0; i < 31; i++) {
       text += possible_combinations.charAt(
         Math.floor(Math.random() * possible_combinations.length)
@@ -44,8 +48,8 @@ export class UssdService {
   }
 
   make_session_id(): string {
-    let text = '';
-    const possible_combinations = '123456789';
+    let text = "";
+    const possible_combinations = "123456789";
     for (let i = 0; i < 9; i++) {
       text += possible_combinations.charAt(
         Math.floor(Math.random() * possible_combinations.length)
@@ -55,7 +59,7 @@ export class UssdService {
   }
 
   loadAll(): Observable<any> {
-    return this.http.get('dataStore/ussd');
+    return this.http.get("dataStore/ussd");
   }
 
   getEmptyUssdConfiguration(id: string) {
@@ -64,17 +68,17 @@ export class UssdService {
     inititialSettings.starting_menu = menuId;
     const menus: UssdMenu = {
       id: menuId,
-      title: 'Untitled menu',
-      type: '',
+      title: "Untitled menu",
+      type: "",
       options: [],
-      previous_menu: '',
-      data_id: '',
-      next_menu: '',
-      dataType: '',
-      data_name: '',
-      auth_key: '',
-      fail_message: '',
-      retry_message: ''
+      previous_menu: "",
+      data_id: "",
+      next_menu: "",
+      dataType: "",
+      data_name: "",
+      auth_key: "",
+      fail_message: "",
+      retry_message: ""
     };
     const menuObject = {};
     menuObject[menuId] = menus;
@@ -128,7 +132,7 @@ export class UssdService {
           if (error && error.httpStatusCode && error.httpStatusCode === 404) {
             const id = this.makeid();
             const data = this.getEmptyUssdConfiguration(id);
-            data.settings.dataStoreKey = 'idsr';
+            data.settings.dataStoreKey = "idsr";
             const ussd: Ussd = {
               id: id,
               settings: data.settings,
@@ -245,26 +249,32 @@ export class UssdService {
         this.store.dispatch(new AddDataelements({ dataelements }));
       });
     }
+
+    if (this._trackedEntityTypes.length === 0) {
+      this.http.get(this.trackedEntityTypesUrl).subscribe(data => {
+        console.log("tracked entities data", data);
+      });
+    }
   }
 
   getStartingSettings(id: string): Setting {
     return {
       id: id,
-      name: 'Untitled Ussd',
-      description: '',
-      session_key: 'sessionid',
-      user_response: 'USSDRequest',
-      dataStoreKey: '',
+      name: "Untitled Ussd",
+      description: "",
+      session_key: "sessionid",
+      user_response: "USSDRequest",
+      dataStoreKey: "",
       request_type: {
-        key: 'USSDType',
-        first_request: 'NR',
-        Continue_request: 'CR',
-        terminated_by_provider: 'UC',
-        timed_out: 'T'
+        key: "USSDType",
+        first_request: "NR",
+        Continue_request: "CR",
+        terminated_by_provider: "UC",
+        timed_out: "T"
       },
-      phone_number_key: 'msisdn',
-      no_user_message: 'This phone number has no associated user',
-      starting_menu: ''
+      phone_number_key: "msisdn",
+      no_user_message: "This phone number has no associated user",
+      starting_menu: ""
     };
   }
 
@@ -272,22 +282,22 @@ export class UssdService {
     return {
       id: id,
       ussdId: ussdId,
-      title: '',
+      title: "",
       accept_input: false,
       is_last_menu: false,
       has_options: false,
       options: [],
       collect_data: false,
-      data_element: '',
-      category_combo: '',
+      data_element: "",
+      category_combo: "",
       authentication: false,
-      authentication_value: '',
-      authentication_field: '',
+      authentication_value: "",
+      authentication_field: "",
       is_period_filter: false,
-      period_type: '',
+      period_type: "",
       use_for_year: false,
-      possible_period_values: '',
-      next_menu: ''
+      possible_period_values: "",
+      next_menu: ""
     };
   }
 }
