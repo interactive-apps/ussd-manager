@@ -13,6 +13,7 @@ import { DataElement } from "../models/dataElement";
 import { AddDataelements } from "../../store/actions/dataelement.actions";
 import { AddDatasets } from "../../store/actions/dataset.actions";
 import { LoadPrograms } from "../../store/actions/program.actions";
+import { AddTrackedEntityTypes } from "../../store/actions/trackedentitytype.actions";
 
 @Injectable()
 export class UssdService {
@@ -252,7 +253,11 @@ export class UssdService {
 
     if (this._trackedEntityTypes.length === 0) {
       this.http.get(this.trackedEntityTypesUrl).subscribe(data => {
-        console.log("tracked entities data", data);
+        // this.store.dispatch(
+        //   new AddTrackedEntityTypes({
+        //     trackedEntityTypes: data.trackedEntityTypes
+        //   })
+        // );
       });
     }
   }

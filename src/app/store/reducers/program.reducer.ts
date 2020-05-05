@@ -1,6 +1,6 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { ProgramActions, ProgramActionTypes } from '../actions/program.actions';
-import { Program } from '../../shared/models/program';
+import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity";
+import { ProgramActions, ProgramActionTypes } from "../actions/program.actions";
+import { Program } from "../../shared/models/program";
 
 export interface State extends EntityState<Program> {
   // additional entities state properties
@@ -18,10 +18,7 @@ export const initialState: State = adapter.getInitialState({
   loaded: false
 });
 
-export function reducer(
-  state = initialState,
-  action: ProgramActions
-): State {
+export function reducer(state = initialState, action: ProgramActions): State {
   switch (action.type) {
     case ProgramActionTypes.ADD_PROGRAM: {
       return adapter.addOne(action.payload.program, state);
