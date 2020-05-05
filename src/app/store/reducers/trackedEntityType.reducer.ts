@@ -3,17 +3,17 @@ import {
   TrackedEntityTypeActions,
   TrackedEntityTypeActionTypes
 } from "../actions/trackedentitytype.actions";
-import { DataElement } from "../../shared/models/dataElement";
+import { TrackedEntityType } from "../../shared/models/trackedEntityType";
 
-export interface State extends EntityState<DataElement> {
+export interface State extends EntityState<TrackedEntityType> {
   // additional entities state properties
   selectedTrackedEntityTypeId: string | null;
   loading: boolean;
   loaded: boolean;
 }
 
-export const adapter: EntityAdapter<DataElement> = createEntityAdapter<
-  DataElement
+export const adapter: EntityAdapter<TrackedEntityType> = createEntityAdapter<
+  TrackedEntityType
 >();
 
 export const initialState: State = adapter.getInitialState({

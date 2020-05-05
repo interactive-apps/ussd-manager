@@ -253,11 +253,11 @@ export class UssdService {
 
     if (this._trackedEntityTypes.length === 0) {
       this.http.get(this.trackedEntityTypesUrl).subscribe(data => {
-        // this.store.dispatch(
-        //   new AddTrackedEntityTypes({
-        //     trackedEntityTypes: data.trackedEntityTypes
-        //   })
-        // );
+        this.store.dispatch(
+          new AddTrackedEntityTypes({
+            trackedEntityTypes: data.trackedEntityTypes
+          })
+        );
       });
     }
   }
