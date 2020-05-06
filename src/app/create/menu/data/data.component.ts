@@ -37,6 +37,9 @@ export class DataComponent implements OnInit {
   selected_group: any;
   searchQuery: string = null;
   selectedProgram = "";
+  selectedProgramObject: {};
+  trackerProgramStages: Array<any> = [];
+  trackerProgramElements: Array<any> = [];
   selectedProgramStage = "";
   selectedDataset = "";
   selectedTrackedEntityType = "";
@@ -49,7 +52,6 @@ export class DataComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log("programs", this.programs);
     _.each(Object.keys(this.trackedEntityTypes), key => {
       this.EntityTypesArray.push(this.trackedEntityTypes[key]);
     });
@@ -99,8 +101,9 @@ export class DataComponent implements OnInit {
         }
       }, 100);
     } else if (type === "tracker") {
-      this.groups = this.EntityTypesArray;
-      console.log(this.menu);
+      this.groups = _.filter(this.programs, (program: any) => {
+        return program["type"] === "WITH_REGISTRATION" ? true : false;
+      });
       setTimeout(() => {
         if (
           this.menu.program &&
@@ -108,7 +111,7 @@ export class DataComponent implements OnInit {
           this.selectedDatas &&
           this.programs
         ) {
-          //this.setSelectedGroup(this.menu.program);
+          this.setSelectedGroup(this.menu.program);
         }
       }, 100);
     }
@@ -166,7 +169,6 @@ export class DataComponent implements OnInit {
       }
       this.selectedDataset = value;
       this.dataLists = items;
-      console.log(items);
     } else if (this.dataType === "programs") {
       this.selectedProgram = value;
       const program = this.getItemById(this.programs, value);
@@ -182,11 +184,25 @@ export class DataComponent implements OnInit {
         this.setDataElementFromStage(programStages[0].id);
       }
     } else if (this.dataType === "tracker") {
-      this.selectedTrackedEntityType = value;
+      this.selectedProgram = value;
+      const program = this.getItemById(this.programs, value);
+      this.selected_group = program;
 
-      this.dataLists = this.trackedEntityTypes[value][
-        "trackedEntityTypeAttributes"
-      ];
+      console.log("program", program);
+
+      this.selectedProgramObject = _.find(this.programs, (program: any) => {
+        return program.id === this.selectedProgram ? true : false;
+      });
+
+      this.trackerProgramStages = this.selectedProgramObject["programStages"];
+
+      if (this.selected_group["programStages"].length == 0) {
+        this.dataLists = this.trackedEntityTypes[
+          this.selectedProgramObject["trackedEntityTypeId"]
+        ]["trackedEntityTypeAttributes"];
+      }
+
+      //this.trackerProgramElements = this.trackedEntityTypes
     }
   }
 
@@ -204,6 +220,7 @@ export class DataComponent implements OnInit {
       this.selected_group.programStages,
       selectedProgramStage
     );
+
     this.selectedProgramStage = selectedProgramStage;
     this.dataLists = programStage.dataElements.map(
       (dataElement: DataElement) => {
@@ -413,6 +430,19 @@ export class DataComponent implements OnInit {
         field_value_type: valueType,
         field_short_name: shortName,
         options: data.id === this.menu.data_id ? this.menu.options : []
+      };
+    } else if (this.dataType === "tracker") {
+      menu = <UssdMenu>{
+        ...this.menu,
+        title: title ? title : data.name,
+        tracked_entity_attribute: data.id,
+        tracked_entity_type: "XjMhM0eneKI",
+        program: this.selectedProgram,
+        program_stage: this.selectedProgramStage,
+        dataType: "tracker",
+        data_name: data.name,
+        data_id: data.id,
+        field_value_type: valueType
       };
     }
     this.store.dispatch(
