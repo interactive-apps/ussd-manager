@@ -153,6 +153,7 @@
       (change)="setDataElementFromStage($event.target.value)"
       class="form-control form-control-sm"
     >
+      <option [value]="">Select Program Stage</option>
       <option
         *ngFor="let stage of selected_group['programStages']"
         [value]="stage['id']"
