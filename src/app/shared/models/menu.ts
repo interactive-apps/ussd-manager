@@ -13,6 +13,8 @@ export interface UssdMenu {
   data_element?: string;
   dataSet?: string;
   category_combo?: string;
+  tracked_entity_attribute?: string;
+  tracked_entity_type?: string;
   program?: string;
   program_stage?: string;
   auth_key?: string;

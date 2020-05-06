@@ -1,22 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UssdMenu } from '../../shared/models/menu';
-import { Store } from '@ngrx/store';
-import * as menuActions from '../../store/actions/menu.actions';
-import { ApplicationState } from '../../store/reducers/index';
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { UssdMenu } from "../../shared/models/menu";
+import { Store } from "@ngrx/store";
+import * as menuActions from "../../store/actions/menu.actions";
+import { ApplicationState } from "../../store/reducers/index";
 import {
   AddMenu,
   SetNextMenus,
   UpdateMenu
-} from '../../store/actions/menu.actions';
-import { fadeOut } from '../../shared/animations/basic-animations';
-import { UssdService } from '../../shared/services/ussd.service';
-import { DataSet } from '../../shared/models/dataSet';
-import { Program } from '../../shared/models/program';
+} from "../../store/actions/menu.actions";
+import { fadeOut } from "../../shared/animations/basic-animations";
+import { UssdService } from "../../shared/services/ussd.service";
+import { DataSet } from "../../shared/models/dataSet";
+import { Program } from "../../shared/models/program";
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css'],
+  selector: "app-menu",
+  templateUrl: "./menu.component.html",
+  styleUrls: ["./menu.component.css"],
   animations: [fadeOut]
 })
 export class MenuComponent implements OnInit {
@@ -30,6 +30,7 @@ export class MenuComponent implements OnInit {
   @Input() selectedDatas: string[] = [];
   @Input() authAvailable = false;
   @Input() isDataReady = false;
+  @Input() trackedEntityTypes: any;
   @Output() nextMenuValue: EventEmitter<any> = new EventEmitter<any>();
   next_menu: UssdMenu = null;
   deleteEnabled = false;
@@ -43,7 +44,8 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.menu.hasOwnProperty('next_menu') && this.menu.next_menu !== '') {
+    console.log("tracked entity types", this.trackedEntityTypes);
+    if (this.menu.hasOwnProperty("next_menu") && this.menu.next_menu !== "") {
       setTimeout(() => {
         this.addNextMenu(this.menu.id, this.menu.next_menu);
       });
@@ -51,7 +53,7 @@ export class MenuComponent implements OnInit {
     const { previous_menu } = this.menu;
     if (previous_menu && this.menus[previous_menu]) {
       const { type } = this.menus[previous_menu];
-      if (type && type === 'data-submission') {
+      if (type && type === "data-submission") {
         this.isPreviousMenuForDataConfirmation = true;
       }
     }
@@ -68,7 +70,7 @@ export class MenuComponent implements OnInit {
 
   setNextMenu(event) {
     const { current_menu_id, next_menu_id, option } = event;
-    if (next_menu_id === '') {
+    if (next_menu_id === "") {
       this.createNewMenu(option);
     } else {
       if (this.menus.hasOwnProperty(next_menu_id)) {
@@ -82,13 +84,13 @@ export class MenuComponent implements OnInit {
   createNewMenu(option = null) {
     const newMenu: UssdMenu = {
       id: this.ussdService.makeid(),
-      title: 'New Menu',
-      type: '',
+      title: "New Menu",
+      type: "",
       options: [],
-      next_menu: '',
-      fail_message: '',
-      retry_message: '',
-      data_id: '',
+      next_menu: "",
+      fail_message: "",
+      retry_message: "",
+      data_id: "",
       previous_menu: this.menu.id
     };
     this.store.dispatch(new AddMenu({ menu: newMenu }));
@@ -135,8 +137,8 @@ export class MenuComponent implements OnInit {
         menu: { id: this.menu.id, changes: { type } }
       })
     );
-    if (type === 'data-submission') {
-      const title = 'You are about to submit data, are you sure?';
+    if (type === "data-submission") {
+      const title = "You are about to submit data, are you sure?";
       this.store.dispatch(
         new menuActions.UpdateMenu({
           menu: {
@@ -146,12 +148,12 @@ export class MenuComponent implements OnInit {
         })
       );
     }
-    if (type === 'period') {
+    if (type === "period") {
       this.store.dispatch(
         new menuActions.UpdateMenu({
           menu: {
             id: this.menu.id,
-            changes: { retry_message: '', fail_message: '' }
+            changes: { retry_message: "", fail_message: "" }
           }
         })
       );
@@ -172,7 +174,7 @@ export class MenuComponent implements OnInit {
   }
 
   isMenuInitialized() {
-    return this.menu.type !== '';
+    return this.menu.type !== "";
   }
 
   activateMenu(menu) {
@@ -182,9 +184,9 @@ export class MenuComponent implements OnInit {
   showDelete() {
     return (
       !this.deleteEnabled &&
-      this.menu.next_menu === '' &&
+      this.menu.next_menu === "" &&
       ((this.menu.options && this.menu.options.length === 0) ||
-        (this.menu.type === 'data' || this.menu.type === 'data-submission'))
+        this.menu.type === "data" || this.menu.type === "data-submission")
     );
   }
 
@@ -197,7 +199,7 @@ export class MenuComponent implements OnInit {
           menu: {
             id: previousMenu.id,
             changes: {
-              next_menu: ''
+              next_menu: ""
             }
           }
         })
@@ -212,7 +214,7 @@ export class MenuComponent implements OnInit {
         if (option.next_menu === menu.id) {
           return {
             ...option,
-            next_menu: ''
+            next_menu: ""
           };
         } else {
           return {

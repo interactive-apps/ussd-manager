@@ -26,6 +26,7 @@ export class DataComponent implements OnInit {
   @Input() programEntities: any = {};
   @Input() selectedDatas: string[] = [];
   @Input() isDataReady = false;
+  @Input() trackedEntityTypes: any;
   @Output() nextMenu: EventEmitter<any> = new EventEmitter<any>();
   @Output() messageValue: EventEmitter<string> = new EventEmitter<string>();
 
@@ -38,13 +39,20 @@ export class DataComponent implements OnInit {
   selectedProgram = "";
   selectedProgramStage = "";
   selectedDataset = "";
+  selectedTrackedEntityType = "";
   submit_data = true;
+  EntityTypesArray: Array<any> = [];
+
   constructor(
     private store: Store<ApplicationState>,
     private ussdService: UssdService
   ) {}
 
   ngOnInit() {
+    //console.log("programs", this.programs);
+    _.each(Object.keys(this.trackedEntityTypes), key => {
+      this.EntityTypesArray.push(this.trackedEntityTypes[key]);
+    });
     this.groups = this.datasets;
     const { dataType } = this.menu;
     if (dataType) {
@@ -91,6 +99,18 @@ export class DataComponent implements OnInit {
         }
       }, 100);
     } else if (type === "tracker") {
+      this.groups = this.EntityTypesArray;
+      console.log(this.menu);
+      setTimeout(() => {
+        if (
+          this.menu.program &&
+          this.menu.program !== "" &&
+          this.selectedDatas &&
+          this.programs
+        ) {
+          //this.setSelectedGroup(this.menu.program);
+        }
+      }, 100);
     }
   }
 
@@ -146,6 +166,7 @@ export class DataComponent implements OnInit {
       }
       this.selectedDataset = value;
       this.dataLists = items;
+      console.log(items);
     } else if (this.dataType === "programs") {
       this.selectedProgram = value;
       const program = this.getItemById(this.programs, value);
@@ -160,6 +181,12 @@ export class DataComponent implements OnInit {
       ) {
         this.setDataElementFromStage(programStages[0].id);
       }
+    } else if (this.dataType === "tracker") {
+      this.selectedTrackedEntityType = value;
+
+      this.dataLists = this.trackedEntityTypes[value][
+        "trackedEntityTypeAttributes"
+      ];
     }
   }
 

@@ -1,24 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { ApplicationState } from '../store/reducers/index';
-import { Observable } from 'rxjs/Observable';
-import { Setting } from '../shared/models/settings';
-import * as settingSelectors from '../store/selectors/setting.selectors';
-import * as menuSelectors from '../store/selectors/menu.selectors';
-import * as dataSelectors from '../store/selectors/data.selectors';
-import * as settingsActions from '../store/actions/settings.actions';
-import * as menuActions from '../store/actions/menu.actions';
-import { UssdService } from '../shared/services/ussd.service';
-import { UssdMenu } from '../shared/models/menu';
-import { Dictionary } from '@ngrx/entity/src/models';
-import { listStateTrigger } from '../shared/animations/basic-animations';
-import { DataSet } from '../shared/models/dataSet';
-import { Program } from '../shared/models/program';
+import { Component, OnInit } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { ApplicationState } from "../store/reducers/index";
+import { Observable } from "rxjs/Observable";
+import { Setting } from "../shared/models/settings";
+import * as settingSelectors from "../store/selectors/setting.selectors";
+import * as menuSelectors from "../store/selectors/menu.selectors";
+import * as dataSelectors from "../store/selectors/data.selectors";
+import * as settingsActions from "../store/actions/settings.actions";
+import * as menuActions from "../store/actions/menu.actions";
+import { UssdService } from "../shared/services/ussd.service";
+import { UssdMenu } from "../shared/models/menu";
+import { Dictionary } from "@ngrx/entity/src/models";
+import { listStateTrigger } from "../shared/animations/basic-animations";
+import { DataSet } from "../shared/models/dataSet";
+import { Program } from "../shared/models/program";
+import { TrackedEntityType } from "../shared/models/trackedEntityType";
 
 @Component({
-  selector: 'app-create',
-  templateUrl: './create.component.html',
-  styleUrls: ['./create.component.css'],
+  selector: "app-create",
+  templateUrl: "./create.component.html",
+  styleUrls: ["./create.component.css"],
   animations: [listStateTrigger]
 })
 export class CreateComponent implements OnInit {
@@ -32,6 +33,7 @@ export class CreateComponent implements OnInit {
   datasets$: Observable<DataSet[]>;
   datasetEntities$: Observable<any>;
   programs$: Observable<Program[]>;
+  TrackedEntityTypes$: Observable<any>;
   programsEntities$: Observable<any>;
   selectedDatas$: Observable<string[]>;
   selectedId: string = null;
@@ -54,6 +56,10 @@ export class CreateComponent implements OnInit {
     this.programs$ = store.select(dataSelectors.getPrograms);
     this.programsEntities$ = store.select(dataSelectors.selectProgramEntities);
     this.datasetEntities$ = store.select(dataSelectors.selectDatasetEntities);
+    this.TrackedEntityTypes$ = store.select(
+      dataSelectors.selectTrackedEntityTypeEntities
+    );
+
     store
       .select(settingSelectors.selectCurrentSettingId)
       .subscribe(id => (this.selectedId = id));

@@ -1,28 +1,60 @@
 <div class="container-fluid">
-  <app-basic *ngIf="(settings$ | async)" [setting]="settings$ | async" [menus]="menus$ | async">
+  <app-basic
+    *ngIf="settings$ | async"
+    [setting]="settings$ | async"
+    [menus]="menus$ | async"
+  >
   </app-basic>
 
   <div class="row mt-2" *ngIf="(settings$ | async)?.starting_menu == ''">
     <div class="col-sm-12">
-      <button class="btn btn-outline-info btn-sm cursor" (click)="addStartingMenu()">Add Starting menu</button>
+      <button
+        class="btn btn-outline-info btn-sm cursor"
+        (click)="addStartingMenu()"
+      >
+        Add Starting menu
+      </button>
     </div>
   </div>
-  <div class="row" *ngIf="(settings$ | async)?.starting_menu && (settings$ | async)?.starting_menu != ''">
+  <div
+    class="row"
+    *ngIf="
+      (settings$ | async)?.starting_menu &&
+      (settings$ | async)?.starting_menu != ''
+    "
+  >
     <div class="col-sm-12">
       <table>
         <tr>
           <td [attr.colspan]="(nextmenus$ | async).length">
-            <h5 style="background-color: rgba(0,0,0,0.1)">Menu Configurations</h5>
+            <h5 style="background-color: rgba(0,0,0,0.1)">
+              Menu Configurations
+            </h5>
           </td>
         </tr>
         <tr>
-          <td *ngFor="let next_menu of (nextmenus$ | async);trackBy: trackItem; let i=index">
+          <td
+            *ngFor="
+              let next_menu of nextmenus$ | async;
+              trackBy: trackItem;
+              let i = index
+            "
+          >
             <div *ngIf="selectedDatas$ | async">
-              <app-menu [menu]="(menus$ | async)[next_menu]" [menus]="menus$ | async" [programs]="programs$ | async" [datasets]="datasets$ | async"
-                [datasetEntities]="datasetEntities$ | async" [programEntities]="programsEntities$ | async" [next_menus]="nextmenus$ | async"
-                [selectedDatas]="selectedDatas$ | async" [authAvailable]="authAlreadySelected$ | async" (nextMenuValue)="setNextMenu($event)"></app-menu>
+              <app-menu
+                [menu]="(menus$ | async)[next_menu]"
+                [menus]="menus$ | async"
+                [trackedEntityTypes]="TrackedEntityTypes$ | async"
+                [programs]="programs$ | async"
+                [datasets]="datasets$ | async"
+                [datasetEntities]="datasetEntities$ | async"
+                [programEntities]="programsEntities$ | async"
+                [next_menus]="nextmenus$ | async"
+                [selectedDatas]="selectedDatas$ | async"
+                [authAvailable]="authAlreadySelected$ | async"
+                (nextMenuValue)="setNextMenu($event)"
+              ></app-menu>
             </div>
-
           </td>
         </tr>
       </table>

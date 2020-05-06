@@ -78,6 +78,8 @@
             ? "program"
             : dataType == "datasets"
             ? "datasets"
+            : dataType == "tracker"
+            ? "tracked entity type"
             : "options"
         }}</option
       >
@@ -107,7 +109,44 @@
       </select>
     </div>
   </div>
-  <div class="col" *ngIf="dataLists.length !== 0">
+  <div class="col" *ngIf="dataType == 'datasets' && dataLists.length !== 0">
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      placeholder="Search by name"
+      [(ngModel)]="searchQuery"
+    />
+    <ul class="list-group dataList" [@listState]="dataLists.length">
+      <!-- <li *ngIf="menu.data_name" class="list-group-item pt-1 pb-1 active-item" style="cursor: no-drop">
+        {{ menu.data_name }}
+      </li> -->
+      <ng-container
+        *ngFor="
+          let data of dataLists | filterByName: searchQuery;
+          trackBy: trackItem;
+          let i = index
+        "
+      >
+        <li
+          class="list-group-item pt-1 pb-1"
+          [ngClass]="{ 'active-item': data.id === menu.data_id }"
+          (click)="setData(data)"
+        >
+          <span> {{ data.name }}</span>
+        </li>
+      </ng-container>
+    </ul>
+    <!--option selctions for data menu-->
+    <div *ngIf="options && options.length > 0">
+      <app-data-element-options
+        [menu]="menu"
+        [menus]="menus"
+        [options]="options"
+        (changeOptionStatus)="updateOptions($event)"
+      ></app-data-element-options>
+    </div>
+  </div>
+  <div class="col" *ngIf="dataType == 'tracker' && dataLists.length !== 0">
     <input
       type="text"
       class="form-control form-control-sm"

@@ -24,11 +24,11 @@ export class UssdService {
   _trackedEntityTypes: any = [];
 
   trackedEntityTypesUrl =
-    "trackedEntityTypes.json?fields=id,name,trackedEntityTypeAttributes[id,name]&paging=false";
+    "trackedEntityTypes.json?fields=id,name,trackedEntityTypeAttributes[id,name,valueType,trackedEntityAttribute,trackedEntityType]&paging=false";
   datasetUrl =
-    "dataSets.json?fields=id,name,periodType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false";
+    "dataSets.json?fields=id,name,periodType,programType,trackedEntityType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false";
   programUrl =
-    "programs.json?fields=id,name,displayName,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false";
+    "programs.json?fields=id,name,displayName,trackedEntityType,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false";
 
   constructor(
     private store: Store<ApplicationState>,
@@ -77,6 +77,9 @@ export class UssdService {
       next_menu: "",
       dataType: "",
       data_name: "",
+      tracked_entity_attribute: "",
+      tracked_entity_type: "",
+      program: "",
       auth_key: "",
       fail_message: "",
       retry_message: ""
@@ -207,6 +210,10 @@ export class UssdService {
             id: program.id,
             name: program.name,
             displayName: program.displayName,
+            type: program.programType,
+            trackedEntityTypeId: program.trackedEntityType
+              ? program.trackedEntityType["id"]
+              : null,
             programStages: program.programStages.map((programStage: any) => {
               const { id, name, programStageDataElements } = programStage;
               return {

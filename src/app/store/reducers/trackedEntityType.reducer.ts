@@ -61,14 +61,14 @@ export const getLoaded = (state: State) => state.loaded;
 
 export const {
   // select the array of dataelement ids
-  selectIds: selectDataelementIds,
+  selectIds: selectTrackedEntityTypeIds,
 
   // select the dictionary of dataelement entities
-  selectEntities: selectDataelementEntities,
+  selectEntities: selectTrackedEntityTypeEntities,
 
   // select the array of dataelements
-  selectAll: selectAllDataelements,
+  selectAll: selectAllTrackedEntityTypes,
 
   // select the total dataelement count
-  selectTotal: selectDataelementTotal
+  selectTotal: selectTrackedEntityTypeTotal
 } = adapter.getSelectors();
