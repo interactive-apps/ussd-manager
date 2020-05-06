@@ -190,8 +190,6 @@ export class DataComponent implements OnInit {
       const program = this.getItemById(this.programs, value);
       this.selected_group = program;
 
-      console.log("program", program);
-
       this.selectedProgramObject = _.find(this.programs, (program: any) => {
         return program.id === this.selectedProgram ? true : false;
       });
