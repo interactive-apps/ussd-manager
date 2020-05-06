@@ -1,5 +1,6 @@
 <div class="form-group">
   <label>Message</label>
+  {{ menu.title }}
   <textarea
     class="form-control form-control-sm"
     placeholder="Message to User"
@@ -130,7 +131,7 @@
         <li
           class="list-group-item pt-1 pb-1"
           [ngClass]="{ 'active-item': data.id === menu.data_id }"
-          (click)="setData(data)"
+          (click)="setData(data, menu.title)"
         >
           <span> {{ data.name }}</span>
         </li>
@@ -149,7 +150,7 @@
 
   <div class="col-12" *ngIf="dataType == 'tracker'">
     <select
-      *ngIf="selected_group['programStages'].length > 0"
+      *ngIf="selected_group && selected_group['programStages'].length > 0"
       (change)="setDataElementFromStage($event.target.value)"
       class="form-control form-control-sm"
     >
@@ -182,7 +183,7 @@
           <li
             class="list-group-item pt-1 pb-1"
             [ngClass]="{ 'active-item': data.id === menu.data_id }"
-            (click)="setData(data)"
+            (click)="setData(data, menu.title)"
           >
             <span> {{ data.name }}</span>
           </li>

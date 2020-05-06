@@ -135,6 +135,8 @@ export class DataComponent implements OnInit {
   }
 
   setSelectedGroup(value: string) {
+    this.selectedProgramStage = "";
+
     if (this.dataType === "datasets") {
       const dataset = this.getItemById(this.datasets, value);
       const items = [];
@@ -432,11 +434,13 @@ export class DataComponent implements OnInit {
         options: data.id === this.menu.data_id ? this.menu.options : []
       };
     } else if (this.dataType === "tracker") {
+      console.log("on setting menu", this.selected_group);
+
       menu = <UssdMenu>{
         ...this.menu,
         title: title ? title : data.name,
         tracked_entity_attribute: data.id,
-        tracked_entity_type: "XjMhM0eneKI",
+        tracked_entity_type: this.selected_group.trackedEntityTypeId,
         program: this.selectedProgram,
         program_stage: this.selectedProgramStage,
         dataType: "tracker",
