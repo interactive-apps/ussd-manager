@@ -28,7 +28,7 @@ export class UssdService {
   datasetUrl =
     "dataSets.json?fields=id,name,periodType,programType,trackedEntityType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false";
   programUrl =
-    "programs.json?fields=id,name,displayName,trackedEntityType,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false";
+    "programs.json?fields=id,name,displayName,trackedEntityType,programType,programStages[id,name,programStageDataElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name,code]]]]]&paging=false";
 
   constructor(
     private store: Store<ApplicationState>,

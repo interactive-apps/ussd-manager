@@ -49,7 +49,7 @@ export class DataComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    //console.log("programs", this.programs);
+    console.log("programs", this.programs);
     _.each(Object.keys(this.trackedEntityTypes), key => {
       this.EntityTypesArray.push(this.trackedEntityTypes[key]);
     });
