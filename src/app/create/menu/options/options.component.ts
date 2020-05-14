@@ -16,7 +16,7 @@ import {
   fadeSmooth,
   listStateTrigger
 } from '../../../shared/animations/basic-animations';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { UssdService } from '../../../shared/services/ussd.service';
 
 @Component({
