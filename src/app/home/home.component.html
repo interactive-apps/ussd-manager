@@ -59,7 +59,11 @@
       </h3>
     </div>
     <div class="gojs">
-      <flowchart [model]="model"></flowchart>
+      <flowchart
+        [model]="model"
+        (nodeClicked)="setSelectedNode($event)"
+      ></flowchart>
+      <inspector [selectedNode]="selectedNode"></inspector>
     </div>
   </div>
 </div>

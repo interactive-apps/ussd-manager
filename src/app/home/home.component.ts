@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit {
   ussd_items$: Observable<Ussd[]>;
   loading$: Observable<boolean>;
   loaded$: Observable<boolean>;
+  public selectedNode = null;
   constructor(
     private store: Store<ApplicationState>,
     private ussdService: UssdService
@@ -116,19 +117,41 @@ export class HomeComponent implements OnInit {
     { key: 1, name: "Afya", title: "Afya Menu" },
     { key: 2, name: "Referal", title: "Referal Menu" },
     { key: 3, name: "Test eIDSR Menu (Afya)", title: "eIDSR Afya", parent: 1 },
-    { key: 4, name: "Test eIDSR Menu (Referal)", title: "eIDSR Referal", parent: 2 },
+    {
+      key: 4,
+      name: "Test eIDSR Menu (Referal)",
+      title: "eIDSR Referal",
+      parent: 2,
+    },
     { key: 5, name: "Simulation Server", title: "Server", parent: 4 },
     { key: 6, name: "Phone Number to use", title: "Server", parent: 4 },
     { key: 7, name: "Simulation Server", title: "Server", parent: 3 },
     { key: 8, name: "Phone Number to use", title: "Server", parent: 3 },
     { key: 9, name: "Create Menu", title: "Add Menu" },
-    { key: 10, name: "Menu Configurations", title: "Configurations", parent: 9 },
+    {
+      key: 10,
+      name: "Menu Configurations",
+      title: "Configurations",
+      parent: 9,
+    },
     { key: 11, name: "Menu Options", title: "Options", parent: 10 },
-    { key: 12, name: "Authentication Menu", title: "Authentication", parent: 10 },
+    {
+      key: 12,
+      name: "Authentication Menu",
+      title: "Authentication",
+      parent: 10,
+    },
     { key: 13, name: "Menu for Period", title: "Period", parent: 10 },
     { key: 14, name: "Menu for collection", title: "Collection", parent: 10 },
-    { key: 15, name: "Menu for data submission", title: "Data Submission", parent: 10 },
+    {
+      key: 15,
+      name: "Menu for data submission",
+      title: "Data Submission",
+      parent: 10,
+    },
     { key: 16, name: "Show Message", title: "Message", parent: 10 },
-
   ]);
+  public setSelectedNode(node) {
+    this.selectedNode = node;
+  }
 }
