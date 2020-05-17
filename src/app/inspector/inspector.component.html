@@ -1,0 +1,5 @@
+<form *ngIf="selectedNode" (ngSubmit)="onSubmit()">
+  Name: <input name="name" [(ngModel)]="data.name" /> Boss:
+  <input name="parent" [(ngModel)]="data.parent" />
+  <button mat-flat-button color="primary">Submit</button>
+</form>

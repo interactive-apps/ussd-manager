@@ -38,6 +38,8 @@ import { SimulateComponent } from './simulate/simulate.component';
 import { DataSubmissionComponent } from './create/menu/data-submission/data-submission.component';
 import { DataElementOptionsComponent } from './create/menu/data-element-options/data-element-options.component';
 import { OrganisationUnitComponent } from './create/menu/organisation-unit/organisation-unit.component';
+import { FlowchartComponent } from './flowchart/flowchart.component';
+import { InspectorComponent } from './inspector/inspector.component';
 
 // Add a function, that returns a “TranslateHttpLoader” and export it (needed by AoT)
 export function HttpLoaderFactory(http: HttpClient) {
@@ -60,7 +62,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     SimulateComponent,
     DataSubmissionComponent,
     DataElementOptionsComponent,
-    OrganisationUnitComponent
+    OrganisationUnitComponent,
+    FlowchartComponent,
+    InspectorComponent
   ],
   imports: [
     BrowserModule,
