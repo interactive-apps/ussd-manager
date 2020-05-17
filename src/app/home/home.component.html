@@ -1,7 +1,10 @@
 <div class="container-fluid">
   <div class="row mt-3">
     <div class="col-sm-12">
-      <button class=" cursor pull-right btn btn-outline-secondary btn-sm" (click)="create()">
+      <button
+        class="cursor pull-right btn btn-outline-secondary btn-sm"
+        (click)="create()"
+      >
         <i class="fa fa-plus-square-o"></i> Create New
       </button>
     </div>
@@ -10,26 +13,40 @@
   <div class="row mt-3" *ngIf="loading$ | async">
     <div class="col-sm-12">
       <h3 class="text-center">
-        <img src="assets/balls-5.svg">
+        <img src="assets/balls-5.svg" />
       </h3>
       <h3 class="text-center">Loading Ussd Menus...</h3>
     </div>
   </div>
   <div class="row mt-3" *ngIf="!(loading$ | async) && (loaded$ | async)">
     <div class="col-sm-12">
-      <div class="card item-card cursor mb-2" (click)="editMenu(item)" *ngFor="let item of ussd_items$ | async">
+      <div
+        class="card item-card cursor mb-2"
+        (click)="editMenu(item)"
+        *ngFor="let item of ussd_items$ | async"
+      >
         <div class="card-body">
           <div class="row">
             <div class="col-sm-9">
               <h3>{{ item.settings.name }}</h3>
               <p class="text-muted m-0">{{ item.settings.description }}</p>
-              <p class="text-muted m-0">Data store key : {{ item.settings.dataStoreKey }}</p>
+              <p class="text-muted m-0">
+                Data store key : {{ item.settings.dataStoreKey }}
+              </p>
             </div>
             <div class="col-sm-3">
-              <button class="btn btn-outline-primary pull-right cursor" (click)="editMenu(item)" title="Click to Edit the Settings">
+              <button
+                class="btn btn-outline-primary pull-right cursor"
+                (click)="editMenu(item)"
+                title="Click to Edit the Settings"
+              >
                 <i class="fa fa-pencil"></i> Edit
               </button>
-              <button class="mr-1 btn btn-outline-primary pull-right cursor" (click)="simulate(item)" title="Click to Edit the Settings">
+              <button
+                class="mr-1 btn btn-outline-primary pull-right cursor"
+                (click)="simulate(item)"
+                title="Click to Edit the Settings"
+              >
                 <i class="fa fa-mobile-phone"></i> Simulate
               </button>
               <!--<button class="btn btn-outline-danger pull-right cursor"><i class="fa fa-trash-o"></i> </button>-->
@@ -37,11 +54,12 @@
           </div>
         </div>
       </div>
-      <h3 class="lead text-center" *ngIf="(ussd_items$ | async).length == 0">There are no any USSD settings now</h3>
+      <h3 class="lead text-center" *ngIf="(ussd_items$ | async).length == 0">
+        There are no any USSD settings now
+      </h3>
     </div>
-  <div class="gojs">
-    <flowchart></flowchart>
+    <div class="gojs">
+      <flowchart [model]="model"></flowchart>
+    </div>
   </div>
-  </div>
-
 </div>
