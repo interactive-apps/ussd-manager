@@ -98,12 +98,8 @@ export class SimulateComponent implements OnInit, AfterViewInit {
 
   sendFirstRequest() {
     //check number format
-    let number = this.phone.split("+");
-    if (
-      number.length == 2 &&
-      /^\d+$/.test(number[1]) &&
-      number[1].length == 12
-    ) {
+
+    if (/^\d+$/.test(this.phone) && this.phone.length == 12) {
       this.phoneFormatError = "";
       this.sending_response = true;
       this.response_ready = false;
@@ -149,7 +145,7 @@ export class SimulateComponent implements OnInit, AfterViewInit {
         );
     } else {
       this.phoneFormatError =
-        "Namba uliyoweka siyo sahihi, tafadhali andika katika mfumu ufuatao: +255713000000";
+        "Namba uliyoweka siyo sahihi, tafadhali andika katika mfumu ufuatao: 255713000000";
     }
   }
 
