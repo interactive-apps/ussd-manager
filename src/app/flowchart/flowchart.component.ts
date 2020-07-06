@@ -5,19 +5,21 @@ const $ = go.GraphObject.make;
 @Component({
   selector: "flowchart",
   templateUrl: "./flowchart.component.html",
-  styleUrls: ["./flowchart.component.css"],
+  styleUrls: ["./flowchart.component.css"]
 })
 export class FlowchartComponent implements OnInit {
   constructor() {}
-
-  ngOnInit(): void {}
-  public diagram: go.Diagram = null;
 
   @Input()
   public model: go.Model;
 
   @Output()
   public nodeClicked = new EventEmitter();
+
+  ngOnInit(): void {
+    console.log("json :: ", this.model);
+  }
+  public diagram: go.Diagram = null;
 
   public ngAfterViewInit() {
     this.diagram = $(go.Diagram, "simulation", {
@@ -32,9 +34,9 @@ export class FlowchartComponent implements OnInit {
         alternateAngle: 90,
         alternateLayerSpacing: 35,
         alternateAlignment: go.TreeLayout.AlignmentBus,
-        alternateNodeSpacing: 20,
+        alternateNodeSpacing: 20
       }),
-      "undoManager.isEnabled": true,
+      "undoManager.isEnabled": true
     });
 
     // define the Node template
@@ -44,7 +46,7 @@ export class FlowchartComponent implements OnInit {
       // for sorting, have the Node.text be the data.name
       new go.Binding("text", "name"),
       // bind the Part.layerName to control the Node's layer depending on whether it isSelected
-      new go.Binding("layerName", "isSelected", function (sel) {
+      new go.Binding("layerName", "isSelected", function(sel) {
         return sel ? "Foreground" : "";
       }).ofObject(),
       // define the node's outer shape
@@ -59,9 +61,9 @@ export class FlowchartComponent implements OnInit {
           portId: "",
           fromLinkable: true,
           toLinkable: true,
-          cursor: "pointer",
+          cursor: "pointer"
         },
-        new go.Binding("fill", "", function (node) {
+        new go.Binding("fill", "", function(node) {
           // modify the fill based on the tree depth level
           const levelColors = [
             "#AC193D",
@@ -71,12 +73,12 @@ export class FlowchartComponent implements OnInit {
             "#008299",
             "#D24726",
             "#008A00",
-            "#094AB2",
+            "#094AB2"
           ];
           let color = node.findObject("SHAPE").fill;
           const dia: go.Diagram = node.diagram;
           if (dia && dia.layout.network) {
-            dia.layout.network.vertexes.each(function (v: go.TreeVertex) {
+            dia.layout.network.vertexes.each(function(v: go.TreeVertex) {
               if (v.node && v.node.key === node.data.key) {
                 const level: number = v.level % levelColors.length;
                 color = levelColors[level];
@@ -94,8 +96,8 @@ export class FlowchartComponent implements OnInit {
           {
             name: "Picture",
             desiredSize: new go.Size(39, 50),
-            margin: new go.Margin(6, 8, 6, 10),
-          },
+            margin: new go.Margin(6, 8, 6, 10)
+          }
           // new go.Binding("source", "key", function (key) {
           //   if (key < 0 || key > 16) return ""; // There are only 16 images on the server
           //   return "assets/HS" + key + ".png";
@@ -108,7 +110,7 @@ export class FlowchartComponent implements OnInit {
           {
             maxSize: new go.Size(150, 999),
             margin: new go.Margin(6, 10, 0, 3),
-            defaultAlignment: go.Spot.Left,
+            defaultAlignment: go.Spot.Left
           },
           $(go.RowColumnDefinition, { column: 2, width: 4 }),
           $(
@@ -121,7 +123,7 @@ export class FlowchartComponent implements OnInit {
               font: "12pt Segoe UI,sans-serif",
               editable: true,
               isMultiline: false,
-              minSize: new go.Size(10, 16),
+              minSize: new go.Size(10, 16)
             },
             new go.Binding("text", "name").makeTwoWay()
           ),
@@ -141,7 +143,7 @@ export class FlowchartComponent implements OnInit {
               editable: true,
               isMultiline: false,
               minSize: new go.Size(10, 14),
-              margin: new go.Margin(0, 0, 0, 3),
+              margin: new go.Margin(0, 0, 0, 3)
             },
             new go.Binding("text", "title").makeTwoWay()
           ),
@@ -149,7 +151,7 @@ export class FlowchartComponent implements OnInit {
             go.TextBlock,
             { font: "9pt  Segoe UI,sans-serif", stroke: "white" },
             { row: 2, column: 0 },
-            new go.Binding("text", "key", function (v) {
+            new go.Binding("text", "key", function(v) {
               return "ID: " + v;
             })
           ),
@@ -157,7 +159,7 @@ export class FlowchartComponent implements OnInit {
             go.TextBlock,
             { font: "9pt  Segoe UI,sans-serif", stroke: "white" },
             { name: "parent", row: 2, column: 3 }, // we include a name so we can access this TextBlock when deleting Nodes/Links
-            new go.Binding("text", "parent", function (v) {
+            new go.Binding("text", "parent", function(v) {
               return "Parent: " + v;
             })
           ),
@@ -171,7 +173,7 @@ export class FlowchartComponent implements OnInit {
               font: "italic 9pt sans-serif",
               wrap: go.TextBlock.WrapFit,
               editable: true, // by default newlines are allowed
-              minSize: new go.Size(10, 14),
+              minSize: new go.Size(10, 14)
             },
             new go.Binding("text", "comments").makeTwoWay()
           )
@@ -182,7 +184,7 @@ export class FlowchartComponent implements OnInit {
     this.diagram.model = this.model;
 
     // when the selection changes, emit event to app-component updating the selected node
-    this.diagram.addDiagramListener("ChangedSelection", (e) => {
+    this.diagram.addDiagramListener("ChangedSelection", e => {
       const node = this.diagram.selection.first();
       this.nodeClicked.emit(node);
     });

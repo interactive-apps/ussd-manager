@@ -25,6 +25,7 @@ import { TrackedEntityType } from "../shared/models/trackedEntityType";
 export class CreateComponent implements OnInit {
   settings$: Observable<Setting>;
   menus$: Observable<Dictionary<UssdMenu>>;
+  allMenus$: Observable<any>;
   selectedMenu$: Observable<UssdMenu>;
   startingMenu$: Observable<UssdMenu>;
   nextmenus$: Observable<string[]>;
@@ -49,6 +50,7 @@ export class CreateComponent implements OnInit {
     this.selectedDatas$ = store.select(menuSelectors.selectedDatas);
     this.authAlreadySelected$ = store.select(menuSelectors.isAuthAvailable);
     this.is_data_ready$ = store.select(menuSelectors.is_data_ready);
+    this.allMenus$ = store.select(menuSelectors.selectAllMenus);
     this.is_data_ready$.subscribe(value => {
       // sconsole.log(value)
     });

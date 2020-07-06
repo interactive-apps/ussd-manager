@@ -1,0 +1,7 @@
+<div class="gojs">
+  <flowchart
+    [model]="model"
+    (nodeClicked)="setSelectedNode($event)"
+  ></flowchart>
+  <inspector [selectedNode]="selectedNode"></inspector>
+</div>

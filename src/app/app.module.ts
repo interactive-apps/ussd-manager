@@ -40,6 +40,7 @@ import { DataElementOptionsComponent } from './create/menu/data-element-options/
 import { OrganisationUnitComponent } from './create/menu/organisation-unit/organisation-unit.component';
 import { FlowchartComponent } from './flowchart/flowchart.component';
 import { InspectorComponent } from './inspector/inspector.component';
+import { MenuFlowComponent } from './create/menu-flow/menu-flow.component';
 
 // Add a function, that returns a “TranslateHttpLoader” and export it (needed by AoT)
 export function HttpLoaderFactory(http: HttpClient) {
@@ -64,7 +65,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DataElementOptionsComponent,
     OrganisationUnitComponent,
     FlowchartComponent,
-    InspectorComponent
+    InspectorComponent,
+    MenuFlowComponent
   ],
   imports: [
     BrowserModule,

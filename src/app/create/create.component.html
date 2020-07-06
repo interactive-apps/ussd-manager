@@ -61,3 +61,7 @@
     </div>
   </div>
 </div>
+
+<div *ngIf="allMenus$ | async as allMenus">
+  <menu-flow [allMenus]="allMenus"></menu-flow>
+</div>
