@@ -15,7 +15,7 @@ import { DataElement } from "../../../shared/models/dataElement";
   selector: "app-data",
   templateUrl: "./data.component.html",
   styleUrls: ["./data.component.css"],
-  animations: [listStateTrigger]
+  animations: [listStateTrigger],
 })
 export class DataComponent implements OnInit {
   @Input() menus: { [id: string]: UssdMenu };
@@ -46,13 +46,16 @@ export class DataComponent implements OnInit {
   submit_data = true;
   EntityTypesArray: Array<any> = [];
 
+  trackerDataTypes: Array<string> = ["Tracker Attributes", "Program Stages"];
+  selectedTrackerDataType: string;
+
   constructor(
     private store: Store<ApplicationState>,
     private ussdService: UssdService
   ) {}
 
   ngOnInit() {
-    _.each(Object.keys(this.trackedEntityTypes), key => {
+    _.each(Object.keys(this.trackedEntityTypes), (key) => {
       this.EntityTypesArray.push(this.trackedEntityTypes[key]);
     });
     this.groups = this.datasets;
@@ -121,15 +124,33 @@ export class DataComponent implements OnInit {
     return this.selectedDatas.indexOf(id) !== -1;
   }
 
+  setTrackerDataType(selection) {
+    // console.log("nnaitwaa ::", selection);
+    this.selectedTrackerDataType = selection;
+
+    if (selection == "Tracker Attributes") {
+      this.dataLists =
+        this.trackedEntityTypes[
+          this.selectedProgramObject["trackedEntityTypeId"]
+        ]["trackedEntityTypeAttributes"];
+    } else if (selection == "Program Stages") {
+      this.dataLists = [];
+      // this.dataLists =
+      //   this.trackedEntityTypes[
+      //     this.selectedProgramObject["trackedEntityTypeId"]
+      //   ]["trackedEntityTypeAttributes"];
+    }
+  }
+
   setSubmit(value: boolean) {
     this.store.dispatch(
       new UpdateMenu({
         menu: {
           id: this.menu.id,
           changes: {
-            submit_data: value
-          }
-        }
+            submit_data: value,
+          },
+        },
       })
     );
   }
@@ -161,7 +182,7 @@ export class DataComponent implements OnInit {
                     name:
                       categoryOptionCombo.name === "default"
                         ? dataelement.name
-                        : dataelement.name + " " + categoryOptionCombo.name
+                        : dataelement.name + " " + categoryOptionCombo.name,
                   };
                 }
               )
@@ -194,13 +215,11 @@ export class DataComponent implements OnInit {
         return program.id === this.selectedProgram ? true : false;
       });
 
+      // console.log("selected p. s :: ", this.selectedProgramObject);
+
       this.trackerProgramStages = this.selectedProgramObject["programStages"];
 
-      if (this.selected_group["programStages"].length == 0) {
-        this.dataLists = this.trackedEntityTypes[
-          this.selectedProgramObject["trackedEntityTypeId"]
-        ]["trackedEntityTypeAttributes"];
-      }
+      // if (this.selected_group["programStages"].length == 0) {
 
       //this.trackerProgramElements = this.trackedEntityTypes
     }
@@ -224,14 +243,8 @@ export class DataComponent implements OnInit {
     this.selectedProgramStage = selectedProgramStage;
     this.dataLists = programStage.dataElements.map(
       (dataElement: DataElement) => {
-        const {
-          id,
-          valueType,
-          optionSets,
-          name,
-          shortName,
-          displayName
-        } = dataElement;
+        const { id, valueType, optionSets, name, shortName, displayName } =
+          dataElement;
         const customShortName = this.getCustomFieldShortName(shortName);
         return {
           id,
@@ -241,13 +254,13 @@ export class DataComponent implements OnInit {
           valueType,
           name,
           stage: selectedProgramStage,
-          program: this.selectedProgram
+          program: this.selectedProgram,
         };
       }
     );
     if (this.menu.data_id) {
       const { data_id } = this.menu;
-      const matchedData = _.find(this.dataLists, data => {
+      const matchedData = _.find(this.dataLists, (data) => {
         return data.id === data_id;
       });
       if (matchedData && matchedData.id) {
@@ -265,20 +278,20 @@ export class DataComponent implements OnInit {
         id: option.id,
         title: option.name,
         response: "" + newOptions.length,
-        value: option.code
+        value: option.code,
       };
       if (option.next_menu && option.next_menu !== "") {
         newOption["next_menu"] = option.next_menu;
       }
       newOptions.push(newOption);
     }
-    options.map(optionObj => {
+    options.map((optionObj) => {
       if (optionObj && optionObj.id !== option.id) {
         const newOption = {
           id: optionObj.id,
           title: optionObj.title,
           response: "" + newOptions.length,
-          value: optionObj.value
+          value: optionObj.value,
         };
         if (optionObj.next_menu && optionObj.next_menu !== "") {
           newOption["next_menu"] = optionObj.next_menu;
@@ -291,7 +304,7 @@ export class DataComponent implements OnInit {
       newOptions = _.reverse(newOptions);
     }
     let count = 0;
-    newOptions.forEach(newOption => {
+    newOptions.forEach((newOption) => {
       count++;
       newOption.response = "" + count;
     });
@@ -300,8 +313,8 @@ export class DataComponent implements OnInit {
       new UpdateMenu({
         menu: {
           id: this.menu.id,
-          changes: { options: newOptions }
-        }
+          changes: { options: newOptions },
+        },
       })
     );
   }
@@ -314,7 +327,7 @@ export class DataComponent implements OnInit {
         code: true,
         inReverseOrder: true,
         next_menu: "",
-        checked: true
+        checked: true,
       },
       {
         id: this.ussdService.makeid(),
@@ -322,8 +335,8 @@ export class DataComponent implements OnInit {
         code: valueType === "BOOLEAN" ? false : "",
         inReverseOrder: true,
         next_menu: "",
-        checked: true
-      }
+        checked: true,
+      },
     ];
   }
 
@@ -341,13 +354,13 @@ export class DataComponent implements OnInit {
       this.nextMenu.emit({
         current_menu_id: this.menu.id,
         next_menu_id: next_menu,
-        option: null
+        option: null,
       });
     }
   }
 
   hasOptionInMenuOptions(option, optionList) {
-    const matchOption = _.find(optionList, optionObj => {
+    const matchOption = _.find(optionList, (optionObj) => {
       return optionObj.id === option.id;
     });
     return matchOption && matchOption.id ? true : false;
@@ -356,7 +369,7 @@ export class DataComponent implements OnInit {
   getMenuSelections(menus) {
     const menuSelections = [];
     menuSelections.push({ id: "", name: "select next menu" });
-    Object.keys(menus).map(menuId => {
+    Object.keys(menus).map((menuId) => {
       if (this.menu.id !== menuId) {
         const menuObject = this.menus[menuId];
         menuSelections.push({ id: menuId, name: menuObject.title });
@@ -366,12 +379,15 @@ export class DataComponent implements OnInit {
   }
 
   setData(data: any, title?: string) {
+
+    console.log(data)
+
     const { valueType, shortName, optionSets } = data;
     const ValueTypeWithDefaultOptions = ["BOOLEAN", "TRUE_ONLY"];
     this.options = [];
     if (optionSets) {
       optionSets.map((option: any) => {
-        const matchOption = _.find(this.menu.options, optionObj => {
+        const matchOption = _.find(this.menu.options, (optionObj) => {
           return optionObj.id === option.id;
         });
         this.options.push({
@@ -381,14 +397,14 @@ export class DataComponent implements OnInit {
           inReverseOrder: false,
           next_menu:
             matchOption && matchOption.next_menu ? matchOption.next_menu : "",
-          checked: matchOption && matchOption.id ? true : false
+          checked: matchOption && matchOption.id ? true : false,
         });
       });
     }
     if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
       const options = this.getDefaultOptions(data.valueType);
-      options.map(option => {
-        const matchOption = _.find(this.menu.options, optionObj => {
+      options.map((option) => {
+        const matchOption = _.find(this.menu.options, (optionObj) => {
           return optionObj.value === option.code;
         });
         this.options.push({
@@ -398,7 +414,7 @@ export class DataComponent implements OnInit {
           inReverseOrder: false,
           next_menu:
             matchOption && matchOption.next_menu ? matchOption.next_menu : "",
-          checked: matchOption && matchOption.id ? true : false
+          checked: matchOption && matchOption.id ? true : false,
         });
       });
     }
@@ -415,7 +431,7 @@ export class DataComponent implements OnInit {
         data_id: data.id,
         field_value_type: valueType,
         field_short_name: shortName,
-        options: data.id === this.menu.data_id ? this.menu.options : []
+        options: data.id === this.menu.data_id ? this.menu.options : [],
       };
     } else if (this.dataType === "programs") {
       menu = <UssdMenu>{
@@ -429,40 +445,62 @@ export class DataComponent implements OnInit {
         data_id: data.id,
         field_value_type: valueType,
         field_short_name: shortName,
-        options: data.id === this.menu.data_id ? this.menu.options : []
+        options: data.id === this.menu.data_id ? this.menu.options : [],
       };
     } else if (this.dataType === "tracker") {
       console.log("on setting menu", this.selected_group);
 
-      menu = <UssdMenu>{
-        ...this.menu,
-        title: title ? title : data.name,
-        tracked_entity_attribute: data.id,
-        tracked_entity_type: this.selected_group.trackedEntityTypeId,
-        program: this.selectedProgram,
-        program_stage: this.selectedProgramStage,
-        dataType: "tracker",
-        data_name: data.name,
-        data_id: data.id,
-        field_value_type: valueType
-      };
+      if(this.selectedTrackerDataType == "Tracker Attributes"){
+
+        menu = <UssdMenu>{
+          ...this.menu,
+          title: title ? title : data.name,
+          tracked_entity_attribute: data.id,
+          tracked_entity_type: this.selected_group.trackedEntityTypeId,
+          program: this.selectedProgram,
+          program_stage: null,
+          dataType: "tracker",
+          data_name: data.name,
+          data_id: data.id,
+          field_value_type: valueType,
+        };
+
+      }else if(this.selectedTrackerDataType == 'Program Stages'){
+
+        menu = <UssdMenu>{
+          ...this.menu,
+          title: title ? title : data.name,
+          tracked_entity_attribute: null,
+          tracked_entity_type: this.selected_group.trackedEntityTypeId,
+          program: this.selectedProgram,
+          program_stage: this.selectedProgramStage,
+          dataType: "tracker",
+          data_element:data.id,
+          data_name: data.name,
+          data_id: data.id,
+          field_value_type: valueType,
+        };
+
+      }
+
+      
     }
     this.store.dispatch(
       new UpdateMenu({
         menu: {
           id: this.menu.id,
-          changes: { ...menu }
-        }
+          changes: { ...menu },
+        },
       })
     );
     if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
       const newOptions = [];
-      this.options.map(option => {
+      this.options.map((option) => {
         const newOption = {
           id: option.id,
           title: option.name,
           response: "" + newOptions.length,
-          value: option.code
+          value: option.code,
         };
         if (option.next_menu && option.next_menu !== "") {
           newOption["next_menu"] = option.next_menu;
@@ -470,7 +508,7 @@ export class DataComponent implements OnInit {
         newOptions.push(newOption);
       });
       let count = 0;
-      newOptions.forEach(newOption => {
+      newOptions.forEach((newOption) => {
         count++;
         newOption.response = `${count}`;
       });
@@ -478,8 +516,8 @@ export class DataComponent implements OnInit {
         new UpdateMenu({
           menu: {
             id: this.menu.id,
-            changes: { options: newOptions }
-          }
+            changes: { options: newOptions },
+          },
         })
       );
     }
@@ -495,14 +533,14 @@ export class DataComponent implements OnInit {
       program_stage: "",
       dataType: "",
       data_name: "",
-      data_id: ""
+      data_id: "",
     };
     this.store.dispatch(
       new UpdateMenu({
         menu: {
           id: this.menu.id,
-          changes: { ...menu }
-        }
+          changes: { ...menu },
+        },
       })
     );
   }
@@ -518,7 +556,7 @@ export class DataComponent implements OnInit {
     this.nextMenu.emit({
       current_menu_id: this.menu.id,
       next_menu_id: this.menu.next_menu,
-      option: null
+      option: null,
     });
   }
 
@@ -532,9 +570,9 @@ export class DataComponent implements OnInit {
         menu: {
           id: this.menu.id,
           changes: {
-            [key]: value
-          }
-        }
+            [key]: value,
+          },
+        },
       })
     );
   }

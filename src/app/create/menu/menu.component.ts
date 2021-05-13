@@ -44,7 +44,7 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("tracked entity types", this.trackedEntityTypes);
+    // console.log("tracked entity types", this.trackedEntityTypes);
     if (this.menu.hasOwnProperty("next_menu") && this.menu.next_menu !== "") {
       setTimeout(() => {
         this.addNextMenu(this.menu.id, this.menu.next_menu);
