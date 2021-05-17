@@ -1,5 +1,5 @@
 {
-    "version": "1.0.3",
+    "version": "1.0.4",
     "name": "USSD Manager",
     "description": "USSD Application Manager",
     "launch_path": "index.html",

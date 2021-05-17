@@ -181,7 +181,7 @@
         {{ stage["name"] }}
       </option>
     </select>
-    <select
+    <!-- <select
       class="form-control form-control-sm"
       *ngIf="
         selectedTrackerDataType &&
@@ -195,10 +195,10 @@
       >
         {{ stage["name"] }}
       </option>
-    </select>
+    </select> -->
 
     <!-- {{dataLists | json}} -->
-    
+
     <div>
       <input
         type="text"
@@ -207,7 +207,6 @@
         [(ngModel)]="searchQuery"
       />
       <ul class="list-group dataList" [@listState]="dataLists.length">
-        
         <ng-container
           *ngFor="
             let data of dataLists | filterByName: searchQuery;
