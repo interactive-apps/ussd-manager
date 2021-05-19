@@ -70,6 +70,7 @@
     <select
       (change)="setSelectedGroup($event.target.value)"
       class="form-control form-control-sm"
+      [value]="selected_group?.id"
     >
       <option [value]="">
         Select
@@ -88,6 +89,7 @@
         [value]="group.id"
       >
         {{ group.name }}
+         <!-- - {{group.id}} -->
       </option>
     </select>
   </div>
@@ -152,6 +154,7 @@
     <select
       class="form-control form-control-sm"
       (change)="setTrackerDataType($event.target.value)"
+      [value] = "selectedTrackerType"
     >
       <option [value]="">Select tracker data type</option>
       <option
@@ -162,7 +165,6 @@
       </option>
     </select>
 
-    <!-- {{ selectedTrackerDataType }} -->
     <select
       *ngIf="
         selected_group &&
@@ -181,26 +183,8 @@
         {{ stage["name"] }}
       </option>
     </select>
-    <!-- <select
-      class="form-control form-control-sm"
-      *ngIf="
-        selectedTrackerDataType &&
-        selectedTrackerDataType == 'Tracker Attributes'
-      "
-    >
-      <option [value]="">Select Tracker Attribute</option>
-      <option
-        *ngFor="let stage of selected_group['programStages']"
-        [value]="stage['id']"
-      >
-        {{ stage["name"] }}
-      </option>
-    </select> -->
-
-    <!-- {{dataLists | json}} -->
 
     <div>
-      this---- {{options | json}}
       <input
         type="text"
         class="form-control form-control-sm"
@@ -224,6 +208,7 @@
           </li>
         </ng-container>
       </ul>
+
       <div *ngIf="options && options.length > 0">
         <app-data-element-options
           [menu]="menu"

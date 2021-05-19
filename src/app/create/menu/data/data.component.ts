@@ -30,6 +30,7 @@ export class DataComponent implements OnInit {
   @Output() nextMenu: EventEmitter<any> = new EventEmitter<any>();
   @Output() messageValue: EventEmitter<string> = new EventEmitter<string>();
 
+  selectedTrackerType: string;
   dataType = "datasets";
   groups: any[] = [];
   dataLists: any[] = [];
@@ -55,9 +56,7 @@ export class DataComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
-    console.log("the menu :: ", this.menu);
-    
+    //  console.log("the menu :: ", this.programs);
     _.each(Object.keys(this.trackedEntityTypes), (key) => {
       this.EntityTypesArray.push(this.trackedEntityTypes[key]);
     });
@@ -72,6 +71,25 @@ export class DataComponent implements OnInit {
         this.setDataType("tracker");
       }
     }
+
+    if (this.menu && this.menu.dataType && this.menu.dataType == "tracker" && this.menu.tracked_entity_attribute) {
+
+      this.selectedTrackerType = this.menu.tracked_entity_attribute
+        ? "Tracker Attributes"
+        : "Program Stages";
+
+      this.dataType = "tracker";
+      this.setSelectedGroup(this.menu.program);
+      this.setTrackerDataType("Tracker Attributes");
+
+
+      let data = _.filter(this.trackedEntityTypes[this.menu.tracked_entity_type]['trackedEntityTypeAttributes'], data => {
+        return this.menu.data_id == data.id
+      })
+
+      this.setData(data[0], this.menu.title)
+    }
+    
   }
 
   setMessage(message: string) {
@@ -128,8 +146,8 @@ export class DataComponent implements OnInit {
   }
 
   setTrackerDataType(selection) {
-    // console.log("nnaitwaa ::", selection);
     this.selectedTrackerDataType = selection;
+
 
     if (selection == "Tracker Attributes") {
       this.dataLists =
@@ -138,11 +156,9 @@ export class DataComponent implements OnInit {
         ]["trackedEntityTypeAttributes"];
     } else if (selection == "Program Stages") {
       this.dataLists = [];
-      // this.dataLists =
-      //   this.trackedEntityTypes[
-      //     this.selectedProgramObject["trackedEntityTypeId"]
-      //   ]["trackedEntityTypeAttributes"];
     }
+
+    
   }
 
   setSubmit(value: boolean) {
@@ -213,6 +229,9 @@ export class DataComponent implements OnInit {
       this.selectedProgram = value;
       const program = this.getItemById(this.programs, value);
       this.selected_group = program;
+
+      // console.log("programs :: ", this.programs);
+      // console.log("selected prog :: ", this.selectedProgram);
 
       this.selectedProgramObject = _.find(this.programs, (program: any) => {
         return program.id === this.selectedProgram ? true : false;
@@ -383,8 +402,6 @@ export class DataComponent implements OnInit {
 
   setData(data: any, title?: string) {
 
-    console.log("the data", data)
-
     const { valueType, shortName, optionSets } = data;
     const ValueTypeWithDefaultOptions = ["BOOLEAN", "TRUE_ONLY"];
     this.options = [];
@@ -404,7 +421,12 @@ export class DataComponent implements OnInit {
         });
       });
     }
-    if(data && data.trackedEntityAttribute && data.trackedEntityAttribute.optionSet && data.trackedEntityAttribute.optionSet.options){
+    if (
+      data &&
+      data.trackedEntityAttribute &&
+      data.trackedEntityAttribute.optionSet &&
+      data.trackedEntityAttribute.optionSet.options
+    ) {
       data.trackedEntityAttribute.optionSet.options.map((option: any) => {
         const matchOption = _.find(this.menu.options, (optionObj) => {
           return optionObj.id === option.id;
@@ -418,7 +440,7 @@ export class DataComponent implements OnInit {
             matchOption && matchOption.next_menu ? matchOption.next_menu : "",
           checked: matchOption && matchOption.id ? true : false,
         });
-      })
+      });
     }
     if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
       const options = this.getDefaultOptions(data.valueType);
@@ -467,10 +489,8 @@ export class DataComponent implements OnInit {
         options: data.id === this.menu.data_id ? this.menu.options : [],
       };
     } else if (this.dataType === "tracker") {
-      console.log("on setting menu", this.selected_group);
 
-      if(this.selectedTrackerDataType == "Tracker Attributes"){
-
+      if (this.selectedTrackerDataType == "Tracker Attributes") {
         menu = <UssdMenu>{
           ...this.menu,
           title: title ? title : data.name,
@@ -483,9 +503,7 @@ export class DataComponent implements OnInit {
           data_id: data.id,
           field_value_type: valueType,
         };
-
-      }else if(this.selectedTrackerDataType == 'Program Stages'){
-
+      } else if (this.selectedTrackerDataType == "Program Stages") {
         menu = <UssdMenu>{
           ...this.menu,
           title: title ? title : data.name,
@@ -494,15 +512,12 @@ export class DataComponent implements OnInit {
           program: this.selectedProgram,
           program_stage: this.selectedProgramStage,
           dataType: "tracker",
-          data_element:data.id,
+          data_element: data.id,
           data_name: data.name,
           data_id: data.id,
           field_value_type: valueType,
         };
-
       }
-
-      
     }
     this.store.dispatch(
       new UpdateMenu({
