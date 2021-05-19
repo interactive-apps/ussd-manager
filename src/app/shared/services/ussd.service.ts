@@ -24,7 +24,7 @@ export class UssdService {
   _trackedEntityTypes: any = [];
 
   trackedEntityTypesUrl =
-    "trackedEntityTypes.json?fields=id,name,trackedEntityTypeAttributes[id,name,valueType,trackedEntityAttribute,trackedEntityType]&paging=false";
+    "trackedEntityTypes.json?fields=id,name,trackedEntityTypeAttributes[id,name,valueType,trackedEntityAttribute[optionSet[id,name,options[id,name,code]]],trackedEntityType]&paging=false";
   datasetUrl =
     "dataSets.json?fields=id,name,periodType,programType,trackedEntityType,dataSetElements[dataElement[id,name,shortName,displayName,valueType,optionSet[id,name,options[id,name]],categoryCombo[id,name,categoryOptionCombos[id,name]]]]&paging=false";
   programUrl =

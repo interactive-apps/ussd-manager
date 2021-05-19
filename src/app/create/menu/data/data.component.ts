@@ -55,6 +55,9 @@ export class DataComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+
+    console.log("the menu :: ", this.menu);
+    
     _.each(Object.keys(this.trackedEntityTypes), (key) => {
       this.EntityTypesArray.push(this.trackedEntityTypes[key]);
     });
@@ -380,7 +383,7 @@ export class DataComponent implements OnInit {
 
   setData(data: any, title?: string) {
 
-    console.log(data)
+    console.log("the data", data)
 
     const { valueType, shortName, optionSets } = data;
     const ValueTypeWithDefaultOptions = ["BOOLEAN", "TRUE_ONLY"];
@@ -400,6 +403,22 @@ export class DataComponent implements OnInit {
           checked: matchOption && matchOption.id ? true : false,
         });
       });
+    }
+    if(data && data.trackedEntityAttribute && data.trackedEntityAttribute.optionSet && data.trackedEntityAttribute.optionSet.options){
+      data.trackedEntityAttribute.optionSet.options.map((option: any) => {
+        const matchOption = _.find(this.menu.options, (optionObj) => {
+          return optionObj.id === option.id;
+        });
+        this.options.push({
+          id: option.id,
+          name: option.name,
+          code: option.code,
+          inReverseOrder: false,
+          next_menu:
+            matchOption && matchOption.next_menu ? matchOption.next_menu : "",
+          checked: matchOption && matchOption.id ? true : false,
+        });
+      })
     }
     if (ValueTypeWithDefaultOptions.indexOf(data.valueType) > -1) {
       const options = this.getDefaultOptions(data.valueType);
