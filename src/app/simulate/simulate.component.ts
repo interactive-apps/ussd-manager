@@ -150,6 +150,6 @@ export class SimulateComponent implements OnInit, AfterViewInit {
   }
 
   getUrl(request, type) {
-    return `${this.url}/${this.id}?msisdn=${this.phone}&sessionid=${this.sessionId}&input=${request}`;
+    return `${this.url}/${this.id}?msisdn=${this.phone}&sessionid=${this.sessionId}&input=${request}&USSDType=${type}`;
   }
 }
