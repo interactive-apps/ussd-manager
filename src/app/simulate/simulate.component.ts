@@ -17,7 +17,8 @@ import { ActivatedRoute } from "@angular/router";
 export class SimulateComponent implements OnInit, AfterViewInit {
   phone = null;
   phoneFormatError = "";
-  url = "http://localhost:3021";
+  // url = "https://pimacovid-dev.moh.go.tz";
+  url = "http://localhost:3001"
   sessionId = "";
   id;
   //@ViewChild('input1') inputEl: ElementRef;

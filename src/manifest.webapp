@@ -16,7 +16,12 @@
     "default_locale": "en",
     "activities": {
         "dhis": {
-            "href": "../../.."
+            "href": "../../../"
         }
-    }
+    },
+  "authorities": [
+    "EBS_USER",
+    "IBS_USER",
+    "MCBS_USER"
+  ]
 }
