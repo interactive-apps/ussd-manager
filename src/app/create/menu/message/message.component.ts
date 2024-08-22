@@ -1,48 +1,57 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {UssdMenu} from '../../../shared/models/menu';
-import {Store} from '@ngrx/store';
-import {ApplicationState} from '../../../store/reducers/index';
-import {UpdateMenu} from '../../../store/actions/menu.actions';
-import * as menuActions from '../../../store/actions/menu.actions';
-
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/animations";
+import { UssdMenu } from "../../../shared/models/menu";
+import { Store } from "@ngrx/store";
+import { ApplicationState } from "../../../store/reducers/index";
+import { UpdateMenu } from "../../../store/actions/menu.actions";
+import * as menuActions from "../../../store/actions/menu.actions";
 
 @Component({
-  selector: 'app-message',
-  templateUrl: './message.component.html',
-  styleUrls: ['./message.component.css']
+  selector: "app-message",
+  templateUrl: "./message.component.html",
+  styleUrls: ["./message.component.css"],
 })
 export class MessageComponent implements OnInit {
-
   @Input() menu: UssdMenu;
   @Input() isDataReady = false;
   @Output() messageValue: EventEmitter<string> = new EventEmitter<string>();
-  submit_data =  false;
+  submit_data = false;
 
-  constructor(private store: Store<ApplicationState>) { }
+  constructor(private store: Store<ApplicationState>) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   setMessage(message) {
     this.messageValue.emit(message);
   }
 
   setSubmit(value) {
-    this.store.dispatch(new UpdateMenu({
-      menu: {
-        id: this.menu.id,
-        changes: {
-          submit_data: value
-        }
-      }
-    }));
+    this.store.dispatch(
+      new UpdateMenu({
+        menu: {
+          id: this.menu.id,
+          changes: {
+            submit_data: value,
+          },
+        },
+      })
+    );
   }
   setValByKey(key, value) {
-    this.store.dispatch(new menuActions.UpdateMenu(
-      {menu: {id: this.menu.id, changes: {
-        [key]: value
-      }}}
-    ));
+    this.store.dispatch(
+      new menuActions.UpdateMenu({
+        menu: {
+          id: this.menu.id,
+          changes: {
+            [key]: value,
+          },
+        },
+      })
+    );
   }
-
 }

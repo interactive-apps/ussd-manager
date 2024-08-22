@@ -1,15 +1,14 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {PROFILE_MENUS} from './profile-menus';
-import {menuBackgroundColors} from './background-colors';
-import {MenuService} from './menu.service';
+import { Component, OnInit, Input } from "@angular/animations";
+import { PROFILE_MENUS } from "./profile-menus";
+import { menuBackgroundColors } from "./background-colors";
+import { MenuService } from "./menu.service";
 
 @Component({
-  selector: 'dhis-menu',
-  templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  selector: "dhis-menu",
+  templateUrl: "./menu.component.html",
+  styleUrls: ["./menu.component.css"],
 })
 export class MenuComponent implements OnInit {
-
   @Input() rootUrl: string;
   backgroundColor: string;
   applicationTitle: string;
@@ -27,14 +26,14 @@ export class MenuComponent implements OnInit {
   showSidebar: boolean;
 
   constructor(private menuService: MenuService) {
-    this.rootUrl = '../../../';
-    this.backgroundColor = '#f5f5f5';
+    this.rootUrl = "../../../";
+    this.backgroundColor = "#f5f5f5";
     this.searchWidth = 30;
     this.currentUser = {};
     this.showApps = false;
     this.showProfile = false;
     this.profileMenus = PROFILE_MENUS;
-    this.filteredApp = '';
+    this.filteredApp = "";
     this.loadingModules = true;
     this.loadingUser = true;
     this.apps = [];
@@ -44,31 +43,37 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.menuService.getSystemSettings(this.rootUrl)
+    this.menuService
+      .getSystemSettings(this.rootUrl)
       .subscribe((settings: any) => {
         if (settings !== null) {
-          this.applicationTitle = settings['applicationTitle'];
+          this.applicationTitle = settings["applicationTitle"];
           /**
            * get system current background style
            * @type {string}
            */
-          const colorName = settings.hasOwnProperty('currentStyle') ?
-            settings['currentStyle'].split('/')[0] : settings.hasOwnProperty('keyStyle') ? settings['keyStyle'].split('/')[0] : 'blue';
+          const colorName = settings.hasOwnProperty("currentStyle")
+            ? settings["currentStyle"].split("/")[0]
+            : settings.hasOwnProperty("keyStyle")
+            ? settings["keyStyle"].split("/")[0]
+            : "blue";
           this.backgroundColor = menuBackgroundColors[colorName];
         }
       });
 
-    this.menuService.getUserInfo(this.rootUrl)
-      .subscribe((profile: any) => {
-        if (profile !== null) {
-          this.loadingUser = false;
-          this.currentUser.name = profile.displayName;
-          this.currentUser.email = profile.email;
-          this.currentUser.AbbreviatedName = this.getAbbreviatedName(profile.displayName);
-        }
-      });
+    this.menuService.getUserInfo(this.rootUrl).subscribe((profile: any) => {
+      if (profile !== null) {
+        this.loadingUser = false;
+        this.currentUser.name = profile.displayName;
+        this.currentUser.email = profile.email;
+        this.currentUser.AbbreviatedName = this.getAbbreviatedName(
+          profile.displayName
+        );
+      }
+    });
 
-    this.menuService.getMenuModules(this.rootUrl)
+    this.menuService
+      .getMenuModules(this.rootUrl)
       .subscribe((menuModules: any) => {
         if (menuModules !== null) {
           this.loadingModules = false;
@@ -79,9 +84,11 @@ export class MenuComponent implements OnInit {
   }
 
   private _prepareMenuModules() {
-    return this.filteredApp === '' ? this.originalApps.filter((menu: any) => {
-      return  !menu.onlyShowOnSearch;
-    }) : this.originalApps;
+    return this.filteredApp === ""
+      ? this.originalApps.filter((menu: any) => {
+          return !menu.onlyShowOnSearch;
+        })
+      : this.originalApps;
   }
 
   updateMenuModules() {
@@ -95,14 +102,14 @@ export class MenuComponent implements OnInit {
       if (i === 0) {
         abbreviatedName.push(name[i].toUpperCase());
       } else {
-        if (name[i] === ' ') {
+        if (name[i] === " ") {
           count = i;
           abbreviatedName.push(name[count + 1].toUpperCase());
         }
       }
     }
 
-    return abbreviatedName.join('');
+    return abbreviatedName.join("");
   }
 
   widdenSearch(e?) {
@@ -117,7 +124,7 @@ export class MenuComponent implements OnInit {
     if (e) {
       e.stopPropagation();
     }
-    document.getElementById('menu-search-input').blur();
+    document.getElementById("menu-search-input").blur();
     this.searchWidth = 30;
     this.showApps = !this.showApps;
   }
@@ -140,7 +147,4 @@ export class MenuComponent implements OnInit {
     e.stopPropagation();
     this.showSidebar = !this.showSidebar;
   }
-
 }
-
-

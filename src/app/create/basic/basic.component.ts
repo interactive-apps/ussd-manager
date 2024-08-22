@@ -1,23 +1,29 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Setting } from '../../shared/models/settings';
-import { Store } from '@ngrx/store';
-import { ApplicationState, getRouterState } from '../../store/reducers/index';
-import * as settingsActions from '../../store/actions/settings.actions';
-import { UssdMenu } from '../../shared/models/menu';
-import { ClearMenus } from '../../store/actions/menu.actions';
-import { ClearSettings } from '../../store/actions/settings.actions';
-import { Go } from '../../store/actions/router.action';
-import { Ussd } from '../../shared/models/ussd';
-import { HttpClientService } from '../../shared/services/http-client.service';
-import { UpdateUssd, UpsertUssd } from '../../store/actions/ussd.actions';
-import { fadeIn } from '../../shared/animations/basic-animations';
-import * as _ from 'lodash';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/animations";
+import { Setting } from "../../shared/models/settings";
+import { Store } from "@ngrx/store";
+import { ApplicationState, getRouterState } from "../../store/reducers/index";
+import * as settingsActions from "../../store/actions/settings.actions";
+import { UssdMenu } from "../../shared/models/menu";
+import { ClearMenus } from "../../store/actions/menu.actions";
+import { ClearSettings } from "../../store/actions/settings.actions";
+import { Go } from "../../store/actions/router.action";
+import { Ussd } from "../../shared/models/ussd";
+import { HttpClientService } from "../../shared/services/http-client.service";
+import { UpdateUssd, UpsertUssd } from "../../store/actions/ussd.actions";
+import { fadeIn } from "../../shared/animations/basic-animations";
+import * as _ from "lodash";
 
 @Component({
-  selector: 'app-basic',
-  templateUrl: './basic.component.html',
-  styleUrls: ['./basic.component.css'],
-  animations: [fadeIn]
+  selector: "app-basic",
+  templateUrl: "./basic.component.html",
+  styleUrls: ["./basic.component.css"],
+  animations: [fadeIn],
 })
 export class BasicComponent implements OnInit {
   @Input() setting: Setting;
@@ -36,7 +42,10 @@ export class BasicComponent implements OnInit {
   setValue(key, event) {
     this.store.dispatch(
       new settingsActions.UpdateSetting({
-        setting: { id: this.setting.id, changes: { [key]: event.target.value } }
+        setting: {
+          id: this.setting.id,
+          changes: { [key]: event.target.value },
+        },
       })
     );
   }
@@ -44,11 +53,11 @@ export class BasicComponent implements OnInit {
   setTypeValue(key, event) {
     const request_type = {
       ...this.setting.request_type,
-      [key]: event.target.value
+      [key]: event.target.value,
     };
     this.store.dispatch(
       new settingsActions.UpdateSetting({
-        setting: { id: this.setting.id, changes: { request_type } }
+        setting: { id: this.setting.id, changes: { request_type } },
       })
     );
   }
@@ -60,14 +69,14 @@ export class BasicComponent implements OnInit {
       this.saving_success = false;
     }, 3000);
     setTimeout(() => {
-      this.store.dispatch(new Go({ path: [''] }));
+      this.store.dispatch(new Go({ path: [""] }));
     }, 2000);
     this.store.dispatch(
       new UpdateUssd({
         ussd: {
           id: ussdItem.id,
-          changes: { ...ussdItem }
-        }
+          changes: { ...ussdItem },
+        },
       })
     );
   }
@@ -86,25 +95,25 @@ export class BasicComponent implements OnInit {
     const ussdItem: Ussd = {
       id: this.setting.id,
       settings: { ...this.setting },
-      menus: { ...this.menus }
+      menus: { ...this.menus },
     };
     let { dataStoreKey } = ussdItem.settings;
-    if (ussdItem.settings.dataStoreKey === '') {
+    if (ussdItem.settings.dataStoreKey === "") {
       dataStoreKey = _.camelCase(ussdItem.settings.name);
       ussdItem.settings.dataStoreKey = dataStoreKey;
     }
     this.http.put(`dataStore/ussd/${dataStoreKey}`, ussdItem).subscribe(
-      data => {
+      (data) => {
         this.handlingSuccessSaving(ussdItem);
       },
-      errorResponse => {
+      (errorResponse) => {
         const { error } = errorResponse;
         if (error && error.httpStatusCode && error.httpStatusCode === 404) {
           this.http.post(`dataStore/ussd/${dataStoreKey}`, ussdItem).subscribe(
-            data => {
+            (data) => {
               this.handlingSuccessSaving(ussdItem);
             },
-            errorResponsePosting => {
+            (errorResponsePosting) => {
               this.hadlingFailSaving();
             }
           );
@@ -115,6 +124,6 @@ export class BasicComponent implements OnInit {
     );
   }
   cancel() {
-    this.store.dispatch(new Go({ path: [''] }));
+    this.store.dispatch(new Go({ path: [""] }));
   }
 }

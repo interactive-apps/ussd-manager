@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { Injectable } from "@angular/animations";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 @Injectable()
 export class HttpClientService {
-  public APIURL = '../../../api/';
-  constructor(private http: HttpClient) { }
+  public APIURL = "../../../api/";
+  constructor(private http: HttpClient) {}
 
   createAuthorizationHeader(headers: HttpHeaders, options?) {
     if (options) {
@@ -18,15 +18,15 @@ export class HttpClientService {
     const headers = new HttpHeaders();
     this.createAuthorizationHeader(headers);
     return this.http.get<any>(this.APIURL + url, {
-      headers: headers
+      headers: headers,
     });
   }
 
   get_from_base(url) {
     const headers = new HttpHeaders();
     this.createAuthorizationHeader(headers);
-    return this.http.get<any>( url, {
-      headers: headers
+    return this.http.get<any>(url, {
+      headers: headers,
     });
   }
 
@@ -34,14 +34,14 @@ export class HttpClientService {
     const headers = new HttpHeaders();
     this.createAuthorizationHeader(headers, options);
     return this.http.post<any>(this.APIURL + url, data, {
-      headers: headers
+      headers: headers,
     });
   }
   put(url, data, options?) {
     const headers = new HttpHeaders();
     this.createAuthorizationHeader(headers, options);
     return this.http.put<any>(this.APIURL + url, data, {
-      headers: headers
+      headers: headers,
     });
   }
 
@@ -49,8 +49,7 @@ export class HttpClientService {
     const headers = new HttpHeaders();
     this.createAuthorizationHeader(headers, options);
     return this.http.delete(this.APIURL + url, {
-      headers: headers
+      headers: headers,
     });
   }
-
 }

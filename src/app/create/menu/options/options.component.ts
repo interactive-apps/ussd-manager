@@ -4,26 +4,26 @@ import {
   Input,
   OnChanges,
   OnInit,
-  Output
-} from '@angular/core';
-import { UssdMenu } from '../../../shared/models/menu';
-import { Store } from '@ngrx/store';
-import { ApplicationState } from '../../../store/reducers/index';
-import { UpdateMenu } from '../../../store/actions/menu.actions';
+  Output,
+} from "@angular/animations";
+import { UssdMenu } from "../../../shared/models/menu";
+import { Store } from "@ngrx/store";
+import { ApplicationState } from "../../../store/reducers/index";
+import { UpdateMenu } from "../../../store/actions/menu.actions";
 import {
   fadeIn,
   fadeOut,
   fadeSmooth,
-  listStateTrigger
-} from '../../../shared/animations/basic-animations';
-import { Observable } from 'rxjs/Observable';
-import { UssdService } from '../../../shared/services/ussd.service';
+  listStateTrigger,
+} from "../../../shared/animations/basic-animations";
+import { Observable } from "rxjs/Observable";
+import { UssdService } from "../../../shared/services/ussd.service";
 
 @Component({
-  selector: 'app-options',
-  templateUrl: './options.component.html',
-  styleUrls: ['./options.component.css'],
-  animations: [fadeIn, fadeOut, listStateTrigger, fadeSmooth]
+  selector: "app-options",
+  templateUrl: "./options.component.html",
+  styleUrls: ["./options.component.css"],
+  animations: [fadeIn, fadeOut, listStateTrigger, fadeSmooth],
 })
 export class OptionsComponent implements OnInit, OnChanges {
   @Input() menu: UssdMenu;
@@ -57,12 +57,12 @@ export class OptionsComponent implements OnInit, OnChanges {
   }
 
   setOptionValue(value, current_option) {
-    this.options = this.options.map(option => {
+    this.options = this.options.map((option) => {
       const title =
         current_option.response === option.response ? value : option.title;
       return {
         ...option,
-        title
+        title,
       };
     });
     this.updateMenu();
@@ -74,9 +74,9 @@ export class OptionsComponent implements OnInit, OnChanges {
         menu: {
           id: this.menu.id,
           changes: {
-            [key]: value
-          }
-        }
+            [key]: value,
+          },
+        },
       })
     );
   }
@@ -85,7 +85,7 @@ export class OptionsComponent implements OnInit, OnChanges {
     this.nextMenuValue.emit({
       current_menu_id: this.menu.id,
       next_menu_id: option.next_menu,
-      option
+      option,
     });
   }
 
@@ -95,11 +95,11 @@ export class OptionsComponent implements OnInit, OnChanges {
 
   onDropSuccess() {
     let index = 0;
-    this.options = this.options.map(option => {
+    this.options = this.options.map((option) => {
       index += 1;
       return {
         ...option,
-        response: index + ''
+        response: index + "",
       };
     });
     this.updateMenu();
@@ -111,9 +111,9 @@ export class OptionsComponent implements OnInit, OnChanges {
         menu: {
           id: this.menu.id,
           changes: {
-            options: [...this.options]
-          }
-        }
+            options: [...this.options],
+          },
+        },
       })
     );
   }
@@ -122,9 +122,9 @@ export class OptionsComponent implements OnInit, OnChanges {
     const index = this.options.length + 1;
     const newOption = {
       id: this.ussdService.makeid(),
-      title: 'New Option',
-      response: index + '',
-      next_menu: ''
+      title: "New Option",
+      response: index + "",
+      next_menu: "",
     };
     this.options.push(newOption);
     this.updateMenu();
@@ -132,7 +132,7 @@ export class OptionsComponent implements OnInit, OnChanges {
 
   deleteOption(option) {
     this.deleting = [];
-    this.options = this.options.filter(item => {
+    this.options = this.options.filter((item) => {
       return item.response !== option.response;
     });
     this.onDropSuccess();

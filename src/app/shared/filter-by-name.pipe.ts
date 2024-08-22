@@ -1,15 +1,14 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/animations";
 
 @Pipe({
-  name: 'filterByName'
+  name: "filterByName",
 })
 export class FilterByNamePipe implements PipeTransform {
-
   transform(value: any[], name: any): any {
     if (name !== undefined) {
       // filter users, users which match and return true will be kept, false will be filtered out
       if (value.length !== 0 && name !== null) {
-        const splitData = name.split(' ');
+        const splitData = name.split(" ");
         return value.filter((item) => {
           let found = true;
           splitData.forEach((str) => {
@@ -20,9 +19,7 @@ export class FilterByNamePipe implements PipeTransform {
           return found;
         });
       }
-
     }
     return value;
   }
-
 }

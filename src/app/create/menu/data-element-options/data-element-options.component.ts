@@ -1,21 +1,27 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import * as _ from 'lodash';
-import { Store } from '@ngrx/store';
-import { ApplicationState } from '../../../store/reducers/index';
-import { UpdateMenu } from '../../../store/actions/menu.actions';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+} from "@angular/animations";
+import * as _ from "lodash";
+import { Store } from "@ngrx/store";
+import { ApplicationState } from "../../../store/reducers/index";
+import { UpdateMenu } from "../../../store/actions/menu.actions";
 import {
   fadeIn,
   fadeOut,
   fadeSmooth,
-  listStateTrigger
-} from '../../../shared/animations/basic-animations';
-import { UssdService } from '../../../shared/services/ussd.service';
+  listStateTrigger,
+} from "../../../shared/animations/basic-animations";
+import { UssdService } from "../../../shared/services/ussd.service";
 
 @Component({
-  selector: 'app-data-element-options',
-  templateUrl: './data-element-options.component.html',
-  styleUrls: ['./data-element-options.component.css'],
-  animations: [fadeIn, fadeOut, listStateTrigger, fadeSmooth]
+  selector: "app-data-element-options",
+  templateUrl: "./data-element-options.component.html",
+  styleUrls: ["./data-element-options.component.css"],
+  animations: [fadeIn, fadeOut, listStateTrigger, fadeSmooth],
 })
 export class DataElementOptionsComponent implements OnInit {
   @Input() options: any[] = [];
@@ -29,9 +35,9 @@ export class DataElementOptionsComponent implements OnInit {
   ngOnInit() {}
 
   getSelectedMenu(optionId) {
-    let selected = '';
+    let selected = "";
     if (this.menu && this.menu.options) {
-      const matchOption = _.find(this.menu.options, optionObj => {
+      const matchOption = _.find(this.menu.options, (optionObj) => {
         return optionObj.id === optionId;
       });
       if (matchOption && matchOption.next_menu) {
@@ -47,12 +53,12 @@ export class DataElementOptionsComponent implements OnInit {
   }
 
   updateOptionNextMenu(nextMenuId, optionId) {
-    this.options.forEach(option => {
+    this.options.forEach((option) => {
       if (option.id === optionId) {
         option.next_menu = nextMenuId;
       }
     });
-    const matchOption = _.find(this.options, optionObj => {
+    const matchOption = _.find(this.options, (optionObj) => {
       return optionObj.id === optionId;
     });
     if (matchOption && matchOption.id) {
@@ -62,8 +68,8 @@ export class DataElementOptionsComponent implements OnInit {
 
   getMenuSelections(menus) {
     const menuSelections = [];
-    menuSelections.push({ id: '', name: 'select next menu' });
-    Object.keys(menus).map(menuId => {
+    menuSelections.push({ id: "", name: "select next menu" });
+    Object.keys(menus).map((menuId) => {
       if (this.menu.id !== menuId) {
         const menuObject = menus[menuId];
         menuSelections.push({ id: menuId, name: menuObject.title });
@@ -74,11 +80,11 @@ export class DataElementOptionsComponent implements OnInit {
 
   onDropSuccess() {
     let index = 0;
-    this.options = this.options.map(option => {
+    this.options = this.options.map((option) => {
       index += 1;
       return {
         ...option,
-        response: index + ''
+        response: index + "",
       };
     });
     this.updateMenu();
@@ -89,9 +95,9 @@ export class DataElementOptionsComponent implements OnInit {
         menu: {
           id: this.menu.id,
           changes: {
-            options: [...this.options]
-          }
-        }
+            options: [...this.options],
+          },
+        },
       })
     );
   }

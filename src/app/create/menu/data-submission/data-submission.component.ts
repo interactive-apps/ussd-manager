@@ -1,15 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UssdMenu, UssdMenuOptions } from '../../../shared/models/menu';
-import { Store } from '@ngrx/store';
-import { ApplicationState } from '../../../store/reducers/index';
-import * as menuActions from '../../../store/actions/menu.actions';
-import { UpdateMenu } from '../../../store/actions/menu.actions';
-import { UssdService } from '../../../shared/services/ussd.service';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/animations";
+import { UssdMenu, UssdMenuOptions } from "../../../shared/models/menu";
+import { Store } from "@ngrx/store";
+import { ApplicationState } from "../../../store/reducers/index";
+import * as menuActions from "../../../store/actions/menu.actions";
+import { UpdateMenu } from "../../../store/actions/menu.actions";
+import { UssdService } from "../../../shared/services/ussd.service";
 
 @Component({
-  selector: 'app-data-submission',
-  templateUrl: './data-submission.component.html',
-  styleUrls: ['./data-submission.component.css']
+  selector: "app-data-submission",
+  templateUrl: "./data-submission.component.html",
+  styleUrls: ["./data-submission.component.css"],
 })
 export class DataSubmissionComponent implements OnInit {
   @Input() menu: UssdMenu;
@@ -37,14 +43,14 @@ export class DataSubmissionComponent implements OnInit {
     const options: Array<UssdMenuOptions> = [
       {
         id: this.ussdService.makeid(),
-        title: 'Yes',
-        response: true
+        title: "Yes",
+        response: true,
       },
       {
         id: this.ussdService.makeid(),
-        title: 'No',
-        response: false
-      }
+        title: "No",
+        response: false,
+      },
     ];
     return options;
   }
@@ -53,17 +59,17 @@ export class DataSubmissionComponent implements OnInit {
     this.nextMenu.emit({
       current_menu_id: this.menu.id,
       next_menu_id: this.menu.next_menu,
-      option: null
+      option: null,
     });
   }
 
   setOptionValue(value, current_option) {
-    this.options = this.options.map(option => {
+    this.options = this.options.map((option) => {
       const title =
         current_option.response === option.response ? value : option.title;
       return {
         ...option,
-        title
+        title,
       };
     });
     this.updateMenu();
@@ -75,9 +81,9 @@ export class DataSubmissionComponent implements OnInit {
         menu: {
           id: this.menu.id,
           changes: {
-            options: [...this.options]
-          }
-        }
+            options: [...this.options],
+          },
+        },
       })
     );
   }
@@ -88,9 +94,9 @@ export class DataSubmissionComponent implements OnInit {
         menu: {
           id: this.menu.id,
           changes: {
-            [key]: value
-          }
-        }
+            [key]: value,
+          },
+        },
       })
     );
   }
@@ -101,9 +107,9 @@ export class DataSubmissionComponent implements OnInit {
         menu: {
           id: this.menu.id,
           changes: {
-            submit_data: value
-          }
-        }
+            submit_data: value,
+          },
+        },
       })
     );
   }
