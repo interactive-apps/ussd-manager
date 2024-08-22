@@ -48,7 +48,7 @@
     }
   },
   "devDependencies": {
-    "@angular/cli": "^9.1.15",
+    "@angular/cli": "^18.2.1",
     "@angular/compiler-cli": "^9.1.13",
     "@angular/language-service": "^9.1.13",
     "@ngrx/schematics": "^5.1.0",
