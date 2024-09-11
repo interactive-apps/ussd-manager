@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Effect, Actions, ofType } from "@ngrx/effects";
+import { createEffect, Actions, ofType } from "@ngrx/effects";
 import { catchError, map, switchMap, tap } from "rxjs/operators";
 import { of } from "rxjs";
 import { USSDActionTypes } from "../actions/ussd.actions";
@@ -10,12 +10,12 @@ import { UssdService } from "../../shared/services/ussd.service";
 export class UssdEffect {
   constructor(private actions$: Actions, private ussdService: UssdService) {}
 
-  @Effect({ dispatch: false })
-  loadGroups$ = this.actions$.pipe(
+  
+  loadGroups$ = createEffect(() => this.actions$.pipe(
     ofType(USSDActionTypes.GET_USSDS),
     tap(() => {
       this.ussdService.getAllUssds();
       this.ussdService.getMetaData();
     })
-  );
+  ), { dispatch: false });
 }
