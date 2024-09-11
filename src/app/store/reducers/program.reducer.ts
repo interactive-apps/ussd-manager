@@ -29,7 +29,7 @@ export function reducer(state = initialState, action: ProgramActions): State {
     }
 
     case ProgramActionTypes.LOAD_PROGRAMS: {
-      return adapter.addAll(action.payload.programs, state);
+      return adapter.setAll(action.payload.programs, state);
     }
 
     case ProgramActionTypes.CLEAR_PROGRAMS: {

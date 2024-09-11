@@ -32,7 +32,7 @@ export function reducer(
     }
 
     case DataelementActionTypes.LOAD_DATAELEMENTS: {
-      return adapter.addAll(action.payload.dataelements, state);
+      return adapter.setAll(action.payload.dataelements, state);
     }
 
     case DataelementActionTypes.CLEAR_DATAELEMENTS: {

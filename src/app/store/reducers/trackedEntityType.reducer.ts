@@ -37,7 +37,7 @@ export function reducer(
     }
 
     case TrackedEntityTypeActionTypes.LOAD_TRACKED_ENTITY_TYPES: {
-      return adapter.addAll(action.payload.trackedEntityTypes, state);
+      return adapter.setAll(action.payload.trackedEntityTypes, state);
     }
 
     case TrackedEntityTypeActionTypes.CLEAR_TRACKED_ENTITY_TYPES: {

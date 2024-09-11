@@ -32,7 +32,7 @@ export function reducer(
     }
 
     case DatasetActionTypes.LOAD_DATASETS: {
-      return adapter.addAll(action.payload.datasets, state);
+      return adapter.setAll(action.payload.datasets, state);
     }
 
     case DatasetActionTypes.CLEAR_DATASETS: {
