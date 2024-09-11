@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/animations";
-import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
-import { PREDEFINED_MENU_ITEMS } from "./predifined-menu-items";
+import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {PREDEFINED_MENU_ITEMS} from './predifined-menu-items';
 
 @Injectable()
 export class MenuService {

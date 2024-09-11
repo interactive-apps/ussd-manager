@@ -56,7 +56,7 @@ export function reducer(
     }
 
     case SettingActionTypes.LOAD_SETTINGS: {
-      return adapter.addAll(action.payload.settings, state);
+      return adapter.setAll(action.payload.settings, state);
     }
 
     case SettingActionTypes.CLEAR_SETTINGS: {

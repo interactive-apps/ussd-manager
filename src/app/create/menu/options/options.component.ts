@@ -14,10 +14,17 @@ import {
   fadeIn,
   fadeOut,
   fadeSmooth,
+<<<<<<< HEAD
   listStateTrigger,
 } from "../../../shared/animations/basic-animations";
 import { Observable } from "rxjs/Observable";
 import { UssdService } from "../../../shared/services/ussd.service";
+=======
+  listStateTrigger
+} from '../../../shared/animations/basic-animations';
+import { Observable } from 'rxjs';
+import { UssdService } from '../../../shared/services/ussd.service';
+>>>>>>> feature/angular_updates
 
 @Component({
   selector: "app-options",

@@ -31,7 +31,7 @@ export class AddSetting implements Action {
 export class UpsertSetting implements Action {
   readonly type = SettingActionTypes.UPSERT_SETTING;
 
-  constructor(public payload: { setting: Update<Setting> }) {}
+  constructor(public payload: { setting: Setting }) {}
 }
 
 export class AddSettings implements Action {
@@ -43,7 +43,7 @@ export class AddSettings implements Action {
 export class UpsertSettings implements Action {
   readonly type = SettingActionTypes.UPSERT_SETTINGS;
 
-  constructor(public payload: { settings: Update<Setting>[] }) {}
+  constructor(public payload: { settings: Setting[] }) {}
 }
 
 export class UpdateSetting implements Action {

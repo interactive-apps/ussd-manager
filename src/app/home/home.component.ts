@@ -1,13 +1,13 @@
-import { Component, OnInit } from "@angular/animations";
-import { Store } from "@ngrx/store";
-import { ApplicationState } from "../store/reducers/index";
-import { Observable } from "rxjs/Observable";
-import { Setting } from "../shared/models/settings";
-import * as ussdSelectors from "../store/selectors/ussd.selectors";
-import * as settingsActions from "../store/actions/settings.actions";
-import { Go } from "../store/actions/router.action";
-import { Ussd } from "../shared/models/ussd";
-import { GetUssds, AddUssd } from "../store/actions/ussd.actions";
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { ApplicationState } from '../store/reducers/index';
+import { Observable } from 'rxjs';
+import { Setting } from '../shared/models/settings';
+import * as ussdSelectors from '../store/selectors/ussd.selectors';
+import * as settingsActions from '../store/actions/settings.actions';
+import { Go } from '../store/actions/router.action';
+import { Ussd } from '../shared/models/ussd';
+import { GetUssds, AddUssd } from '../store/actions/ussd.actions';
 import {
   AddMenu,
   ClearMenus,

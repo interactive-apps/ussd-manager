@@ -56,7 +56,7 @@ export function reducer(
     }
 
     case USSDActionTypes.LOAD_USSDS: {
-      return adapter.addAll(action.payload.ussds, state);
+      return adapter.setAll(action.payload.ussds, state);
     }
 
     case USSDActionTypes.CLEAR_USSDS: {

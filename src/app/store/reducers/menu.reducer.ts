@@ -55,7 +55,7 @@ export function reducer(state = initialState, action: MenuActions): State {
     }
 
     case MenuActionTypes.LOAD_MENUS: {
-      return adapter.addAll(action.payload.menus, state);
+      return adapter.setAll(action.payload.menus, state);
     }
 
     case MenuActionTypes.CLEAR_MENUS: {

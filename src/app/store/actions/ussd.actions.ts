@@ -32,7 +32,7 @@ export class AddUssd implements Action {
 export class UpsertUssd implements Action {
   readonly type = USSDActionTypes.UPSERT_USSD;
 
-  constructor(public payload: { ussd: Update<Ussd> }) {}
+  constructor(public payload: { ussd: Ussd }) {}
 }
 
 export class AddUssds implements Action {
@@ -44,7 +44,7 @@ export class AddUssds implements Action {
 export class UpsertUssds implements Action {
   readonly type = USSDActionTypes.UPSERT_USSDS;
 
-  constructor(public payload: { ussds: Update<Ussd>[] }) {}
+  constructor(public payload: { ussds: Ussd[] }) {}
 }
 
 export class UpdateUssd implements Action {

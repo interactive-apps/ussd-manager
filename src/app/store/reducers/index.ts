@@ -11,7 +11,7 @@ import * as fromDataElement from "../reducers/dataelement.reducer";
 import * as fromDataset from "../reducers/dataset.reducer";
 import * as fromUssd from "../reducers/ussd.reducer";
 import * as fromTrackedEntityType from "../reducers/trackedEntityType.reducer";
-import { storeFreeze } from "ngrx-store-freeze";
+
 import { uiReducer, UiState } from "./ui.reducer";
 import { RouterStateUrl } from "./router.reducer";
 import { environment } from "../../../environments/environment";
@@ -44,7 +44,7 @@ export const reducers: ActionReducerMap<ApplicationState> = {
 
 export const metaReducers: MetaReducer<
   ApplicationState
->[] = !environment.production ? [storeFreeze] : [];
+>[] = !environment.production ? [] : [];
 
 export const getRouterState = createFeatureSelector<
   fromRouter.RouterReducerState<RouterStateUrl>
