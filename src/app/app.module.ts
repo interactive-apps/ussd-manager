@@ -71,8 +71,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     NgxPaginationModule,
     DndModule.forRoot(),
-    StoreModule.forRoot(reducers, { metaReducers }),
-    StoreRouterConnectingModule,
+    StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: true, strictActionImmutability: true } }),
+    StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot(effects),
     TranslateModule.forRoot({
       loader: {
