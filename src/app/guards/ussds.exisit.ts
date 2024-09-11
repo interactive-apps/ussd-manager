@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { Store } from '@ngrx/store';
 
@@ -10,7 +10,7 @@ import {selectUssdLoaded} from '../store/selectors/ussd.selectors';
 import {ApplicationState} from '../store/reducers/index';
 
 @Injectable()
-export class UssdExistsGuards implements CanActivate {
+export class UssdExistsGuards  {
   constructor(private store: Store<ApplicationState>) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
