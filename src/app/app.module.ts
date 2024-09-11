@@ -16,7 +16,7 @@ import { CustomSerializer } from './store/reducers/router.reducer';
 import { AppRoutingModule } from './app-routing.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { effects } from './store/effects/index';
 import { EffectsModule } from '@ngrx/effects';
 import { metaReducers, reducers } from './store/reducers/index';
@@ -44,53 +44,47 @@ export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    CreateComponent,
-    BasicComponent,
-    MenuComponent,
-    MessageComponent,
-    AuthenticationComponent,
-    DataComponent,
-    PeriodComponent,
-    OptionsComponent,
-    FilterByNamePipe,
-    SimulateComponent,
-    DataSubmissionComponent,
-    DataElementOptionsComponent,
-    OrganisationUnitComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    MenuModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxPaginationModule,
-    DndModule.forRoot(),
-    StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: true, strictActionImmutability: true } }),
-    StoreRouterConnectingModule.forRoot({ serializer: FullRouterStateSerializer }),
-    EffectsModule.forRoot(effects),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    }),
-    !environment.production
-      ? StoreDevtoolsModule.instrument({ maxAge: 100 , connectInZone: true})
-      : [],
-    AppRoutingModule
-  ],
-  providers: [
-    { provide: RouterStateSerializer, useClass: CustomSerializer },
-    ...services,
-    ...guards
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HomeComponent,
+        CreateComponent,
+        BasicComponent,
+        MenuComponent,
+        MessageComponent,
+        AuthenticationComponent,
+        DataComponent,
+        PeriodComponent,
+        OptionsComponent,
+        FilterByNamePipe,
+        SimulateComponent,
+        DataSubmissionComponent,
+        DataElementOptionsComponent,
+        OrganisationUnitComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        BrowserAnimationsModule,
+        MenuModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxPaginationModule,
+        DndModule.forRoot(),
+        StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: true, strictActionImmutability: true } }),
+        StoreRouterConnectingModule.forRoot({ serializer: FullRouterStateSerializer }),
+        EffectsModule.forRoot(effects),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
+        !environment.production
+            ? StoreDevtoolsModule.instrument({ maxAge: 100, connectInZone: true })
+            : [],
+        AppRoutingModule], providers: [
+        { provide: RouterStateSerializer, useClass: CustomSerializer },
+        ...services,
+        ...guards,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {}
