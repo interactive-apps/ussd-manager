@@ -121,7 +121,6 @@
       }
     }
   },
-  "defaultProject": "ussd-manager",
   "schematics": {
     "@ngrx/schematics:component": {
       "prefix": "app",
