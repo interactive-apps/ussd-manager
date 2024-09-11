@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/animations";
+import { Component, OnInit, Input } from "@angular/core";
 import { PROFILE_MENUS } from "./profile-menus";
 import { menuBackgroundColors } from "./background-colors";
 import { MenuService } from "./menu.service";

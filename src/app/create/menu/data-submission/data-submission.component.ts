@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from "@angular/animations";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { UssdMenu, UssdMenuOptions } from "../../../shared/models/menu";
 import { Store } from "@ngrx/store";
 import { ApplicationState } from "../../../store/reducers/index";

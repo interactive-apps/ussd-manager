@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from "@angular/animations";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Setting } from "../../shared/models/settings";
 import { Store } from "@ngrx/store";
 import { ApplicationState, getRouterState } from "../../store/reducers/index";
