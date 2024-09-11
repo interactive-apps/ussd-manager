@@ -82,7 +82,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     !environment.production
-      ? StoreDevtoolsModule.instrument({ maxAge: 100 })
+      ? StoreDevtoolsModule.instrument({ maxAge: 100 , connectInZone: true})
       : [],
     AppRoutingModule
   ],
