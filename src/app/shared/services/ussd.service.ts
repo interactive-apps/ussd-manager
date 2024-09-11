@@ -3,7 +3,7 @@ import { UssdMenu } from "../models/menu";
 import { Setting } from "../models/settings";
 import { Ussd } from "../models/ussd";
 import { AddUssd, DoneLoadingUssds } from "../../store/actions/ussd.actions";
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { Store } from "@ngrx/store";
 import { ApplicationState } from "../../store/reducers/index";
 import { HttpClientService } from "./http-client.service";

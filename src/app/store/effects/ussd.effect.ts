@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import {catchError, map, switchMap, tap} from 'rxjs/operators';
-import {of} from 'rxjs/observable/of';
+import {of} from 'rxjs';
 import {USSDActionTypes} from '../actions/ussd.actions';
 import {HttpClientService} from '../../shared/services/http-client.service';
 import {UssdService} from '../../shared/services/ussd.service';

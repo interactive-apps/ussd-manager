@@ -1,3 +1,5 @@
+import { Update } from "@ngrx/entity";
+
 export interface UssdMenu {
   id: string;
   title?: string;
@@ -26,6 +28,7 @@ export interface UssdMenu {
   years_back?: number;
   maximum_value?: string;
   next_menu?: string;
+  
 }
 
 export interface UssdMenuOptions {
