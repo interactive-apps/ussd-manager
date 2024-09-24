@@ -54,7 +54,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     HomeComponent,
     CreateComponent,
-    BasicComponent,
+    // BasicComponent,
     MenuComponent,
     MessageComponent,
     AuthenticationComponent,
@@ -74,6 +74,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MenuModule,
     FormsModule,
     ReactiveFormsModule,
+    BasicComponent,
     NgxPaginationModule,
     DndModule.forRoot(),
     StoreModule.forRoot(reducers, {
@@ -82,18 +83,19 @@ export function HttpLoaderFactory(http: HttpClient) {
         strictStateImmutability: true,
         strictActionImmutability: true,
       },
+  
     }),
     StoreRouterConnectingModule.forRoot({
       serializer: FullRouterStateSerializer,
     }),
     EffectsModule.forRoot(effects),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
+    // TranslateModule.forRoot({
+    //   loader: {
+    //     provide: TranslateLoader,
+    //     useFactory: HttpLoaderFactory,
+    //     deps: [HttpClient],
+    //   },
+    // }),
     !environment.production
       ? StoreDevtoolsModule.instrument({ maxAge: 100, connectInZone: true })
       : [],

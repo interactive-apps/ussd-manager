@@ -15,6 +15,7 @@ import * as _ from "lodash";
 
 @Component({
   selector: "app-basic",
+  standalone:true,
   templateUrl: "./basic.component.html",
   styleUrls: ["./basic.component.css"],
   animations: [fadeIn],
