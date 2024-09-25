@@ -1,4 +1,4 @@
-<div class="form-group">
+<!-- <div class="form-group">
   <label>Title</label>
   <textarea
     class="form-control form-control-sm"
@@ -20,6 +20,124 @@
     [sortableIndex]="i"
     [dragEnabled]="enableItemdragOperation"
     (onDropSuccess)="onDropSuccess()"
+  >
+    <div class="row mb-1">
+      <div class="col-sm-2 pr-0 text-muted" style="cursor: all-scroll">
+        <i class="fa fa-ellipsis-v"></i>
+        {{option.response}}.
+      </div>
+      <div class="col-sm-10 pl-0">
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          placeholder="Option Title"
+          (focus)="enableItemdragOperation = false;"
+          (click)="enableItemdragOperation = false; $event.stopPropagation()"
+          (input)="setOptionValue($event.target.value, option)"
+          [value]="option.title">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 pr-0" *ngIf="!deleting[option.response]" @fadeOut></div>
+      <div class="col-sm-5 pl-0 pr-1" *ngIf="!deleting[option.response]" @fadeOut>
+        <button
+          style="height: 28px; padding: 2px"
+          class="p-1 cursor btn-outline-secondary btn-block btn-sm btn"
+          (click)="SetNextMenu(option)"
+        >Next Menu
+        </button>
+      </div>
+      <div class="col-sm-5 pl-1" *ngIf="!deleting[option.response]" @fadeOut>
+        <button
+          *ngIf="option.next_menu === ''"
+          [disabled]="option.next_menu !== ''"
+          style="height: 28px; padding: 2px"
+          class="cursor btn-outline-danger btn-block btn-sm btn"
+          (click)="deleting = []; deleting[option.response] = true"
+        >Delete
+        </button>
+      </div>
+
+      <div class="col-sm-12 mt-1" *ngIf="deleting[option.response] && option.next_menu === ''" @fadeOut>
+        <p class="mb-1 text-center">Are you sure <br>
+          <small class="text-muted">Deleting all children menus</small> <br>
+        <button
+          class="btn btn-light mr-1"
+          (click)="deleteOption(option)"
+        >
+          <i class="fa fa-check"></i>
+          Yes
+        </button>
+        <button
+          class="btn btn-light"
+          (click)="deleting = []"
+        >
+          <i class="fa fa-window-close"></i>
+          No
+        </button>
+        </p>
+      </div>
+    </div>
+  </li>
+</ul>
+<button class="btn btn-block btn-light cursor" (click)="addOption()">Add option</button>
+<br>
+<div class="form-group">
+  <label>Number Of Retries</label>
+  <input
+    type="number"
+    class="form-control form-control-sm"
+    placeholder="Number Of Retries"
+    (input)="setValue('number_of_retries', $event.target.value)"
+    [value]="menu.number_of_retries">
+  <small class="form-text text-muted">
+    Number of times User is allowed to retry.
+  </small>
+</div>
+<div class="form-group">
+  <label>Retry Message</label>
+  <textarea
+    type="text"
+    class="form-control form-control-sm"
+    placeholder="Message for retrying"
+    (input)="setValue('retry_message', $event.target.value)"
+    [value]="menu.retry_message">
+  </textarea>
+  <small class="form-text text-muted">
+    Text to display during retry.
+  </small>
+</div>
+<div class="form-group">
+  <label>Fail Message</label>
+  <textarea
+    type="text"
+    class="form-control form-control-sm"
+    placeholder="A fail message"
+    (input)="setValue('fail_message', $event.target.value)"
+    [value]="menu.fail_message">
+  </textarea>
+  <small class="form-text text-muted">
+    Message to give When Authentication Failed.
+  </small>
+</div> -->
+
+<div class="form-group"></div>
+  <label>Title</label>
+  <textarea
+    class="form-control form-control-sm"
+    placeholder="Message to User"
+    (input)="setValue('title', $event.target.value)"
+    [value]="menu.title"
+  ></textarea>
+  <small class="form-text text-muted">
+    Welcoming title to explain options.
+  </small>
+<ul class="list-group" cdkDropList (cdkDropListDropped)="onDrop($event)">
+  <li
+    class="list-group-item p-1"
+    *ngFor="let option of options; trackBy: trackItem; let i = index"
+    [ngClass]="{'activeItem': activeItem(option)}"
+    cdkDrag
   >
     <div class="row mb-1">
       <div class="col-sm-2 pr-0 text-muted" style="cursor: all-scroll">

@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --aot / --proxy proxy-config.json",
-    "build": "rm -rf dist && mkdir dist && ng build --configuration production --aot --output-hashing all --sourcemaps false --named-chunks false --build-optimizer --vendor-chunk  && cd dist && zip -r -D ussd-manager.zip .",
+    "build": "rm -rf dist && mkdir dist && ng build --configuration production --aot --output-hashing all  && cd dist && zip -r -D ussd-manager.zip .",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -13,6 +13,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^18.2.5",
+    "@angular/cdk": "^18.2.5",
     "@angular/common": "^18.2.4",
     "@angular/compiler": "^18.2.4",
     "@angular/core": "^18.2.4",
@@ -36,7 +37,8 @@
     "jquery": "^3.3.1",
     "lodash": "^4.17.4",
     "lodash-es": "^4.17.21",
-    "ng2-dnd": "^5.0.2",
+    "ng2-dnd": "^9.0.0-beta2",
+    "ngx-drag-drop": "^18.0.2",
     "ngx-pagination": "^6.0.3",
     "popper.js": "^1.12.9",
     "rxjs": "^6.6.7",

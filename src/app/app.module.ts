@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { NgxPaginationModule } from "ngx-pagination";
-import { DndModule } from "ng2-dnd";
+import { DragDropModule } from "@angular/cdk/drag-drop";
 
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
@@ -76,7 +76,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     BasicComponent,
     NgxPaginationModule,
-    DndModule.forRoot(),
+    // DndModule.forRoot(),
+    DragDropModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
