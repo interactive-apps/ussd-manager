@@ -1,118 +1,83 @@
-<div class="container-fluid">
-  <div class="row mb-3 mt-3">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      <h2>eIDSR Menu</h2>
-    </div>
-    <div class="col-sm-4"></div>
-  </div>
+<h1 style="text-align: center;"></h1>
+<br/>
+<div class="phone-wrapper" [ngClass]="{'hidden-content': !isImageLoaded}">
+  <img src="/assets/pixel3xl.png" id="android-img" class="phone-img" (load)="onImageLoad()" />
+  <div id="outer-container" class="android" data-select2-id="select2-data-outer-container">
+    <div id="simulator-container">
+      <div id="screen">
+        <ng-container *ngIf="isStart">
+          <div id="ussd-box">
+            <div id="menu-text">Phone Number to use</div>
+            <input
+              id="menu-entry"
+              name="menu-entry"
+              autocomplete="off"
+              [(ngModel)]="phone"
+              placeholder="255XXXXXXXXX"
+            />
+            <div class="menu-text" *ngIf="phoneFormatError">
+              {{ phoneFormatError }}
+            </div>
+            <div id="buttons">
+              <input
+                class="dialog-btn"
+                id="cancel-btn"
+                name="cancel-btn"
+                type="button"
+                value="Cancel"
+                (click)="cancelRequest()"
+              />
+              <input
+                class="dialog-btn"
+                id="ok-btn"
+                name="ok-btn"
+                type="button"
+                value="Start"
+                (click)="sendFirstRequest()"
+              />
+              <div *ngIf="sending_response">
+                <div class="loading-overlay">
+                  <span class="loader"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
 
-  <!-- <div class="row mb-3 mt-3">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      <label>Simulation Server</label>
-      <input
-        [(ngModel)]="url"
-        class="form-control form-control-sm"
-        placeholder="http://localhost:3000"
-      />
-    </div>
-    <div class="col-sm-4"></div>
-  </div> -->
-  <div class="row mb-3 mt-3">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      <label>Phone Number to use</label>
-      <input
-        [(ngModel)]="phone"
-        class="form-control form-control-sm"
-        placeholder="255XXXXXXXXX"
-      />
-    </div>
-    <div class="col-sm-4"></div>
-  </div>
-
-  <div class="row mb-3 mt-3">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      <button
-        (click)="sendFirstRequest()"
-        class=" cursor btn btn-outline-secondary btn-block"
-      >
-        Start
-      </button>
-    </div>
-    <div class="col-sm-4"></div>
-  </div>
-
-  <!-- phone format error -->
-  <div class="row mb-3 mt-3" *ngIf="phoneFormatError != ''">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      {{ phoneFormatError }}
-    </div>
-    <div class="col-sm-4"></div>
-  </div>
-
-  <!-- end phone format error-->
-  <div *ngIf="response_ready">
-    <div class="row">
-      <div class="col-sm-4"></div>
-      <div class="col-sm-4" [innerHTML]="response_body"></div>
-      <div class="col-sm-4"></div>
-    </div>
-    <!--ussd response-->
-    <div class="row" *ngIf="need_input">
-      <div class="col-sm-4"></div>
-      <div class="col-sm-4">
-        <input
-          [(ngModel)]="answer"
-          class="form-control form-control-sm"
-          placeholder="Answer here"
-        />
-      </div>
-      <div class="col-sm-4"></div>
-    </div>
-    <!--button to request next action-->
-    <div class="row mb-3 mt-3" *ngIf="need_input">
-      <div class="col-sm-4"></div>
-      <div class="col-sm-4">
-        <div class="row">
-          <div class="col">
-            <button
+        <div id="ussd-box" *ngIf="!isStart">
+          <div id="menu-text" [innerHTML]="response_body"></div>
+          <input
+            id="menu-entry"
+            name="menu-entry"
+            autocomplete="off"
+            [(ngModel)]="answer"
+          />
+          <div id="buttons">
+            <input
+              class="dialog-btn"
+              id="cancel-btn"
+              name="cancel-btn"
+              type="button"
+              value="Cancel"
               (click)="cancelRequest()"
-              class=" cursor btn btn-outline-secondary btn-block"
-            >
-              Cancel
-            </button>
-          </div>
-          <div class="col">
-            <button
-              [disabled]="answer == ''"
+            />
+            <input
+              class="dialog-btn"
+              id="ok-btn"
+              name="ok-btn"
+              type="button"
+              value="Send"
+              [disabled]="!answer"
               (click)="sendRequest()"
-              class=" cursor btn btn-outline-secondary btn-block"
-            >
-              Reply
-            </button>
+            />
+            <div *ngIf="sending_response">
+              <div class="loading-overlay">
+                <span class="loader"></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-sm-4"></div>
     </div>
-  </div>
-  <div class="row" *ngIf="sending_response">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4">
-      <h3 class="text-center">
-        <div class="lds-ring">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </h3>
-      <h3 class="text-center">Loading Next Menu ...</h3>
-    </div>
-    <div class="col-sm-4"></div>
   </div>
 </div>

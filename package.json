@@ -5,7 +5,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --aot / --proxy proxy-config.json",
-    "build": "rm -rf dist && mkdir dist && ng build --configuration production --aot --output-hashing all  && cd dist && zip -r -D ussd-manager.zip .",
+    "build":"rm -rf dist && mkdir dist && ng build --configuration production --aot --output-hashing all && cd dist && 7z a ussd-manager.zip *",
+
+
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
