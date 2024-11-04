@@ -22,6 +22,7 @@ export class SimulateComponent implements OnInit, AfterViewInit {
   response_body = "";
   answer = "";
   isImageLoaded = false;
+  showInputs: boolean = true; 
 
   constructor(
     private http: HttpClient,
@@ -61,7 +62,7 @@ export class SimulateComponent implements OnInit, AfterViewInit {
           if (d.response_type === 2) {
             this.need_input = true;
           }
-
+  
           if (d.options) {
             this.response_body = "";
             console.log("data", d);
@@ -76,6 +77,9 @@ export class SimulateComponent implements OnInit, AfterViewInit {
               new RegExp("\n", "g"),
               "<br />"
             );
+          }
+          if (d.text === "Taarifa hazijatumwa" || d.text === "Umetuma taarifa kikamilifu") {
+            this.showInputs = false;
           }
         } catch (e) {
           const dataArr = data.split(";");
@@ -105,23 +109,18 @@ export class SimulateComponent implements OnInit, AfterViewInit {
         .subscribe(
           (data: any) => {
             this.isStart = false;
-            console.log("data response data.....", data);
-            console.log(data, typeof data);
             try {
               let d = JSON.parse(data);
               if (d.response_type === 2) {
                 this.need_input = true;
               }
-              console.log("Body:", d);
               this.response_body = d.text;
               if (d.options) {
                 this.response_body += "<p>";
-                console.log("Object.keys(d.options)", Object.keys(d.options));
                 Object.keys(d.options).forEach(key => {
                   this.response_body += `${key} ${d.options[key]}<br/>`;
                 });
                 this.response_body += "</p>";
-                console.log(this.response_body);
               }
             } catch (e) {
               const dataArr = data.split(";");
@@ -135,7 +134,7 @@ export class SimulateComponent implements OnInit, AfterViewInit {
             this.answer = "";
           },
           error => {
-            console.log(error);
+         
           }
         );
     } else {

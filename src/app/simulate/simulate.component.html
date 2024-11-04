@@ -1,7 +1,7 @@
 <h1 style="text-align: center;">Tambua TB</h1>
 <br/>
 <div class="phone-wrapper" [ngClass]="{'hidden-content': !isImageLoaded}">
-  <img src="/assets/pixel3xl.png" id="android-img" class="phone-img" (load)="onImageLoad()" />
+  <img src="assets/pixel3xl.png" id="android-img" class="phone-img" (load)="onImageLoad()" />
   <div id="outer-container" class="android" data-select2-id="select2-data-outer-container">
     <div id="simulator-container">
       <div id="screen">
@@ -46,33 +46,35 @@
 
         <div id="ussd-box" *ngIf="!isStart">
           <div id="menu-text" [innerHTML]="response_body"></div>
-          <input
-            id="menu-entry"
-            name="menu-entry"
-            autocomplete="off"
-            [(ngModel)]="answer"
-          />
-          <div id="buttons">
+          <div *ngIf="showInputs">
             <input
-              class="dialog-btn"
-              id="cancel-btn"
-              name="cancel-btn"
-              type="button"
-              value="Cancel"
-              (click)="cancelRequest()"
+              id="menu-entry"
+              name="menu-entry"
+              autocomplete="off"
+              [(ngModel)]="answer"
             />
-            <input
-              class="dialog-btn"
-              id="ok-btn"
-              name="ok-btn"
-              type="button"
-              value="Send"
-              [disabled]="!answer"
-              (click)="sendRequest()"
-            />
-            <div *ngIf="sending_response">
-              <div class="loading-overlay">
-                <span class="loader"></span>
+            <div id="buttons">
+              <input
+                class="dialog-btn"
+                id="cancel-btn"
+                name="cancel-btn"
+                type="button"
+                value="Cancel"
+                (click)="cancelRequest()"
+              />
+              <input
+                class="dialog-btn"
+                id="ok-btn"
+                name="ok-btn"
+                type="button"
+                value="Send"
+                [disabled]="!answer"
+                (click)="sendRequest()"
+              />
+              <div *ngIf="sending_response">
+                <div class="loading-overlay">
+                  <span class="loader"></span>
+                </div>
               </div>
             </div>
           </div>
