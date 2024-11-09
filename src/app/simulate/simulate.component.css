@@ -29,7 +29,7 @@ body, html {
 #outer-container.feature {
   height: 100%;
   display: grid;
-  grid-template-columns: 400px 400px 500px;
+  grid-template-columns: 1fr; /* Adjusted to fit within the container */
 }
 
 #outer-container {
@@ -39,6 +39,7 @@ body, html {
   width: 100%;
   height: 100%;
   margin: 0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .android #screen {
@@ -47,6 +48,10 @@ body, html {
   margin: 55px 30px;
   background: #303030;
   border-radius: 6px;
+  overflow: hidden; /* Ensure content does not overflow */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #screen,
@@ -82,12 +87,17 @@ select {
 .fullscreen #ussd-box {
   width: 245px;
   padding: 22px 23px 48px 23px;
-  margin: 45% auto;
+  margin: auto;
   border-radius: 4px;
   background: #424242;
   box-shadow: 0 22px 38px #00000042;
   color: #ffffffb3;
   font-family: "Roboto", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-height: 100%; /* Ensure it does not exceed the screen height */
 }
 
 .menu-text {
